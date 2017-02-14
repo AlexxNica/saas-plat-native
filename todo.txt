@@ -1,0 +1,38 @@
+﻿higher-order component ES6? react native PureRenderMixin 提高性能
+
+iPhone Portrait iOS 8-Retina HD 5.5 （1242×2208） @3x
+iPhone Portrait iOS 8-Retina HD 4.7 （750×1334） @2x
+
+iPhone Portrait iOS 7,8-2x （640×960） @2x
+iPhone Portrait iOS 7,8-Retina 4 （640×1136） @2x
+
+iPhone Portrait iOS 5,6-1x （320×480） @1x
+iPhone Portrait iOS 5,6-2x （640×960） @2x
+iPhone Portrait iOS 5,6-Retina4 （640×1136） @2x
+
+发布时需要改splash的url 为api.saas-plat.com/splash/get
+改app/config
+
+
+ 升级依赖检查，依赖包版本是否支持要升级的版本
+ 
+
+
+
+登录出错后点其他账户登陆后界面卡死
+
+单据列表
+https://github.com/jemise111/react-native-swipe-list-view
+
+用户主页用这个
+https://github.com/Bob1993/react-native-imagefooter-listview
+
+
+ https://github.com/reactnativecn/react-native-jpush
+
+
+业务入口选择：
+
+1、线下零售管理   - pos机功能卖点
+2、线上电商管理   - 对接各种电商平台统一管理库存
+

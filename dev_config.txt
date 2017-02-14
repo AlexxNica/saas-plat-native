@@ -1,0 +1,31 @@
+﻿npm install
+
+cd src\core
+npm install
+cd src\app\appfx
+npm install
+cd src\platform\host
+npm install
+cd src\platform\login
+npm install
+
+cd dev\loaders\assets-loader
+npm install
+cd dev\plugins\babel-relative-import
+npm install
+
+
+ATOM 配置：
+npm install eslint
+npm install linter-eslint
+npm install eslint-config-airbnb  
+npm install eslint-plugin-jsx-a11y 
+npm install eslint-plugin-import 
+npm install eslint-plugin-react  
+npm install eslint-plugin-react-native
+npm install eslint-config-future
+
+
+apm被墙自己git上下载到atom的packages里
+https://github.com/iancmyers/atom-eslint
+https://github.com/AtomLinter/linter-eslint

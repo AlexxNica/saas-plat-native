@@ -1,0 +1,20 @@
+{
+  "name": "appshop",
+  "version": "1.0.0",
+  "description": "app shop for saas-plat.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "app",
+    "shop"
+  ],
+  "author": "saas-plat.com",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-loader": "^1.0.0"
+  }
+
+
+}

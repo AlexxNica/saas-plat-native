@@ -1,0 +1,24 @@
+{
+  "name": "portal",
+  "version": "1.0.0",
+  "description": "saas-plat default portal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "saasplat",
+    "portal"
+  ],
+  "author": "saas-plat.com",
+  "license": "ISC",
+  "spconfig": {
+    "scope": "client",
+    "preload": true
+  },
+  "dependencies": {
+    "react-native-easy-grid": "^0.1.8",
+    "react-native-interactive-avatar": "^1.1.0",
+    "react-native-parallax-view": "github:saas-plat/react-native-parallax-view"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "community",
+  "version": "1.0.0",
+  "description": "saas-plat community",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "community"
+  ],
+  "author": "saas-plat.com",
+  "license": "ISC"
+}

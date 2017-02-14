@@ -1,0 +1,22 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "saasplat login component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "login"
+  ],
+  "author": "saas-plat.com",
+  "license": "ISC",
+  "spconfig": {
+    "scope": "client",
+    "preload": true
+  },
+  "dependencies": {
+    "react-native-awesome-button": "^1.6.0",
+    "react-native-smart-gesture-password": "^2.1.0"
+  }
+}

@@ -10,6 +10,7 @@
     "http": "node --harmony dev/http.js",
     "watch": "node --harmony dev/watch.js",
     "build": "node dev/build.js",
+    "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "spdefine": "node --harmony dev/genSpDefines"
   },

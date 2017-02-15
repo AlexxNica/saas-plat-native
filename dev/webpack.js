@@ -26,24 +26,36 @@ module.exports = function () {
   var mainfile = 'index.js';
   var packagefile = 'package.json';
 
-  function getEntry(entry, searchDir, ns) {
+  function findEntry(list, searchDir) {
     if (!fs.statSync(searchDir).isDirectory())
       return;
     var dirs = fs.readdirSync(searchDir);
     for (var i in dirs) {
       var dir = dirs[i];
-      var mainfullfilename = path.join(searchDir, dir, mainfile);
       var packagefilename = path.join(searchDir, dir, packagefile);
-      var packagejson2 = {};
-      if (fs.existsSync(packagefilename)) {
-        packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
-        if (fs.existsSync(mainfullfilename)) {
-          entry[(ns ? ns + '/' : '') + dir + '.' + platform + '-' + packagejson2.version || '1.0.0'] = mainfullfilename;
-        }
-      } else {
-        getEntry(entry, path.join(searchDir, dir), (ns ? ns + '/' : '') + dir);
+      if (!fs.existsSync(packagefilename)) {
+        findEntry(list, path.join(searchDir, dir) );
+      }else{
+        list.push(path.join(searchDir, dir));
       }
     }
+  }
+
+  function getEntry(list){
+    var entry = {};
+    for(var i in list){
+      var dir = list[i];
+      var mainfullfilename = path.join(  dir, mainfile);
+      var packagefilename = path.join(  dir, packagefile);
+      //console.log(packagefilename);
+      if (fs.existsSync(packagefilename)) {
+      var  packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
+        if (fs.existsSync(mainfullfilename)) {
+          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version || '1.0.0'] = mainfullfilename;
+        }
+      }
+    }
+    return entry;
   }
 
   return {
@@ -63,8 +75,9 @@ module.exports = function () {
       }
       //  console.log(externals);
 
-      var entry = {};
-      getEntry(entry, config.BUNDLE_SRC);
+      var list = config.bundles;
+      findEntry(list, path.join(__dirname, '../src'));
+      var  entry = getEntry(list);
       //console.log(entry);
 
       // returns a Compiler instance
@@ -91,10 +104,8 @@ module.exports = function () {
             loader: 'babel',
             query: {
               sourceMaps: 'yes',
-              sourceRoot: config.BUNDLE_SRC,
-              presets: ["es2015", "stage-0", "stage-1", "stage-2",
-                  "stage-3", "react"
-                ],
+              //sourceRoot: config.BUNDLE_SRC,
+              presets: ["es2015", "stage-0", "stage-1", "stage-2", "stage-3", "react"],
               plugins: [
                 'transform-decorators-legacy'
                   // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {

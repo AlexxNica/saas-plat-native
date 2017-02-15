@@ -34,24 +34,31 @@ module.exports = function () {
       var dir = dirs[i];
       var packagefilename = path.join(searchDir, dir, packagefile);
       if (!fs.existsSync(packagefilename)) {
-        findEntry(list, path.join(searchDir, dir) );
-      }else{
+        findEntry(list, path.join(searchDir, dir));
+      } else {
         list.push(path.join(searchDir, dir));
       }
     }
   }
 
-  function getEntry(list){
+  function getEntry(list) {
     var entry = {};
-    for(var i in list){
+    for (var i in list) {
       var dir = list[i];
-      var mainfullfilename = path.join(  dir, mainfile);
-      var packagefilename = path.join(  dir, packagefile);
+      var mainfullfilename = path.join(dir, mainfile);
+      var packagefilename = path.join(dir, packagefile);
       //console.log(packagefilename);
       if (fs.existsSync(packagefilename)) {
-      var  packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
+        var packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
         if (fs.existsSync(mainfullfilename)) {
-          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version || '1.0.0'] = mainfullfilename;
+          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
+            '1.0.0'] = mainfullfilename;
+        } else {
+          mainfullfilename = path.join(dir, 'src', mainfile);
+          if (fs.existsSync(mainfullfilename)) {
+            entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
+              '1.0.0'] = mainfullfilename;
+          }
         }
       }
     }
@@ -76,9 +83,10 @@ module.exports = function () {
       //  console.log(externals);
 
       var list = config.bundles;
-      findEntry(list, path.join(__dirname, '../src'));
-      var  entry = getEntry(list);
-      //console.log(entry);
+    //  findEntry(list, path.join(__dirname, '../src'));
+      var entry = getEntry(list);
+      // console.log(list);
+      // console.log(entry);
 
       // returns a Compiler instance
       var compiler = webpack({
@@ -91,7 +99,9 @@ module.exports = function () {
         },
         externals: externals,
         resolve: {
-          extensions: ['', '.js', '.' + platform + '.js', '.png', '.jpg']
+          extensions: ['', '.js', '.' + platform + '.js', '.png',
+            '.jpg'
+          ]
         },
         devtool: '#source-map', // inline-source-map
         module: {
@@ -105,15 +115,17 @@ module.exports = function () {
             query: {
               sourceMaps: 'yes',
               //sourceRoot: config.BUNDLE_SRC,
-              presets: ["es2015", "stage-0", "stage-1", "stage-2", "stage-3", "react"],
+              presets: ["es2015", "stage-0", "stage-1", "stage-2",
+                "stage-3", "react"
+              ],
               plugins: [
                 'transform-decorators-legacy'
-                  // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {
-                  //   "file": fi,
-                  //   "nsRootDir": __dirname + '\\..\\bundles\\'
-                  // }]
-                  //'transform-runtime'
-                ]
+                // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {
+                //   "file": fi,
+                //   "nsRootDir": __dirname + '\\..\\bundles\\'
+                // }]
+                //'transform-runtime'
+              ]
             }
           }]
         }
@@ -125,7 +137,7 @@ module.exports = function () {
       watcher = compiler.watch({ // watch options:
         aggregateTimeout: 300, // wait so long for more changes
         poll: true // use polling instead of native watchers
-          // pass a number to set the polling interval
+        // pass a number to set the polling interval
       }, function (err, stats) {
         if (err) {
           console.log(err + ' error'.error);
@@ -133,7 +145,8 @@ module.exports = function () {
         }
 
         var jsonStats = stats.toJson();
-        if (jsonStats.errors.length > 0 || jsonStats.warnings.length > 0) {
+        if (jsonStats.errors.length > 0 || jsonStats.warnings.length >
+          0) {
           for (var i in jsonStats.errors) {
             console.log(jsonStats.errors[i] + ' error'.error);
           }
@@ -141,7 +154,8 @@ module.exports = function () {
           for (var k in jsonStats.warnings) {
             console.log(jsonStats.warnings[k] + ''.warn);
           }
-          console.log('-------- ' + new Date().toLocaleString().info + ' -------');
+          console.log('-------- ' + new Date().toLocaleString().info +
+            ' -------');
         } else {
           console.log('webpack' + ' complate'.info);
         }

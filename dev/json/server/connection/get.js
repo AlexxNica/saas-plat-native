@@ -20,12 +20,11 @@ function readJsonFile(filename) {
   var json3 = {};
   if (fs.existsSync(filename)) {
     // console.log(filename);
-
     //console.log(fs.readFileSync(filename, 'utf8'));
     var packagefile = fs.readFileSync(filename, 'utf8');
     packagefile = deleteCodeComments(packagefile);
     json3 = JSON.parse(packagefile);
-
+    json3 = json3.spconfig && json3.spconfig.module;
   }
   return json3;
 }
@@ -66,7 +65,7 @@ function findAppBundle(json2, root) {
   }
 }
 
-exports.default = function() {
+exports.default = function () {
   var json2 = {
     id: 'server1',
     name: '测试服务器1',
@@ -79,22 +78,25 @@ exports.default = function() {
   }
 
   json2.modules = [];
-  for (var i in config.modules || []) {
-    var moduleFileName = path.join(config.modules[i], 'package.json');
-    var json4 = readJsonFile(moduleFileName);
-    var views = [];
-    for (i = 0; i < json4.adapter[0].views.length; i++) {
-      var vp = json4.adapter[0].views[i];
-      var v = readJsonFile(path.join(config.modules[i], 'views', vp +
-        '.json'));
-      views.push(v);
+  var modules = config.modules || [];
+  for (var k = 0; k < modules.length; k++) {
+    var moduleFileName = path.join(config.modules[k], 'package.json');
+    if (fs.existsSync(moduleFileName)) {
+      var json4 = readJsonFile(moduleFileName);
+      var views = [];
+      for (i = 0; i < json4.adapter[0].views.length; i++) {
+        var vp = json4.adapter[0].views[i];
+        var v = readJsonFile(path.join(config.modules[k], 'views', vp +
+          '.json'));
+        views.push(v);
+      }
+      json2.modules.push({
+        code: json4.code,
+        name: json4.name,
+        description: json4.description,
+        views: views
+      });
     }
-    json2.modules.push({
-      code: json4.code,
-      name: json4.name,
-      description: json4.description,
-      views: views
-    });
   }
 
   return json2;

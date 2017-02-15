@@ -5,4 +5,4 @@ import ServerListLocales from './zh-CN/ServerList';
 import NoModuleLocales from './zh-CN/NoModule';
 import PortalLocales from './zh-CN/Portal';
 
-Registry.registerLocales('zh-CN', () => ({router, ServerListLocales, NoModuleLocales, PortalLocales}));
+Registry.registerLocales(() => ({router, ServerListLocales, NoModuleLocales, PortalLocales}));

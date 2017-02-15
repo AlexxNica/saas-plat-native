@@ -1,7 +1,7 @@
 {
-  "name": "app",
+  "name": "saas-plat-core",
   "version": "1.0.78",
-  "description": "saasplat native app",
+  "description": "saas-plat 内核程序",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

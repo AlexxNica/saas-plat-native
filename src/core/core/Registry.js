@@ -71,10 +71,6 @@ export default class {
     this.registerRoute(name, 'root', route, afterBuild);
   }
 
-  static registerDefaultTheme(theme) {
-    return this.registerTheme('default', theme);
-  }
-
   static registerTheme(name, theme) {
     if (arguments.length === 1) {
       theme = name;
@@ -97,6 +93,11 @@ export default class {
   }
 
   static registerLocales(lang, locales) {
+    if (arguments.length === 1){
+      // 默认是简体中文
+      locales = lang;
+      lang = 'zh-CN';
+    }
     assert(locales, tx('LocalesNull'));
     assert(locales && typeof locales === 'function');
     const ctx = LoadContextManager.getCurrentContext();

@@ -1,5 +1,5 @@
 {
-  "name": "login",
+  "name": "saas-plat-platform-login",
   "version": "1.0.0",
   "description": "saasplat login component",
   "main": "index.js",

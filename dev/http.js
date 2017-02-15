@@ -43,7 +43,7 @@ function readJsonFile(filename) {
   return json3;
 }
 
-function connectApp(request, response, dir, modulesJson) {
+function connectApp(request, response,  modulesJson) {
   var theurl = url.parse(request.url);
   console.log(theurl.pathname);
   if (!Array.isArray(dir))
@@ -55,8 +55,7 @@ function connectApp(request, response, dir, modulesJson) {
       debug: true
     }
   };
-  for (var i = 0; i < dir.length; i++) {
-    var root = config.BUNDLE_SRC + path.sep + dir[i];
+   var root = path.dirname(__dirname) + path.sep + 'src'+ path.sep + 'platform';
     var files = fs.readdirSync(root);
     for (var f in files) {
       var filename = path.join(root, files[f], 'package.json');
@@ -66,7 +65,7 @@ function connectApp(request, response, dir, modulesJson) {
         var json3 = JSON.parse(packagefile);
         json3.spconfig = json3.spconfig || {};
         packageconfig = {
-          name: dir[i] + json3.name,
+          name: json3.name,
           version: 'HEAD',
           description: json3.description,
           keywords: json3.keywords,
@@ -77,11 +76,9 @@ function connectApp(request, response, dir, modulesJson) {
           dependencies: json3.spconfig.dependencies
         };
       }
-      json2.bundles.push(Object.assign({}, packageconfig, {
-        name: dir[i] + '/' + files[f]
-      }));
+      json2.bundles.push(packageconfig);
     }
-  }
+
   if (modulesJson) {
     var moduleFileName = path.join(__dirname, 'json', modulesJson, 'module.js');
     var packageconfig = {};
@@ -278,7 +275,7 @@ var server = http.createServer(function(request, response) {
   } else if (pathname == '/app/version') {
     appversion(request, response);
   } else if (pathname == '/app/connection') {
-    connectApp(request, response, 'platform');
+    connectApp(request, response);
     // } else if (pathname == '/server/connection') {   connectApp(request,
     // response);
   } else if (pathname == '/server/bundle/server1') {

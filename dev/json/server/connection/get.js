@@ -4,16 +4,16 @@ var config = require('../../../config').get();
 
 function deleteCodeComments(code) {
   // 另一种思路更简便的办法
-   // 将'://'全部替换为特殊字符，删除注释代码后再将其恢复回来
-   var tmp1 = ':\/\/';
-   var regTmp1 = /:\/\//g;
-   var tmp2 = '@:@/@/@';
-   var regTmp2 = /@:@\/@\/@/g;
-   code = code.replace(regTmp1, tmp2);
-   var reg = /(\/\/.*)?|(\/\*[\s\S]*?\*\/)/g;
-   code = code.replace(reg, '');
-   result = code.replace(regTmp2, tmp1);
-   return result;
+  // 将'://'全部替换为特殊字符，删除注释代码后再将其恢复回来
+  var tmp1 = ':\/\/';
+  var regTmp1 = /:\/\//g;
+  var tmp2 = '@:@/@/@';
+  var regTmp2 = /@:@\/@\/@/g;
+  code = code.replace(regTmp1, tmp2);
+  var reg = /(\/\/.*)?|(\/\*[\s\S]*?\*\/)/g;
+  code = code.replace(reg, '');
+  result = code.replace(regTmp2, tmp1);
+  return result;
 }
 
 function readJsonFile(filename) {
@@ -30,10 +30,7 @@ function readJsonFile(filename) {
   return json3;
 }
 
-function findAppBundle(json2, dir) {
-  if (dir === 'core' || dir === 'platform')
-    return;
-  var root = config.BUNDLE_SRC + path.sep + dir;
+function findAppBundle(json2, root) {
   var files = fs.readdirSync(root);
   for (var f in files) {
     if (files[f] === 'core') {
@@ -56,16 +53,14 @@ function findAppBundle(json2, dir) {
         preload: json3.spconfig.preload,
         dependencies: json3.spconfig.dependencies
       };
-      json2.bundles.push(Object.assign({}, packageconfig, {
-        name: (dir && (dir.replace(/\\/g, '/') + '/')) + files[f]
-      }));
+      json2.bundles.push(packageconfig);
     }
   }
 
   for (var f in files) {
     if (files[f] !== 'node_modules') {
       if (fs.statSync(path.join(root, files[f])).isDirectory()) {
-        findAppBundle(json2, (dir && (dir + path.sep)) + files[f]);
+        findAppBundle(json2, path.join(root, files[f]));
       }
     }
   }
@@ -79,23 +74,28 @@ exports.default = function() {
     bundleServer: 'http://test.saas-plat.com:8202/bundle/file',
     bundles: []
   };
-  findAppBundle(json2, '');
-  var moduleFileName = path.join(__dirname, 'department', 'module.json');
-  var json4 = readJsonFile(moduleFileName);
-  var views = [];
-  for (i = 0; i < json4.adapter[0].views.length; i++) {
-    var vp = json4.adapter[0].views[i];
-    var v = readJsonFile(path.join(__dirname, 'department', 'views', vp + '.json'));
-    views.push(v);
+  for (var i in config.bundles) {
+    findAppBundle(json2, config.bundles[i]);
   }
-  json2.modules = [
-    {
+
+  json2.modules = [];
+  for (var i in config.modules || []) {
+    var moduleFileName = path.join(config.modules[i], 'package.json');
+    var json4 = readJsonFile(moduleFileName);
+    var views = [];
+    for (i = 0; i < json4.adapter[0].views.length; i++) {
+      var vp = json4.adapter[0].views[i];
+      var v = readJsonFile(path.join(config.modules[i], 'views', vp +
+        '.json'));
+      views.push(v);
+    }
+    json2.modules.push({
       code: json4.code,
       name: json4.name,
       description: json4.description,
       views: views
-    }
-  ];
+    });
+  }
 
   return json2;
 }

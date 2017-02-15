@@ -1,5 +1,5 @@
 {
-  "name": "portal",
+  "name": "saas-plat-platform-portal",
   "version": "1.0.0",
   "description": "saas-plat default portal",
   "main": "index.js",

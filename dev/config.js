@@ -2,6 +2,7 @@ var path = require('path');
 
 exports.get = function(){
   return {
-    BUNDLE_SRC : path.dirname(__dirname) + path.sep + 'src'
+    bundles : [__dirname + '/../../saas-plat-appfx/native'],
+    modules: [__dirname + '/../../saas-plat-erp/base/department']
   };
 };

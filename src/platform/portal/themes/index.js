@@ -7,7 +7,7 @@ import PortalTheme from './default/Portal';
 import ServerListTheme from './default/ServerList';
 import ConsoleTheme from './default/Console';
 
-Registry.registerDefaultTheme(() => ({
+Registry.registerTheme(() => ({
   PortalTheme,
   NotFoundTheme,
   NoModuleTheme,

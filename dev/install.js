@@ -1,24 +1,53 @@
 var fs = require('fs');
 var path = require('path');
-var execSync = require('child_process').execSync;
+var npm = require('npm');
+// var execSync = require('child_process').execSync;
 
-function installPackage(dir) {
+function installPackage(dir, cb) {
+  if (!dir) return;
   var dir = path.join(__dirname, '..', dir);
-  console.log(dir)
+  console.log(dir);
   process.chdir(dir);
-  console.log(execSync('npm', ['install']));
+  //console.log(execSync('npm', ['install']));
+  npm.load({
+    //loglevel: "debug",
+    //verbose: true,
+    prefix: dir
+  }, function(er, npm) {
+    if (er) return cb(er);
+    let packfile = path.join(dir, 'package.json');
+    let args = [];
+    if (fs.existsSync(packfile)) {
+      let userPackage = JSON.parse(fs.readFileSync(packfile) || '{}');
+      if (userPackage.dependencies) {
+        for (let name in userPackage.dependencies) {
+          args.push(name + '@' + userPackage.dependencies[name]);
+          //args.push(name);
+        }
+      }
+    }
+    console.log(args);
+    npm.commands.install(args, cb);
+  });
 }
 
 var installPackages = [
-  //'',
   'dev/loaders/assets-loader',
-//  'dev/plugins/babel-relative-import',
-// 'src/core',
-// 'src/platform/host',
-// 'src/platform/login',
-// 'src/platform/portal',
+  'dev/plugins/babel-relative-import',
+  'src/core',
+  'src/platform/host',
+  'src/platform/login',
+  'src/platform/portal'
 ];
 
-for(var i in installPackages){
-  installPackage(installPackages[i]);
+function installAll(id) {
+  installPackage(installPackages[id || 0], function(err) {
+    if (err){
+      console.log(err);
+      return;
+    }
+    installAll((id || 0) + 1);
+  });
 }
+
+installAll();

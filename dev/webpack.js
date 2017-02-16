@@ -83,10 +83,10 @@ module.exports = function() {
       //  console.log(externals);
 
       var list = config.bundles;
-      //  findEntry(list, path.join(__dirname, '../src'));
+      findEntry(list, path.join(__dirname, '../src'));
       var entry = getEntry(list);
       // console.log(list);
-      // console.log(entry);
+       console.log(entry);
 
       // returns a Compiler instance
       var compiler = webpack({

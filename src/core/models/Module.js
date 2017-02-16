@@ -33,14 +33,14 @@ export default class Module {
   toJS() {
     return {
       id: this.id,
-      code: this.code,
       name: this.name,
+      text: this.text,
       url: this.url,
       views: this.views.map(v => v.toJS)
     };
   }
 
   static fromJS(store, object) {
-    return new Module(store, object.id, object.name, object.text, (object.views || []).map(v => View.fromJS(this, this.code, v)));
+    return new Module(store, object.id, object.name, object.text, (object.views || []).map(v => View.fromJS(this, this.name, v)));
   }
 }

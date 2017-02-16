@@ -1,5 +1,5 @@
 {
-  "name": "saas-plat-core",
+  "name": "core",
   "version": "1.0.78",
   "description": "saas-plat 内核程序",
   "main": "index.js",

@@ -48,7 +48,7 @@ class Bundle {
     this.preloads = {};
     this.dependencies = {};
     this.modules.forEach((item) => {
-      const scope = item.name.split('/')[0];
+      const scope = item.scope;
       let preloadScope = this.preloads[scope];
       if (!preloadScope) {
         this.preloads[scope] = preloadScope = [];
@@ -94,7 +94,7 @@ class Bundle {
     }
 
     for (const metadata of metadatas) {
-      this.modules.set(metadata.name, metadata);
+      this.modules.set(metadata.name, {...metadata, scope});
     }
     this._build();
 
@@ -103,11 +103,11 @@ class Bundle {
   removeMetadata(scope) {
     assert(scope);
     const deletes = [];
-    for (const key of this.modules.keys()) {
-      if (key.startsWith(`${scope}/`)) {
+    this.modules.forEach((item, key) => {
+      if (item.scope === scope){
         deletes.push(key);
       }
-    }
+    });
     for (const key of deletes) {
       this.modules.delete(key);
     }

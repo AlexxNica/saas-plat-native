@@ -1,7 +1,7 @@
 {
-  "name": "saas-plat-platform-portal",
+  "name": "saas-plat-portal",
   "version": "1.0.0",
-  "description": "saas-plat default portal",
+  "description": "门户",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

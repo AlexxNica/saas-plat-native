@@ -13,7 +13,7 @@ function bigThen(ver1, ver2) {
 }
 
 function getdeps(name, platform, version, dev, rootpath) {
-  if (version == 'HEAD' || !version) { 
+  if (version == 'HEAD' || !version) {
     var ps = name.split('/');
     var filename = ps[ps.length - 1];
     var p = [__dirname, 'bundles'];

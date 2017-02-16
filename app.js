@@ -137,7 +137,7 @@ export default class extends React.Component {
       return;
     }
     this.pushMessage(msgs.fileSyncing);
-    fetch(`${config.bundle}?name=core&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`).then((response) => {
+    fetch(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`).then((response) => {
       if (response.status == 200)
         return response.text();
       throw msgs.httpAccessForbidden + ' (' + response.status + ')';
@@ -150,7 +150,7 @@ export default class extends React.Component {
       resolve(text);
     }).catch((error) => {
       if (me.debugMode) {
-        me.pushMessage(`${config.bundle}?name=core&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`);
+        me.pushMessage(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`);
       }
       reject(error);
     });

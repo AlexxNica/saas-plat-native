@@ -1,40 +1,49 @@
-import {observable, action} from 'mobx';
+import { observable, action } from 'mobx';
 import SupportModel from '../models/Support';
 import DeviceModel from '../models/Device';
 
 import bundle from '../core/Bundle';
 
-import {tx} from '../utils/internal';
+import { tx } from '../utils/internal';
 import localStore from '../utils/LocalStore';
 
 import config from '../config';
 
-
 console.disableDebugging = function() {
   SystemStore.getStore().device.debug = false;
 };
-import {registerStore} from '../core/Store';
+import { registerStore } from '../core/Store';
 
 @registerStore('systemStore')
 export default class SystemStore {
   @observable device = new DeviceModel();
   @observable support = new SupportModel();
-  @observable options = null;
+  @observable options = {};
   @observable config = config;
 
-  @action loadSystemOptions() {
-    localStore.load({key: 'systemOptions'}).then(result => {
-      console.log(tx('SystemOptionLoaded'));
-      this.options = result || {};
-    }).catch(err => {
-      if (err && err.name != 'NotFoundError' && err.name != 'ExpiredError') {
-        console.log(tx('SystemOptionLoadFail'));
-        console.warn(err);
-      } else {
-        this.options = {};
-      }
+  @action loadSystemOptions(autoLoad = true) {
+    const me = this;
+    return new Promise(function(resolve, reject) {
+      localStore.load({ key: 'systemOptions' }).then(result => {
+        console.log(tx('SystemOptionLoaded'));
+        if (autoLoad) {
+          me.options = result;
+        }
+        resolve(result);
+      }).catch(err => {
+        if (err && err.name !== 'NotFoundError' && err.name !==
+          'ExpiredError') {
+          console.log(tx('SystemOptionLoadFail'));
+          console.warn(err);
+          reject();
+        } else {
+          if (autoLoad) {
+            me.options = {};
+          }
+          resolve({});
+        }
+      });
     });
-
   }
 
   @action updateBundleServer(server) {
@@ -43,8 +52,7 @@ export default class SystemStore {
 
   @action saveSystemOptions() {
     console.log('保存系统选项');
-    debugger
-    localStore.save({key: 'systemOptions', rawData: this.options});
+    localStore.save({ key: 'systemOptions', rawData: this.options });
   }
 
   @action setSystemOption(options) {

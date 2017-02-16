@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha --compilers js:babel-core/register --recursive --bail",
+    
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "start": "node --harmony dev/start",
     "client": "node node_modules/react-native/local-cli/cli.js start",

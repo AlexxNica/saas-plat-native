@@ -1,6 +1,5 @@
 var fs = require('fs');
 var path = require('path');
-var config = require('./config').get();
 var webpackAndroid = require('./webpack')();
 var webpackIOS = require('./webpack')();
 

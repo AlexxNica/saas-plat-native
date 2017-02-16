@@ -7,8 +7,10 @@ import {
   Image,
   StatusBar
 } from 'react-native';
+import assert from 'assert';
 import AppIntro from 'react-native-app-intro';
 import {autobind} from 'core-decorators';
+import {connectStore} from '../core/Store';
 
 // 介绍页不能被主体化
 const styles = StyleSheet.create({
@@ -49,13 +51,15 @@ const styles = StyleSheet.create({
   }
 });
 
+@connectStore(['systemStore'])
 @autobind
 export default class extends Component {
   handleDone() {
-    this.props.system.setSystemOption({appVersion: this.props.system.config.version});
-    if (this.props.onDone)
-      this.props.onDone();
-    }
+    this.props.systemStore.setSystemOption({appVersion: this.props.systemStore.config.version});
+    assert(this.props.onDone);  // onDone必须有值
+    this.props.onDone();
+  }
+  
   render() {
     // onDone 在action中设置的，在PlatformLoading.js中
     return (

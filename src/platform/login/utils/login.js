@@ -7,7 +7,7 @@ export function login(userData) {
    // 登陆完打开门户
   setTimeout(function(){
     try {
-      Actions.gotoAction('platform/portal', {
+      Actions.gotoAction('saas-plat-portal', {
         type: 'reset'
       });
     } catch (err) {

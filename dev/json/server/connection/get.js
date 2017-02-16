@@ -24,7 +24,7 @@ function readJsonFile(filename) {
     var packagefile = fs.readFileSync(filename, 'utf8');
     packagefile = deleteCodeComments(packagefile);
     json3 = JSON.parse(packagefile);
-    json3 = json3.spconfig && json3.spconfig.module;
+
   }
   return json3;
 }
@@ -32,40 +32,42 @@ function readJsonFile(filename) {
 function findAppBundle(json2, root) {
   var files = fs.readdirSync(root);
   for (var f in files) {
-    if (files[f] === 'core') {
-      continue;
-    }
-    var filename = path.join(root, files[f], 'package.json');
-    var packageconfig = {};
-    if (fs.existsSync(filename)) {
-      var packagefile = fs.readFileSync(filename);
-      var json3 = JSON.parse(packagefile);
-      json3.spconfig = json3.spconfig || {};
-      packageconfig = {
-        name: json3.name,
-        version: 'HEAD',
-        description: json3.description,
-        keywords: json3.keywords,
-        author: json3.author,
-        license: json3.license,
-        // 下面的是sp扩展
-        preload: json3.spconfig.preload,
-        dependencies: json3.spconfig.dependencies
-      };
-      json2.bundles.push(packageconfig);
-    }
-  }
+    var filename = path.join(root, files[f]);
+    if (fs.statSync(filename).isFile()) {
+      if (files[f] === 'package.json') {
 
-  for (var f in files) {
-    if (files[f] !== 'node_modules') {
-      if (fs.statSync(path.join(root, files[f])).isDirectory()) {
-        findAppBundle(json2, path.join(root, files[f]));
+        if (fs.existsSync(filename)) {
+          var packageconfig = {};
+          var packagefile = fs.readFileSync(filename);
+          var json3 = JSON.parse(packagefile);
+          json3.spconfig = json3.spconfig || {};
+          packageconfig = {
+            name: json3.name,
+            version: 'HEAD',
+            description: json3.description,
+            keywords: json3.keywords,
+            author: json3.author,
+            license: json3.license,
+            // 下面的是sp扩展
+            preload: json3.spconfig.preload,
+            dependencies: json3.spconfig.dependencies
+          };
+          console.log('ok')
+          json2.bundles.push(packageconfig);
+          return;
+        }
+      }
+    } else {
+      if (files[f] !== 'node_modules') {
+        if (fs.statSync(path.join(root, files[f])).isDirectory()) {
+          findAppBundle(json2, path.join(root, files[f]));
+        }
       }
     }
   }
 }
 
-exports.default = function () {
+exports.default = function() {
   var json2 = {
     id: 'server1',
     name: '测试服务器1',
@@ -83,6 +85,7 @@ exports.default = function () {
     var moduleFileName = path.join(config.modules[k], 'package.json');
     if (fs.existsSync(moduleFileName)) {
       var json4 = readJsonFile(moduleFileName);
+      json4 = json4.spconfig && json4.spconfig.module;
       var views = [];
       for (i = 0; i < json4.adapter[0].views.length; i++) {
         var vp = json4.adapter[0].views[i];

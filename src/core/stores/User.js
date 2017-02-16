@@ -1,6 +1,6 @@
 import assert from 'assert';
 import sha1 from 'crypto-js/sha1';
-import {observable, action} from 'mobx';
+import { observable, action } from 'mobx';
 
 import ServerStore from './Server';
 import RouterStore from './Router';
@@ -11,8 +11,8 @@ import HistroyModel from '../models/Histroy';
 import statistics from '../utils/Statistics';
 import localStore from '../utils/LocalStore';
 
-import {tx} from '../utils/internal';
-import {registerStore} from '../core/Store';
+import { tx } from '../utils/internal';
+import { registerStore } from '../core/Store';
 
 import * as apis from '../apis/PlatformApis';
 
@@ -33,13 +33,13 @@ export default class UserStore {
 
   @action logout() {
     // 删除之前的登录状态
-    localStore.remove({key: 'loginState'});
+    localStore.remove({ key: 'loginState' });
     this.user = null;
   }
 
-  @action login({username, password}) {
+  @action login({ username, password }) {
     console.log(tx('LoginStart'));
-    statistics.log({how: 'login'});
+    statistics.log({ how: 'login' });
     return new Promise(async(resolve, reject) => {
       var encUsername = encodeURIComponent(username) || '';
       var passwordHash = sha1(password).toString();
@@ -81,7 +81,8 @@ export default class UserStore {
         key: 'loginState',
         id: 'loginState',
         rawData: this.user.toJS(),
-        expires: (this.user.token && this.user.token.expires) || 1000 * 3600 * 24 * 7 // 保持一周
+        expires: (this.user.token && this.user.token.expires) || 1000 *
+          3600 * 24 * 7 // 保持一周
       });
     }
   }
@@ -89,7 +90,7 @@ export default class UserStore {
   @action saveHistoryList() {
     // 添加历史记录
     console.log('保存登陆历史记录');
-    localStore.save({key: 'historyList', rawData: this.historyList.toJS()});
+    localStore.save({ key: 'historyList', rawData: this.historyList.toJS() });
   }
 
   // 恢复最后一次登录的用户状态
@@ -97,7 +98,8 @@ export default class UserStore {
     console.log('恢复最后一次登录的用户状态');
     let me = this;
     return new Promise((resolve, reject) => {
-      localStore.load({key: 'loginState', id: 'loginState'}).then((result) => {
+      localStore.load({ key: 'loginState', id: 'loginState' }).then((
+        result) => {
         console.log('恢复登录状态完成');
         if (autoLogin) {
           if (me.user) {
@@ -108,7 +110,8 @@ export default class UserStore {
         me.loginState = result;
         resolve(result);
       }).catch(err => {
-        if (err && err.name !== 'NotFoundError' && err.name !== 'ExpiredError') {
+        if (err && err.name !== 'NotFoundError' && err.name !==
+          'ExpiredError') {
           console.log('登录状态恢复失败');
           console.warn(err);
           resolve({});
@@ -123,15 +126,17 @@ export default class UserStore {
     console.log('加载登录历史记录');
     let me = this;
     return new Promise(function(resolve, reject) {
-      localStore.load({key: 'historyList'}).then(result => {
+      localStore.load({ key: 'historyList' }).then(result => {
         console.log(tx('HistroyListLoadSuccess'));
         if (autoLoad) {
           me.historyList.clear();
-          (result.items || []).forEach(s => me.historyList.add(UserModel.fromJS(me, s)));
+          (result.items || []).forEach(s => me.historyList.add(
+            UserModel.fromJS(me, s)));
         }
         resolve(result || []);
       }).catch(err => {
-        if (err && err.name != 'NotFoundError' && err.name != 'ExpiredError') {
+        if (err && err.name != 'NotFoundError' && err.name !=
+          'ExpiredError') {
           console.log(tx('HistroyListLoadFailed'));
           console.warn(err);
           resolve();
@@ -144,21 +149,26 @@ export default class UserStore {
 
   // 恢复指定用户的选项设置
   @action loadUserOptions(name, autoUpdate = true) {
-    assert(name, '要加载选项的用户不存在');
-    console.log('恢复用户选项');
+    assert(name);
+    console.log('恢复用户选项', name);
+    const me = this;
     return new Promise(function(resolve, reject) {
-      localStore.load({key: 'useroptions', id: name}).then(result => {
+      localStore.load({ key: 'useroptions', id: name }).then(result => {
         console.log('用户选项加载完成');
-        if (autoUpdate && this.user) {
-          this.options = result;
+        if (autoUpdate && me.user) {
+          me.options = result;
         }
         resolve(result);
       }).catch(err => {
-        if (err && err.name != 'NotFoundError' && err.name != 'ExpiredError') {
+        if (err && err.name !== 'NotFoundError' && err.name !==
+          'ExpiredError') {
           console.log('用户选项加载失败');
           console.warn(err);
-          resolve();
+          reject();
         } else {
+          if (autoUpdate && me.user) {
+            me.options = {};
+          }
           resolve();
         }
       });
@@ -169,16 +179,15 @@ export default class UserStore {
     this.loadLoginState(autoLogin).then(loginState => {
       this.loginState = loginState || {};
       if (loginState.name)
-        this.loadUserOptions(loginState.name);
-      }
-    );
+        this.loadUserOptions(loginState.name, true);
+    });
     this.loadHistoryList();
   }
 
   @action saveUserOptions() {
     assert(this.user && this.user.name, '用户尚未登录无法保存');
-    console.log('保存用户选项');
-    localStore.save({key: 'useroptions', id: this.user.name, rawData: this.options});
+    console.log('保存用户选项', this.user.name);
+    localStore.save({ key: 'useroptions', id: this.user.name, rawData: this.options });
   }
 
   @action setUserOption(options) {
@@ -193,7 +202,8 @@ export default class UserStore {
   @action hasServerAuth(authCode, ns = null) {
     if (!authCode)
       return false;
-    ns = ns || (RouterStore.getStore().currentBundle && RouterStore.getStore().currentBundle.name);
+    ns = ns || (RouterStore.getStore().currentBundle && RouterStore.getStore()
+      .currentBundle.name);
     if (!ns) {
       console.warn('当前模块不存在，权限无法判定');
       return false;
@@ -208,7 +218,8 @@ export default class UserStore {
     if (!authID)
       return false;
     if (authID >= 1000) {
-      console.warn('auth code ' + module.name + '/' + authCode + '(' + authID + '>1000) is invalid');
+      console.warn('auth code ' + module.name + '/' + authCode + '(' + authID +
+        '>1000) is invalid');
     }
     let fullCode = moduleID * 1000 + authID;
     let currentServer = ServerStore.getStore().currentServer;
@@ -225,16 +236,16 @@ export default class UserStore {
     if (!serverAuth.exclude) {
       // 包含
       for (var scope of scopes) {
-        return scope.length == 2
-          ? (fullCode >= scope[0] && fullcode <= scope[1])
-          : fullcode == scope;
+        return scope.length == 2 ?
+          (fullCode >= scope[0] && fullcode <= scope[1]) :
+          fullcode == scope;
       }
     } else {
       // 排除法
       for (var scope2 of scopes) {
-        if (scope2.length == 2
-          ? (fullCode >= scope2[0] && fullcode <= scope2[1])
-          : fullcode == scope2) {
+        if (scope2.length == 2 ?
+          (fullCode >= scope2[0] && fullcode <= scope2[1]) :
+          fullcode == scope2) {
           return false;
         }
       }
@@ -264,7 +275,7 @@ export default class UserStore {
   }
 
   @action relogin() {
-    statistics.log({how: 'relogin'});
+    statistics.log({ how: 'relogin' });
     return new Promise((resolve, reject) => {
       if (!this.loginState.token || !this.loginState.name) {
         reject();

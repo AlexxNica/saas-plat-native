@@ -6,30 +6,30 @@ export default class View {
   mId;
 
   @observable url;
+  @observable text;
   @observable name;
-  @observable code;
   @observable config;
 
-  constructor(store, mId, id, code, name, url, config) {
+  constructor(store, mId, id, name, text, url, config) {
     this.store = store;
     this.mId = mId;
     this.id = id;
-    this.code = code;
     this.name = name;
+    this.text = text;
     this.url = url;
     this.config = config;
   }
 
   @action open(options) {
-    this.store.openModule(this.mId, this.code, options);
+    this.store.openModule(this.mId, this.name, options);
   }
 
   toJS() {
     return {
       ...this.config,
       id: this.id,
-      code: this.code,
       name: this.name,
+      text: this.text,
       url: this.url,
     };
   }
@@ -37,11 +37,11 @@ export default class View {
   static fromJS(store, mId, object) {
     const {
       id,
-      code,
       name,
+      text,
       url,
       ...config
     } = object;
-    return new View(store, mId, id, code, name, url, config);
+    return new View(store, mId, id, name, text, url, config);
   }
 }

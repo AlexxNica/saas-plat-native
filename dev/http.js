@@ -81,7 +81,13 @@ function exeJs(request, response) {
     } else {
       delete require.cache[realPath];
       if (require(realPath).custom) {
-        require(realPath).custom(request, response);
+        try {
+          require(realPath).custom(request, response);
+        } catch (err) {
+          console.log(err.stack);
+          console.log(err);
+          response.end();
+        }
       } else {
         var contentType = 'application/json;charset=utf-8';
         response.writeHead(200, { 'Content-Type': contentType });
@@ -106,8 +112,10 @@ function exeJs(request, response) {
 var server = http.createServer(function(request, response) {
   //getJson(request, response);
   exeJs(request, response);
-
 });
+
+function noop(){}
+process.on('uncaughtException', noop)
 
 server.listen(PORT);
 console.log("Server runing at port: " + PORT + ".");

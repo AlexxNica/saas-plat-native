@@ -1,7 +1,7 @@
 {
-  "name": "saas-plat-platform-job",
+  "name": "saas-plat-job",
   "version": "1.0.0",
-  "description": "job",
+  "description": "工单保修服务",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,15 +1,15 @@
 import React from 'react';
 import assert from 'assert';
-import {View, StatusBar, Text, TouchableOpacity} from 'react-native';
-import {autobind} from 'core-decorators';
+import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
+import { autobind } from 'core-decorators';
 import SplashScreen from '@remobile/react-native-splashscreen';
 import Spinner from './Spinner';
 import bundle from '../core/Bundle';
 import * as apis from '../apis/PlatformApis';
-import {connectStyle} from '../core/Theme';
-import {translate} from '../core/I18n';
-import {connectStore} from '../core/Store';
-import {Actions} from '../core/Router';
+import { connectStyle } from '../core/Theme';
+import { translate } from '../core/I18n';
+import { connectStore } from '../core/Store';
+import { Actions } from '../core/Router';
 
 // 平台组件加载等待
 @translate('core.PlatformLoading')
@@ -28,7 +28,7 @@ export default class PlatformLoading extends React.Component {
   @autobind
   finished(code) {
     if (this._isMounted) {
-      this.setState({animating: false});
+      this.setState({ animating: false });
       this.setState({
         message: this.props.t(code) || code || this.props.t('failed')
       });
@@ -38,11 +38,16 @@ export default class PlatformLoading extends React.Component {
       // console.log(this.props.t('user version:'+appVersion);
       // console.log(this.props.t('system version:'+System.getVersion());
       // 如果没有看过介绍页显示，否着直接进入登录页
-      if (!(this.props.systemStore.config.version !== appVersion
-        ? Actions.gotoAction('core/showAppIntro', {onDone: this.gotoLogin})
-        : Actions.gotoAction('platform/login'))) {
+      if (!(this.props.systemStore.config.version !== appVersion ?
+          Actions.gotoAction('core/showAppIntro', {
+            onDone: () => {
+              Actions.gotoAction('saas-plat-login');
+            }
+          }) :
+          Actions.gotoAction('saas-plat-login'))) {
         debugger;
-        this.setState({animating: false, message: this.props.t('loginfailed')});
+        this.setState({ animating: false, message: this.props.t(
+            'loginfailed') });
       }
     }
 
@@ -71,7 +76,8 @@ export default class PlatformLoading extends React.Component {
         const platformConfig = await apis.connectPlatform();
         bundle.removeMetadata('platform');
         bundle.addMetadata('platform', platformConfig.bundles);
-        me.props.systemStore.debug(platformConfig.device && platformConfig.device.debug);
+        me.props.systemStore.debug(platformConfig.device &&
+          platformConfig.device.debug);
         if (platformConfig.bundleServer) {
           me.props.systemStore.updateBundleServer(platformConfig.bundleServer);
         }
@@ -88,7 +94,8 @@ export default class PlatformLoading extends React.Component {
     const me = this;
     return new Promise((resolve, reject) => {
       console.log(me.props.t('StartLoadPlatform'));
-      bundle.load(platformConfig.bundles, platformConfig.server).then((bundles) => {
+      bundle.load(platformConfig.bundles, platformConfig.server).then((
+        bundles) => {
         console.log(me.props.t('LoadPlatformSuccess'));
         resolve(bundles);
       }).catch((err) => {
@@ -100,7 +107,8 @@ export default class PlatformLoading extends React.Component {
 
   startupSystem() {
     const me = this;
-    me.loadBundle({bundles: bundle.getPreloads('platform'), server: this.props.systemStore.config.platform.bundle}).then((bundles) => {
+    me.loadBundle({ bundles: bundle.getPreloads('platform'), server: this.props
+        .systemStore.config.platform.bundle }).then((bundles) => {
       me.finished('complated');
     }).catch((err) => {
       console.log(me.props.t('SystemLoadFail'));
@@ -110,7 +118,7 @@ export default class PlatformLoading extends React.Component {
   }
 
   prepare() {
-    this.setState({animating: true, message: this.props.t('Prepare')});
+    this.setState({ animating: true, message: this.props.t('Prepare') });
 
     this.connect(). // 连接获取平台基本配置信息
     then(() => this.props.systemStore.loadSystemOptions()). // 先加载系统选项，启动过程可能需要判断

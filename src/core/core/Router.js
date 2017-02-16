@@ -40,7 +40,7 @@ export const Actions = class {
   4：模块跳转，直接写modulename(actionname默认index)
   */
   static gotoAction(action, props, version) {
-    assert(action, 'action未知');
+    assert(action);
     // 模块跳转
     let curBundle = bundle.getBundle(action);
     let name;

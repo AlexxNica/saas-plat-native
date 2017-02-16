@@ -1,7 +1,7 @@
 {
-  "name": "saas-plat-platform-login",
+  "name": "saas-plat-login",
   "version": "1.0.0",
-  "description": "saasplat login component",
+  "description": "平台用户登录服务",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

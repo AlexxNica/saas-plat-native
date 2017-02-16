@@ -5,14 +5,13 @@ var npm = require('npm');
 
 function installPackage(dir, cb) {
   if (!dir) return;
-  var dir = path.join(__dirname, '..', dir);
+  dir = path.join(__dirname, '..', dir);
   console.log(dir);
   process.chdir(dir);
-  //console.log(execSync('npm', ['install']));
+  // console.log(execSync('npm', ['install']));
   npm.load({
-    //loglevel: "debug",
-    //verbose: true,
-    prefix: dir
+    // loglevel: "debug",
+    // verbose: true
   }, function(er, npm) {
     if (er) return cb(er);
     let packfile = path.join(dir, 'package.json');
@@ -27,7 +26,7 @@ function installPackage(dir, cb) {
       }
     }
     console.log(args);
-    npm.commands.install(args, cb);
+    npm.commands.install(dir, args, cb);
   });
 }
 

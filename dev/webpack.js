@@ -19,7 +19,7 @@ colors.setTheme({
   error: 'red'
 });
 
-module.exports = function () {
+module.exports = function() {
 
   var watcher;
   var platform = 'ios';
@@ -66,11 +66,11 @@ module.exports = function () {
   }
 
   return {
-    setPlatform: function (plat) {
+    setPlatform: function(plat) {
       platform = plat;
     },
 
-    run: function () {
+    run: function() {
       // externals
       var file = fs.readFileSync(path.join(path.dirname(__dirname),
         'package.json'));
@@ -83,7 +83,7 @@ module.exports = function () {
       //  console.log(externals);
 
       var list = config.bundles;
-    //  findEntry(list, path.join(__dirname, '../src'));
+      //  findEntry(list, path.join(__dirname, '../src'));
       var entry = getEntry(list);
       // console.log(list);
       // console.log(entry);
@@ -104,6 +104,9 @@ module.exports = function () {
           ]
         },
         devtool: '#source-map', // inline-source-map
+        node: {
+          fs: 'empty'
+        },
         module: {
           loaders: [{
             test: /\.(png|jpg)$/,
@@ -138,7 +141,7 @@ module.exports = function () {
         aggregateTimeout: 300, // wait so long for more changes
         poll: true // use polling instead of native watchers
         // pass a number to set the polling interval
-      }, function (err, stats) {
+      }, function(err, stats) {
         if (err) {
           console.log(err + ' error'.error);
           return;
@@ -164,7 +167,7 @@ module.exports = function () {
       console.log(platform + ' webpack compiler ' + 'run'.info);
     },
 
-    close: function (cb) {
+    close: function(cb) {
       if (watcher) {
         watcher.close(cb);
         watcher = null;

@@ -8,11 +8,11 @@ import { tx } from '../utils/internal';
 import localStore from '../utils/LocalStore';
 
 import config from '../config';
+import { registerStore } from '../core/Store';
 
 console.disableDebugging = function() {
   SystemStore.getStore().device.debug = false;
 };
-import { registerStore } from '../core/Store';
 
 @registerStore('systemStore')
 export default class SystemStore {
@@ -23,7 +23,7 @@ export default class SystemStore {
 
   @action loadSystemOptions(autoLoad = true) {
     const me = this;
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       localStore.load({ key: 'systemOptions' }).then(result => {
         console.log(tx('SystemOptionLoaded'));
         if (autoLoad) {

@@ -38,11 +38,7 @@ export default class ServerStore {
       console.warn(tx('ViewNotExists'));
       return;
     }
-    Actions.gotoAction(view.url, {
-      ...options,
-      module,
-      view
-    });
+    Actions.gotoAction(view.url);
   }
 
   saveModuleToLocal() {}

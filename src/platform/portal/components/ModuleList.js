@@ -51,13 +51,13 @@ export default class ModuleList extends React.Component {
       navigationBarStyle: this.props.style.navigationBar,
       renderRightButton: () => (<Icon.Button
         name='user'
-        backgroundColor={this.props.style.button.link.backgroundColor}
-        iconStyle={this.props.style.button.link}
+        backgroundColor={this.props.style.base.navigationBar.backgroundColor}
+        color={this.props.style.base.button.color}
         onPress={() => Actions.gotoAction('user')}/>),
       renderBackButton: () => (<Icon.Button
         name='arrow-left'
-        backgroundColor={this.props.style.button.link.backgroundColor}
-        iconStyle={this.props.style.button.link}
+        backgroundColor={this.props.style.base.navigationBar.backgroundColor}
+        color={this.props.style.base.button.color}
         onPress={() => Actions.pop()}/>)
     });
   }

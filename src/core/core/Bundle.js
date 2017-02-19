@@ -325,7 +325,7 @@ class Bundle {
               try {
                 ctx.removeBundleRegisters();
                 // console.log('require ' + verName);
-                const instance = global.require(`saasplat-native/${verName}`);
+                const instance = global.require(verName);
                 if (!instance) {
                   debugger;
                   console.error(`require ${verName} bundle failed.`);
@@ -369,7 +369,7 @@ class Bundle {
         // 注入脚本
         if (script) {
           const vername = itemConfig.name;
-          let spscript = "spdefine('saasplat-native/" + vername + "', function(global, require, module, exports) {\nrequire=global.sprequire;" + script + "\n});";
+          let spscript = "spdefine('" + vername + "', function(global, require, module, exports) {\nrequire=global.sprequire;" + script + "\n});";
 
           if (__DEV__) {
             spscript += "\n\nconsole.log('" + tx('RequireBundle') + vername + "');";

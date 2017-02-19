@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    
+
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "start": "node --harmony dev/start",
     "client": "node node_modules/react-native/local-cli/cli.js start",
@@ -64,7 +64,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
     "babel-preset-stage-3": "^6.5.0",
-    "babel-root-import": "^3.2.2",
+    "babel-plugin-root-import": "^3.2.2",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
     "eslint": "^3.15.0",

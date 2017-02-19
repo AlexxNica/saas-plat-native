@@ -6,7 +6,6 @@ export function testServer() {
 }
 
 export function queryData(name, args) {
-  debugger
   const filter = toQueryString(args);
   let filterArg = '';
   if (filter) {

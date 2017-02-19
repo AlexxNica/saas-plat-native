@@ -6,10 +6,11 @@ export function testServer() {
 }
 
 export function queryData(name, args) {
+  debugger
   const filter = toQueryString(args);
   let filterArg = '';
   if (filter) {
     filterArg = `&filter=${filter}`;
   }
-  return fetchServer({url: `${config.platform.query}?table=${name}${filterArg}`});
+  return fetchServer({url: `${config.server.query}?table=${name}${filterArg}`});
 }

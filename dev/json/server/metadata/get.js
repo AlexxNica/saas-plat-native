@@ -90,6 +90,7 @@ exports.default = function() {
   }
   json2.modules = [
     {
+      id: new Date().getTime(),
       code: json4.code,
       name: json4.name,
       description: json4.description,

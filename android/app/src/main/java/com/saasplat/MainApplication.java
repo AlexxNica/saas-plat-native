@@ -4,6 +4,16 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.rnziparchive.RNZipArchivePackage;
+import com.brentvatne.react.ReactVideoPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.i18n.reactnativei18n.ReactNativeI18n;
+import com.imagepicker.ImagePickerPackage;
+import com.rnfs.RNFSPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.cmcewen.blurview.BlurViewPackage;
+import com.remobile.splashscreen.RCTSplashScreenPackage;
 import com.cmcewen.blurview.BlurViewPackage;
 import com.rnziparchive.RNZipArchivePackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -46,6 +56,16 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNZipArchivePackage(),
+            new ReactVideoPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeI18n(),
+            new ImagePickerPackage(),
+            new RNFSPackage(),
+            new RNDeviceInfo(),
+            new RCTCameraPackage(),
+            new BlurViewPackage(),
+            new RCTSplashScreenPackage(),
             new BlurViewPackage(),
             new RNZipArchivePackage(),
             new ReactVideoPackage(),

@@ -19,53 +19,5 @@ include ':react-native-blur'
 project(':react-native-blur').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-blur/android')
 include ':@remobile/react-native-splashscreen'
 project(':@remobile/react-native-splashscreen').projectDir = new File(rootProject.projectDir, '../node_modules/@remobile/react-native-splashscreen/android')
-include ':react-native-blur'
-project(':react-native-blur').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-blur/android')
-include ':react-native-zip-archive'
-project(':react-native-zip-archive').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-zip-archive/android')
-include ':react-native-video'
-project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
-include ':react-native-vector-icons'
-project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
-include ':react-native-locale-detector'
-project(':react-native-locale-detector').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-locale-detector/android')
-include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
-include ':react-native-fs'
-project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
-include ':react-native-device-info'
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
-include ':@remobile/react-native-splashscreen'
-project(':@remobile/react-native-splashscreen').projectDir = new File(rootProject.projectDir, '../node_modules/@remobile/react-native-splashscreen/android')
-
-
 include ':app', ':jpush-react-native'
 project(':jpush-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/jpush-react-native/android')
-
-
-include ':react-native-splashscreen'
-project(':react-native-splashscreen').projectDir = new File(rootProject.projectDir, '../node_modules/@remobile/react-native-splashscreen/android')
-
-include ':react-native-vector-icons'
-project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
-
-include ':react-native-video'
-project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android')
-
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
-
-include ':react-native-zip-archive'
-project(':react-native-zip-archive').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-zip-archive/android')
-
-include ':react-native-fs'
-project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
-// react-native-device-info dependency
-include ':react-native-device-info'
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
-
-// react-native-locale-detector dependency
-include ':react-native-locale-detector'
-project(':react-native-locale-detector').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-locale-detector/android')

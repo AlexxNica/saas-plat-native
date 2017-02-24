@@ -2,22 +2,23 @@
 
 saas-plat.com运行平台，技术基于React Native提供跨终端的运行支持。
 
-## IOS版本配置
+## IOS
 
 
-## Android版本配置：
+## Android
 
-- 在android文件夹下创建一个gradle.properties文件
-	MYAPP_RELEASE_STORE_FILE=xxxx.keystore
-	MYAPP_RELEASE_KEY_ALIAS=xxxx
-	MYAPP_RELEASE_STORE_PASSWORD=123456
-	MYAPP_RELEASE_KEY_PASSWORD=123456
+- 在android需要生成一个证书文件，并配置gradle.properties
+    // 签名
+    MYAPP_RELEASE_STORE_FILE=xxxx
+    MYAPP_RELEASE_KEY_ALIAS=xxxx
+    MYAPP_RELEASE_STORE_PASSWORD=xxxx
+    MYAPP_RELEASE_KEY_PASSWORD=xxxx
+
+    //JPush 
+    JPUSH_APPKEY: xxxxxxx
+    JPUSH_APP_CHANNEL: xxxxxxx
+
+## Windows && MAC
 
 
-## Windows版本配置
-
-
-## OSX版本配置
-
-
-## Web版本配置
+## Web

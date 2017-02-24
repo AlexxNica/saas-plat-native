@@ -97,7 +97,7 @@ android {
         }
         manifestPlaceholders = [
             JPUSH_APPKEY: JPUSH_APPKEY,
-            APP_CHANNEL: JPUSH_APP_CHANNEL   
+            APP_CHANNEL: JPUSH_APP_CHANNEL
         ]
     }
     signingConfigs {
@@ -143,16 +143,31 @@ dependencies {
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile project(':react-native-vector-icons')
-    compile project(':react-native-splashscreen')
+    compile project(':@remobile/react-native-splashscreen')
     compile project(':react-native-camera')
     compile project(':react-native-video')
     compile project(':react-native-zip-archive')
     compile project(':react-native-fs')
     compile project(':jpush-react-native')
     compile project(":react-native-device-info")
+    compile project(":react-native-blur")
+    compile project(':react-native-image-picker')
     compile fileTree(dir: "node_modules/react-native-device-info/android/libs", include: ["*.jar"])
     compile project(":react-native-locale-detector")
     compile fileTree(dir: "node_modules/react-native-locale-detector/android/libs", include: ["*.jar"])
+}
+
+repositories {
+    maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
+}
+
+buildscript {
+    repositories {
+        maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
+    }
+    dependencies {
+        classpath 'com.fivehundredpx:blurringview:1.0.0'
+    }
 }
 
 // Run this once to be able to run the application with BUCK

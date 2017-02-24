@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "start": "node --harmony dev/start",
     "client": "node node_modules/react-native/local-cli/cli.js start",
@@ -12,7 +11,8 @@
     "build": "node dev/build.js",
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
-    "spdefine": "node --harmony dev/genSpDefines"
+    "spdefine": "node --harmony dev/genSpDefines",
+    "android": "react-native run-android"
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.2",

@@ -96,8 +96,8 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
         manifestPlaceholders = [
-            JPush_APPID: "af7af7aef587a913d6bbee06",   //�ڴ��޸�JPush��APPID
-            APP_CHANNEL: "DEV"      //Ӧ��������
+            JPUSH_APPID: JPUSH_APPID,
+            APP_CHANNEL: JPUSH_APP_CHANNEL      
         ]
     }
     signingConfigs {

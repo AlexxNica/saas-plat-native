@@ -36,24 +36,22 @@
 {
   NSURL *jsCodeLocation;
 
-  BOOL debugMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"debugMode"];
-
   [[RCTBundleURLProvider sharedSettings] setDefaults];
-  if (debugMode == NO){
-    // 设置调试服务器
-    NSString *debugServer = [userDefaultes stringForKey:@"debugServer"];  
-    [[RCTBundleURLProvider sharedSettings] setJsLocation:debugServer];
-  }
+  #if DEBUG
+  [[RCTBundleURLProvider sharedSettings] setJsLocation:@"test.saas-plat.com"];
+  #endif
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 
 
   // root view
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-                                               moduleName:@"Saasplat"
+                                                      moduleName:@"Saasplat"
                                                initialProperties:nil
-                                               launchOptions:launchOptions];
+                                                  launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
+  // show SplashScreen
+  BOOL debugMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"debugMode"];
   // 调试模式下不显示启动画面
   if (debugMode == NO){
     [RCTSplashScreen show:rootView

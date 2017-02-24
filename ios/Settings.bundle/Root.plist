@@ -18,15 +18,6 @@
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>服务器</string>
-			<key>Key</key>
-			<string>debugServer</string>
-			
-		</dict>
-		<dict>
-			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
 			<string>禁用缓存</string>

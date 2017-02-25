@@ -14,12 +14,12 @@ function installPackage(dir, cb) {
     // verbose: true
   }, function(er, npm) {
     if (er) return cb(er);
-    let packfile = path.join(dir, 'package.json');
-    let args = [];
+    var packfile = path.join(dir, 'package.json');
+    var args = [];
     if (fs.existsSync(packfile)) {
-      let userPackage = JSON.parse(fs.readFileSync(packfile) || '{}');
+      var userPackage = JSON.parse(fs.readFileSync(packfile) || '{}');
       if (userPackage.dependencies) {
-        for (let name in userPackage.dependencies) {
+        for (var name in userPackage.dependencies) {
           args.push(name + '@' + userPackage.dependencies[name]);
           //args.push(name);
         }

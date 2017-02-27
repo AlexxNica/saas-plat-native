@@ -9,16 +9,14 @@ export default class Spinner extends React.Component {
         style={{
         height: 20
       }}
-        styleAttr="Inverse"
-        {...this.props}/>);
+        styleAttr="Inverse" />);
     } else {
       return (<ActivityIndicator
         animating={true}
         style={{
         height: 50
       }}
-        size="small"
-        {...this.props}/>);
+        size="small" />);
     }
   }
 

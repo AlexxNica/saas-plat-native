@@ -56,7 +56,7 @@ function watchdir(dir, watchchild) {
 }
 
 repackTimer();
-//webpackAndroid.run();
+webpackAndroid.run();
 webpackIOS.run();
 
 // 有新bundle重新webpack打包watch

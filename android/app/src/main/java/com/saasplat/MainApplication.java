@@ -51,7 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RCTCameraPackage(),
             new BlurViewPackage(),
             new JPushPackage(SHUTDOWN_TOAST, SHUTDOWN_LOG),
-            new RCTSplashScreenPackage(url)
+            new RCTSplashScreenPackage(MainActivity.activity, url)
       );
     }
   };

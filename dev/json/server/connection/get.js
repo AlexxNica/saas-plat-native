@@ -94,6 +94,7 @@ exports.default = function() {
         views.push(v);
       }
       json2.modules.push({
+        id: 'm_'+k,
         code: json4.code,
         name: json4.name,
         description: json4.description,

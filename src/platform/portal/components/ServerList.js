@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  ProgressBarAndroid,
   TouchableHighlight,
   Platform
 } from 'react-native';
@@ -53,11 +52,7 @@ export default class ServerList extends React.Component {
   }
 
   renderSpinner() {
-    if (Platform.OS === 'android') {
-      return (<ProgressBarAndroid style={this.props.style.progress} styleAttr='Inverse'/>);
-    } else {
       return (<ActivityIndicator animating style={this.props.style.indicator} size='small'/>);
-    }
   }
 
   renderLoading() {

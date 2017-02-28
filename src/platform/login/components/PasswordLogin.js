@@ -9,10 +9,10 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
-import {autobind} from 'core-decorators';
+import { autobind } from 'core-decorators';
 import AwesomeButton from 'react-native-awesome-button';
-import {connectStore, connectStyle, translate, Actions} from 'saasplat-native';
-import {login} from '../utils/login';
+import { connectStore, connectStyle, translate, Actions } from 'saasplat-native';
+import { login } from '../utils/login';
 
 @translate('saas-plat-login.PasswordLogin')
 @connectStyle('saas-plat-login.PasswordLogin')
@@ -23,24 +23,19 @@ export default class PasswordLogin extends React.Component {
     super(props);
     this.state = {
       disabled: false,
+      loginState: 'idle',
       username: this.props.userStore.loginState.username,
       password: '',
       emptyUsernameInput: false,
-      inputPlaceholder: '输入手机号码/邮箱/会员名',
+      inputPlaceholder: props.t('LoginPlaceHolder'),
       emptyPasswordInput: false,
-      inputPasswordPlaceholder: '输入登录密码',
-      loginText: '登录'
+      inputPasswordPlaceholder: props.t('PasswordPlaceHolder'),
+      loginText: props.t('Login')
     };
-
   }
 
-  showLoginMessage(msg) {
-    Alert.alert('提示', (msg && msg.toString()) || '错误，请重试~', [
-      {
-        text: '重新登录'
-      }
-    ]);
-    this.setState({disabled: false, loginText: '再次登录'});
+  getForgetPassword() {
+    Actions.gotoAction('getForgetPassword');
   }
 
   handleLogin() {
@@ -48,17 +43,36 @@ export default class PasswordLogin extends React.Component {
       return;
     }
     if (!this.state.username) {
-      this.setState({emptyUsernameInput: true, inputPlaceholder: '用户名不能为空'});
-      this.refs.username.focus();
+      this.setState({
+        emptyUsernameInput: true,
+        inputPlaceholder: this.props.t('UsernameEmpty')
+      });
+      this.username.focus();
       return;
     }
-    console.log('login request...');
-    this.setState({disabled: true, loginText: '正在登录...'});
-    this.props.userStore.login({username: this.state.username, password: this.state.password}).then(() => {
+    console.log(this.props.t('Logining'));
+    this.setState({ disabled: true, loginState: 'busy' });
+    this.props.userStore.login({
+      username: this.state.username,
+      password: this.state.password
+    }).then(() => {
+      this.setState({ loginState: 'success' });
       login();
     }).catch((error) => {
       console.warn(error);
       this.showLoginMessage(error);
+    });
+  }
+
+  showLoginMessage(msg) {
+    Alert.alert(this.props.t('Tip'), (msg && msg.toString()) || this.props.t(
+      'Error'), [{
+      text: this.props.t('ReLogin')
+    }]);
+    this.setState({
+      disabled: false,
+      loginState: 'idle',
+      loginText: this.props.t('ReLogin')
     });
   }
 
@@ -67,20 +81,28 @@ export default class PasswordLogin extends React.Component {
   }
 
   handleChange(username) {
-    this.setState({username, emptyUsernameInput: false, inputPlaceholder: '输入手机号码/邮箱/会员名'});
+    this.setState({
+      username,
+      emptyUsernameInput: false,
+      inputPlaceholder: this.props.t('LoginPlaceHolder')
+    });
   }
 
   handlePasswordChange(password) {
-    this.setState({password, emptyPasswordInput: false, inputPasswordPlaceholder: '输入登录密码'});
+    this.setState({
+      password,
+      emptyPasswordInput: false,
+      inputPasswordPlaceholder: this.props.t('PasswordPlaceHolder')
+    });
   }
 
   endEdit() {
     if (this.state.username === '') {
-      this.refs.username.focus();
+      this.username.focus();
       return;
     }
     if (this.state.password === '') {
-      this.refs.password.focus();
+      this.password.focus();
       return;
     }
     this.handleLogin();
@@ -88,20 +110,13 @@ export default class PasswordLogin extends React.Component {
 
   showUsernameList() {}
 
-  getForgetPassword() {
-    Actions.gotoAction('getForgetPassword');
-  }
-
   render() {
-    debugger
-    let styles = this.props.style;
+    const styles = this.props.style;
     return (
       <ScrollView
         keyboardShouldPersistTaps='always'
         keyboardDismissMode='on-drag'
-        style={{
-        flex: 1
-      }}
+        style={styles.scrollContainer}
         contentContainerStyle={[styles.container]}>
         <StatusBar barStyle='default'/>
         <View style={styles.header}>
@@ -111,11 +126,11 @@ export default class PasswordLogin extends React.Component {
             height: 100
           }}
             source={require('../assets/logo.png')}/>
-          <Text style={[styles.headerText]}>Saas-Plat</Text>
+          <Text style={[styles.headerText]}>{this.props.t('SaasPlat')}</Text>
           <Text
             style={{
             fontSize: 12,
-            color: styles.colors.secondary
+            color: styles.colors.grey0
           }}>saas-plat.com</Text>
         </View>
 
@@ -128,7 +143,7 @@ export default class PasswordLogin extends React.Component {
           ]}>
             <Image style={styles.inputUsername} source={require('../assets/user-alt.png')}/>
             <TextInput
-              ref='username'
+              ref={ref => this.username = ref}
               style={[styles.input]}
               keyboardType='email-address'
               autoFocus={true}
@@ -138,10 +153,10 @@ export default class PasswordLogin extends React.Component {
               onSubmitEditing={this.endEdit}
               onChangeText={this.handleChange}
               autoCorrect={false}
-              autoCapitalize="none"
+              autoCapitalize='none'
               placeholderTextColor={this.state.emptyUsernameInput
               ? styles.colors.error
-              : styles.colors.grey0}/>
+              : styles.colors.grey3}/>
             <TouchableOpacity onPress={this.showUsernameList}>
               <Image
                 style={styles.inputSelectUsername}
@@ -149,20 +164,20 @@ export default class PasswordLogin extends React.Component {
             </TouchableOpacity>
           </View>
           <View style={styles.userList}>
-            {this.props.userStore.historyList.items.map(user => { < TouchableOpacity style = {
-                styles.userListItem
-              }
-              onPress = {
-                this.showUsernameList
-              } > <Image
-                style={styles.userIcon}
-                source={user.headIconUrl
-                ? {
-                  uri: user.headIconUrl
-                }
-                : require('../assets/user-icon.png')}/> < /TouchableOpacity>
-								})}
+            {this.props.userStore.historyList.items.map(user => {
+              <TouchableOpacity style={styles.userListItem}
+                onPress={
+                  this.showUsernameList
+                }>
+                <Image
+                  style={styles.userIcon}
+                  source={user.headIconUrl
+                  ? { uri: user.headIconUrl }
+                  : require('../assets/user-icon.png')}/>
+                </TouchableOpacity>
+							})}
           </View>
+
           <View
             style={[
             styles.inputContainer, this.state.emptyPasswordInput && {
@@ -173,7 +188,7 @@ export default class PasswordLogin extends React.Component {
               style={styles.inputPassword}
               source={require('../assets/user-password.png')}/>
             <TextInput
-              ref='password'
+              ref={ref => this.password = ref}
               style={[styles.input]}
               keyboardType='ascii-capable'
               secureTextEntry={true}
@@ -183,38 +198,45 @@ export default class PasswordLogin extends React.Component {
               onChangeText={this.handlePasswordChange}
               onSubmitEditing={this.endEdit}
               autoCorrect={false}
-              autoCapitalize="none"
+              autoCapitalize='none'
               placeholderTextColor={this.state.emptyPasswordInput
               ? styles.colors.error
-              : styles.colors.grey0}/>
+              : styles.colors.grey3}/>
           </View>
-          <AwesomeButton
-            backgroundStyle={{backgroundColor:styles.colors.primary1}}
-            labelStyle={{color:styles.colors.primary}}
-            transitionDuration={200}
-            states={{
-            idle: {
-              text: this.state.loginText,
-              backgroundColor: styles.colors.primary1,
-              onPress: this.logIn
-            },
-            busy: {
-              text: this.state.loginText,
-              backgroundColor: styles.colors.primary2,
-              spinner: true
-            }
-          }}
-            buttonState={this.state.disabled
-            ? 'busy'
-            : 'idle'}/>
+
+            <AwesomeButton
+              transitionDuration={200}
+              states={{
+                idle: {
+                  text: this.state.loginText,
+                  backgroundStyle: styles.idle,
+                  labelStyle: styles.labelStyle,
+                  onPress: this.handleLogin
+                },
+                busy: {
+                  text: this.props.t('Logining'),
+                  spinner: true,
+                  spinnerProps: {
+                    animated: true,
+                    color: 'white'
+                  },
+                  backgroundStyle: styles.busy
+                },
+                success: {
+                  text: this.props.t('Logined'),
+                  backgroundStyle: styles.success
+                }
+              }}
+              buttonState={this.state.loginState }
+            />
         </View>
 
         <View style={styles.footer}>
           <TouchableOpacity style={styles.left} onPress={this.getForgetPassword}>
-            <Text style={{color:styles.colors.grey0}}>登录遇到问题?</Text>
+            <Text style={{color:styles.colors.primary2}}>{this.props.t('GetForgetPassword')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.right} onPress={this.register}>
-            <Text style={{color:styles.colors.grey0}}>没有账户?</Text>
+            <Text style={{color:styles.colors.primary2}}>{this.props.t('CreateAccount')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

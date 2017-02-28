@@ -8,7 +8,7 @@
       "no-console":"off" ,
       #"no-console":["error",{ "allow": ["log", "warn", "debug", "error"] }],
       "no-plusplus":["error",{ "allowForLoopAfterthoughts": true }],
-      # "linebreak-style": ["error", "windows"],
+      "linebreak-style": "off",
       "quotes": ["error", "single", { "avoidEscape": true }],
       "jsx-quotes": ["error", "prefer-single"],
       "no-restricted-syntax":"off",
@@ -41,7 +41,7 @@
       "react/jsx-first-prop-new-line": "off",
       "react/jsx-closing-bracket-location": "off",
       "react/jsx-indent-props":"off",
-      "react/jsx-boolean-value":"off",      
+      "react/jsx-boolean-value":"off",
 
     },
     "extends": ["airbnb","future/react"],

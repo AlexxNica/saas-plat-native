@@ -11,11 +11,11 @@ export default {
 
   primary: '#9E9E9E',   // 主色
   primary1: '#4d86f7',  // 主背景色
-  primary2: '#6296f9',  
+  primary2: '#6296f9',
   secondary: '#8F0CE8',
   secondary2: '#00B233',
   secondary3: '#00FF48',
-  grey0: '#393e42',
+  grey0: '#393e42',   // 0 -5 由深到浅
   grey1: '#43484d',
   grey2: '#5e6977',
   grey3: '#86939e',

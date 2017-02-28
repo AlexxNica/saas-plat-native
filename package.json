@@ -36,6 +36,7 @@
     "react-native-button": "^1.4.2",
     "react-native-camera": "^1.0.0-alpha1",
     "react-native-carousel": "^0.6.1",
+    "react-native-default-preference": "github:saas-plat/react-native-default-preference",
     "react-native-device-info": "^0.9.3",
     "react-native-fs": "^2.1.0-rc.1",
     "react-native-gifted-listview": "0.0.15",

@@ -8,7 +8,7 @@ spdefine('@remobile/react-native-splashscreen', function (global, require, modul
 });
 spdefine('@shoutem/theme', function (global, require, module, exports) {
   module.exports = require('@shoutem/theme');
-  module.exports.version = '0.8.9';
+  module.exports.version = '0.8.10';
 });
 spdefine('assert', function (global, require, module, exports) {
   module.exports = require('assert');
@@ -34,9 +34,13 @@ spdefine('immutable', function (global, require, module, exports) {
   module.exports = require('immutable');
   module.exports.version = '3.8.1';
 });
+spdefine('jcore-react-native', function (global, require, module, exports) {
+  module.exports = require('jcore-react-native');
+  module.exports.version = '1.0.0';
+});
 spdefine('jpush-react-native', function (global, require, module, exports) {
   module.exports = require('jpush-react-native');
-  module.exports.version = '1.3.4';
+  module.exports.version = '1.5.0';
 });
 spdefine('lodash', function (global, require, module, exports) {
   module.exports = require('lodash');
@@ -48,7 +52,7 @@ spdefine('lzwcompress', function (global, require, module, exports) {
 });
 spdefine('mobx', function (global, require, module, exports) {
   module.exports = require('mobx');
-  module.exports.version = '3.0.0';
+  module.exports.version = '3.1.0';
 });
 spdefine('mobx-react/native', function (global, require, module, exports) {
   module.exports = require('mobx-react/native');
@@ -60,7 +64,7 @@ spdefine('react', function (global, require, module, exports) {
 });
 spdefine('react-i18next', function (global, require, module, exports) {
   module.exports = require('react-i18next');
-  module.exports.version = '2.0.0';
+  module.exports.version = '2.2.0';
 });
 spdefine('react-native/Libraries/ReactNative/YellowBox', function (global, require, module, exports) {
   module.exports = require('react-native/Libraries/ReactNative/YellowBox');
@@ -88,7 +92,7 @@ spdefine('react-native-blur', function (global, require, module, exports) {
 });
 spdefine('react-native-button', function (global, require, module, exports) {
   module.exports = require('react-native-button');
-  module.exports.version = '1.7.1';
+  module.exports.version = '1.8.2';
 });
 spdefine('react-native-camera', function (global, require, module, exports) {
   module.exports = require('react-native-camera');
@@ -98,9 +102,13 @@ spdefine('react-native-carousel', function (global, require, module, exports) {
   module.exports = require('react-native-carousel');
   module.exports.version = '0.6.1';
 });
+spdefine('react-native-default-preference', function (global, require, module, exports) {
+  module.exports = require('react-native-default-preference');
+  module.exports.version = '1.0.0';
+});
 spdefine('react-native-device-info', function (global, require, module, exports) {
   module.exports = require('react-native-device-info');
-  module.exports.version = '0.9.7';
+  module.exports.version = '0.9.9';
 });
 spdefine('react-native-fs', function (global, require, module, exports) {
   module.exports = require('react-native-fs');
@@ -132,7 +140,7 @@ spdefine('react-native-router-flux', function (global, require, module, exports)
 });
 spdefine('react-native-storage', function (global, require, module, exports) {
   module.exports = require('react-native-storage');
-  module.exports.version = '0.1.4';
+  module.exports.version = '0.1.5';
 });
 spdefine('react-native-touch-id', function (global, require, module, exports) {
   module.exports = require('react-native-touch-id');

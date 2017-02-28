@@ -7,6 +7,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNDefaultPreferencePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -41,6 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
       String url = "http://api.saas-plat.com/app/splash?p="+android.os.Build.MODEL;
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new RNDefaultPreferencePackage("saas-plat-settings"),
             new RNZipArchivePackage(),
             new ReactVideoPackage(),
             new VectorIconsPackage(),

@@ -34,10 +34,6 @@ spdefine('immutable', function (global, require, module, exports) {
   module.exports = require('immutable');
   module.exports.version = '3.8.1';
 });
-spdefine('jcore-react-native', function (global, require, module, exports) {
-  module.exports = require('jcore-react-native');
-  module.exports.version = '1.0.0';
-});
 spdefine('jpush-react-native', function (global, require, module, exports) {
   module.exports = require('jpush-react-native');
   module.exports.version = '1.5.0';

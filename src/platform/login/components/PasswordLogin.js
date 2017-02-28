@@ -4,6 +4,7 @@ import {
   ScrollView,
   StatusBar,
   Image,
+  Text,
   Alert,
   TextInput,
   TouchableOpacity
@@ -13,8 +14,8 @@ import AwesomeButton from 'react-native-awesome-button';
 import {connectStore, connectStyle, translate, Actions} from 'saasplat-native';
 import {login} from '../utils/login';
 
-@translate('platform.login.PasswordLogin')
-@connectStyle('platform.login.PasswordLogin')
+@translate('saas-plat-login.PasswordLogin')
+@connectStyle('saas-plat-login.PasswordLogin')
 @connectStore('userStore')
 @autobind
 export default class PasswordLogin extends React.Component {
@@ -92,6 +93,7 @@ export default class PasswordLogin extends React.Component {
   }
 
   render() {
+    debugger
     let styles = this.props.style;
     return (
       <ScrollView
@@ -100,8 +102,7 @@ export default class PasswordLogin extends React.Component {
         style={{
         flex: 1
       }}
-        contentContainerStyle
-        ={[styles.container]}>
+        contentContainerStyle={[styles.container]}>
         <StatusBar barStyle='default'/>
         <View style={styles.header}>
           <Image
@@ -110,7 +111,7 @@ export default class PasswordLogin extends React.Component {
             height: 100
           }}
             source={require('../assets/logo.png')}/>
-          <Text style={[styles.headerText]}>管理云平台</Text>
+          <Text style={[styles.headerText]}>Saas-Plat</Text>
           <Text
             style={{
             fontSize: 12,
@@ -188,12 +189,13 @@ export default class PasswordLogin extends React.Component {
               : styles.colors.grey0}/>
           </View>
           <AwesomeButton
-            backgroundStyle={styles.colors.primary1}
-            labelStyle={styles.colors.primary}
+            backgroundStyle={{backgroundColor:styles.colors.primary1}}
+            labelStyle={{color:styles.colors.primary}}
             transitionDuration={200}
             states={{
             idle: {
               text: this.state.loginText,
+              backgroundColor: styles.colors.primary1,
               onPress: this.logIn
             },
             busy: {
@@ -209,10 +211,10 @@ export default class PasswordLogin extends React.Component {
 
         <View style={styles.footer}>
           <TouchableOpacity style={styles.left} onPress={this.getForgetPassword}>
-            <Text style={styles.colors.grey0}>登录遇到问题?</Text>
+            <Text style={{color:styles.colors.grey0}}>登录遇到问题?</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.right} onPress={this.register}>
-            <Text style={styles.colors.grey0}>没有账户?</Text>
+            <Text style={{color:styles.colors.grey0}}>没有账户?</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

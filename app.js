@@ -6,8 +6,7 @@ import {
   ScrollView,
   Text,
   StatusBar,
-  ActivityIndicatorIOS,
-  ProgressBarAndroid,
+  ActivityIndicator,
   Platform,
   NetInfo,
   TouchableOpacity,
@@ -59,11 +58,14 @@ const msgs = {
 
 const BASE_CORE = 'core';
 
-const DEV_URL = __DEV__ ? 'http://test.saas-plat.com/dev' :
-  'http://api.saas-plat.com/dev';
+const DEV_URL = __DEV__ ? 'http://test.saas-plat.com:8202/app/dev' :
+  'http://api.saas-plat.com/app/dev';
 
 let lastGlobalError;
-global.devOptions = {};
+global.devOptions = {
+  debugMode: false,
+  cacheDisable: false
+};
 
 global.__errorHandler = function(err) {
   debugger;
@@ -314,12 +316,7 @@ export default class extends React.Component {
     this.setState({ messageList: this.state.messageList.concat(message) });
   }
 
-  loadDevOptions() {
-    global.devOptions = {
-      debugMode : false,
-      cacheDisable : false
-    };
-
+  loadDevOptions(callback) {
     if (global.isConnected) {
       const deviceID = DeviceInfo.getDeviceId(); // iPhone7,2
       const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
@@ -331,7 +328,7 @@ export default class extends React.Component {
         if (json.errno) {
           this.pushMessage(json.errmsg);
         } else {
-          global.devOptions = {...global.devOptions, ...json.data};
+          global.devOptions = { ...global.devOptions, ...json.data };
         }
       }).catch(err => {
         this.pushMessage(err);
@@ -343,20 +340,24 @@ export default class extends React.Component {
     if (global.devOptions.debugMode) {
       this.pushMessage(msgs.debugMode);
     }
+    if (callback){
+      callback();
+    }
   }
 
   loadCoreFile() {
     if (global.isConnected) {
+      const me = this;
       this.pushMessage(msgs.netInfoCheckSuccess);
       // 如果网络连接，获取最新版本
       this.syncVersion({
         resolve: function({ version }) {
-          this.loadFile(version);
+          me.loadFile(version);
         },
         reject: function(err) {
-          this.pushMessage(msgs.versionGetFail + ', ' + (err.message ||
+          me.pushMessage(msgs.versionGetFail + ', ' + (err.message ||
             err));
-          this.loadVersion(false);
+          me.loadVersion(false);
         }
       });
     } else {
@@ -393,7 +394,7 @@ export default class extends React.Component {
         // 网络请求不能关闭，但是这里只需要处理一次
         return;
       }
-      this.pushMessage(msgs.Loading);
+      me.pushMessage(msgs.Loading);
       me.loadDevOptions(() => {
         me.initEnv();
         me.loadCoreFile();
@@ -429,19 +430,7 @@ export default class extends React.Component {
     this.prepare();
   }
 
-  _getSpinner() {
-    if (Platform.OS === 'android') {
-      return <ProgressBarAndroid style={{
-        height: 20
-      }} styleAttr='Inverse' {...this.props}/>;
-    } else {
-      return (
-        <ActivityIndicatorIOS animating={true} style={{
-        height: 50
-      }} size='small' {...this.props}/>
-      );
-    }
-  }
+
 
   clearMessageList() {
     this.setState({ messageList: [] });
@@ -468,7 +457,9 @@ export default class extends React.Component {
       return (
         <View style={styles.container}>
           <StatusBar hidden={false} barStyle='default'/>{this.state.animating
-            ? this._getSpinner()
+            ? <ActivityIndicator animating={true} style={{
+              height: 50
+            }} size='small' />
             : <View style={{
               height: 50
             }}/>}

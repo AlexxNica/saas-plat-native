@@ -14,8 +14,8 @@ import {autobind} from 'core-decorators';
 import {login} from '../utils/login';
 import {connectStore, connectStyle, translate, Actions} from 'saasplat-native';
 
-@translate('platform.login.QuickLogin')
-@connectStyle('platform.login.QuickLogin')
+@translate('saas-plat-login.QuickLogin')
+@connectStyle('saas-plat-login.QuickLogin')
 @connectStore('userStore')
 @autobind
 export default class QuickLogin extends React.Component {

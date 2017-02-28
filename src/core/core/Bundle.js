@@ -1,4 +1,4 @@
-import {Platform, NetInfo, Settings} from 'react-native';
+import {Platform, NetInfo} from 'react-native';
 import assert from 'assert';
 import {tx} from '../utils/internal';
 import localStore from '../utils/LocalStore';
@@ -27,7 +27,7 @@ class Bundle {
   };
 
   loaded = {};
-  cacheDisable = !!Settings.get('cacheDisable');
+  cacheDisable = !!devOptions.cacheDisable;
 
   getBundle(name) {
     assert(name);

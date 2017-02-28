@@ -3,8 +3,7 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableHighlight,
-  Settings
+  TouchableHighlight
 } from 'react-native';
 import {autobind} from 'core-decorators';
 import {debuggingEmitter, debuggingList, startDebug, stopDebug} from '../core/Debug';
@@ -82,7 +81,7 @@ class DebugView extends React.Component {
         this.setState({debuggingList});
       });
     });
-    if (Settings.get('debugMode')) {
+    if (!!devOptions.debugMode) {
       startDebug();
     }
   }
@@ -112,7 +111,7 @@ class DebugView extends React.Component {
   }
 
   render() {
-    if (!(Settings.get('debugMode')) || this.state.debuggingList.length === 0) {
+    if (!(devOptions.debugMode) || this.state.debuggingList.length === 0) {
       return null;
     }
 

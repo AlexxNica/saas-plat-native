@@ -24,7 +24,7 @@ const ScreenTypes = [
 const screen = ScreenTypes.find(item => width < item[1]);
 const deviceType = 'phone'; // todo tv ?
 const deviceID = DeviceInfo.getDeviceId(); // iPhone7,2
-const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
+//const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
 // systemVersion : DeviceInfo.getSystemVersion(), // 9.0  version :
 // DeviceInfo.getReadableVersion(), // 1.1.0.89  locale :
 // DeviceInfo.getDeviceLocale(), // en-US  country :
@@ -32,12 +32,7 @@ const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79A
 
 export function connectPlatform() {
   return fetchJson({
-    url: config.platform.connection,
-    options: {
-      headers: {
-        deviceUUID
-      }
-    }
+    url: config.platform.connection
   });
 }
 

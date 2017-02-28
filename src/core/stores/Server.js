@@ -1,6 +1,5 @@
 import assert from 'assert';
 import {observable, action, runInAction} from 'mobx';
-import {Settings} from 'react-native';
 import {registerStore} from '../core/Store';
 import {Actions} from '../core/Router';
 import bundle from '../core/Bundle';
@@ -101,7 +100,7 @@ export default class ServerStore {
       ...serConfig
     } = serverInfo;
     let serverDebugs = {};
-    if (Settings.get('debugMode')) {
+    if (!!devOptions.debugMode) {
       serverDebugs = {
         modules,
         bundles,

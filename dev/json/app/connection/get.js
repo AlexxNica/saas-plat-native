@@ -1,5 +1,3 @@
-var url = require('url');
-var querystring = require('querystring');
 var fs = require('fs');
 var path = require('path');
 
@@ -7,10 +5,7 @@ exports.default = function () {
 
   var json2 = {
     bundleServer: 'http://test.saas-plat.com:8202/bundle/file',
-    bundles: [],
-    device: {
-      debug: true
-    }
+    bundles: []
   };
   var root = path.join(__dirname,  '../../../../src/platform');
   var files = fs.readdirSync(root);

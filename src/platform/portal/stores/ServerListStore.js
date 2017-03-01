@@ -28,10 +28,10 @@ export default class ServerListStore {
 
     // 无服务器，提示创建一个
     if (!serverStore.currentServer) {
-      Actions.gotoAction('notFoundServer');
+      Actions.gotoAction('saas-plat-portal/notFoundServer');
       return;
     } else {
-      Actions.gotoAction('portal');
+      Actions.gotoAction('saas-plat-portal/portal');
     }
 
     // 进入上次的模块，或进入默认的模块

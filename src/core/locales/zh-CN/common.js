@@ -13,6 +13,9 @@ export default {
   // Router
   SceneFocus : '进入页面',
   RouterNotFound : '未找到，无法跳转',
+  ClearAllRouter: '移除所有路由注册',
+  RouterRemoved: '路由已被移除',
+  RouterAdded: '路由注册完成',
 
   // bundle
   failed : '下载失败',

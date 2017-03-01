@@ -4,8 +4,7 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  TouchableHighlight,
-  Platform
+  TouchableHighlight
 } from 'react-native';
 import {autobind} from 'core-decorators';
 import GiftedListView from 'react-native-gifted-listview';

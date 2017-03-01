@@ -136,7 +136,7 @@ export function unregisterStore(storeName) {
   const removes = storeList.filter(store => match(store.storeNames, storeNames));
   for (const item of removes) {
     const index = storeList.indexOf(item);
-    storeList = storeList.splice(index, 1);
+    storeList.splice(index, 1);
   }
 }
 

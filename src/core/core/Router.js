@@ -154,7 +154,7 @@ export const Router = class extends React.Component {
   }
 
   buildScene(scene, state, style, ns) {
-    assert(scene, '路由查找失败');
+    assert(scene);
     if (!ns) {
       // 删除所有已经注册的action要不会导致删除的scene还有action
       this.actionKeys.forEach((key) => {
@@ -238,6 +238,7 @@ export const Router = class extends React.Component {
   }
 
   render() {
+    debugger
     const scenes = this.buildScene(this.props.children, RouterStore.getStore().scenes, this.props.style);
     return (<FluxRouter scenes={FluxActions.create(scenes)} createReducer={this.reducer}/>);
   }

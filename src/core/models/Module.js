@@ -41,6 +41,7 @@ export default class Module {
   }
 
   static fromJS(store, object) {
+    debugger
     return new Module(store, object.id, object.name, object.text, (object.views || []).map(v => View.fromJS(this, this.name, v)));
   }
 }

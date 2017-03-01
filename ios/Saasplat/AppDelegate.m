@@ -51,13 +51,9 @@
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   // show SplashScreen
-  BOOL debugMode = [[NSUserDefaults standardUserDefaults] boolForKey:@"debugMode"];
-  // 调试模式下不显示启动画面
-  if (debugMode == NO){
     [RCTSplashScreen show:rootView
                  imageUrl:[@"http://api.saas-plat.com/app/splash?p=" stringByAppendingString:[self platform]]
      ];
-  }
 
   //jpush
   if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {

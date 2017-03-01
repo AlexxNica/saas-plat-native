@@ -24,8 +24,8 @@ const msgs = {
   Success: '环境准备已就绪。',
   NetworkConnectFailed: '网络尚未连接，建议开启WIFI或3G网络，否则数据无法更新和保存提交。',
   Failed: '应用启动失败，稍后重试...',
-  Loading: '正在加载，请稍后... ',
-  DevLoading: '获取开发者选项',
+  Loading: '开始启动... ',
+  DevLoading: '获取开发者选项...',
   httpRquestTimeout: '网络请求超时',
   httpAccessForbidden: '网络连接已拒绝',
 
@@ -332,16 +332,27 @@ export default class extends React.Component {
         }
       }).catch(err => {
         this.pushMessage(err);
+      }).done(() => {
+        if (global.devOptions.cacheDisable) {
+          this.pushMessage(msgs.cacheDisable);
+        }
+        if (global.devOptions.debugMode) {
+          this.pushMessage(msgs.debugMode);
+        }
+        if (callback) {
+          callback();
+        }
       });
-    }
-    if (global.devOptions.cacheDisable) {
-      this.pushMessage(msgs.cacheDisable);
-    }
-    if (global.devOptions.debugMode) {
-      this.pushMessage(msgs.debugMode);
-    }
-    if (callback){
-      callback();
+    } else {
+      if (global.devOptions.cacheDisable) {
+        this.pushMessage(msgs.cacheDisable);
+      }
+      if (global.devOptions.debugMode) {
+        this.pushMessage(msgs.debugMode);
+      }
+      if (callback) {
+        callback();
+      }
     }
   }
 
@@ -368,6 +379,13 @@ export default class extends React.Component {
   }
 
   initEnv() {
+    // 调试模式不显示启动画面，直接显示加载过程
+    if (global.devOptions.debugMode) {
+      // 恢复状态条
+      StatusBar.setHidden(false);
+      SplashScreen.hide();
+    }
+
     this.store = new Storage({
       size: 1, // 默认保存最近1个版本
       storageBackend: AsyncStorage,
@@ -415,12 +433,7 @@ export default class extends React.Component {
   componentDidMount() {
     this._start = new Date().getTime();
     this.prepare();
-    // 调试模式不显示启动画面，直接显示加载过程
-    if (global.devOptions.debugMode) {
-      // 恢复状态条
-      StatusBar.setHidden(false);
-      SplashScreen.hide();
-    }
+
   }
 
   onPressFeed() {
@@ -429,8 +442,6 @@ export default class extends React.Component {
     }
     this.prepare();
   }
-
-
 
   clearMessageList() {
     this.setState({ messageList: [] });

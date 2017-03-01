@@ -1,0 +1,12 @@
+{ 
+      "name": "erp/base/department",
+      "text": "进销存/基本信息/部门",
+      "description": "维护部门列表和编辑部门信息等功能",
+      "adapter": [{
+        "description": "支持iphone和android手机应用",
+        "platform": ["ios", "android"],
+        "screen": ["xs", "sm"],
+        "views": ["List", "Edit"]
+      }]
+    
+}

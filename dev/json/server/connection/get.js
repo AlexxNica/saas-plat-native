@@ -80,17 +80,15 @@ exports.default = function() {
   }
 
   json2.modules = [];
-  var modules = config.modules || [];
+  var modules = ['metadata'];
   for (var k = 0; k < modules.length; k++) {
-    var moduleFileName = path.join(config.modules[k], 'package.json');
+    var moduleFileName = path.join(__dirname, modules[k], 'module.json');
     if (fs.existsSync(moduleFileName)) {
       var json4 = readJsonFile(moduleFileName);
-      json4 = json4.spconfig && json4.spconfig.module;
       var views = [];
       for (i = 0; i < json4.adapter[0].views.length; i++) {
         var vp = json4.adapter[0].views[i];
-        var v = readJsonFile(path.join(config.modules[k], 'views', vp +
-          '.json'));
+        var v = readJsonFile(path.join(__dirname, modules[k],  vp + '.json'));
         views.push(v);
       }
       json2.modules.push({

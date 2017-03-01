@@ -27,6 +27,10 @@ export default class Module {
 
   // 打开模块页面
   @action open(viewName, options) {
+    if (arguments.length === 1 && typeof viewName === 'object'){
+      options = viewName;
+      viewName = null;
+    }
     this.store.openModule(this.name, viewName, options);
   }
 
@@ -41,7 +45,6 @@ export default class Module {
   }
 
   static fromJS(store, object) {
-    debugger
     return new Module(store, object.id, object.name, object.text, (object.views || []).map(v => View.fromJS(this, this.name, v)));
   }
 }

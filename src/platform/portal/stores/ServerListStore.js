@@ -42,7 +42,7 @@ export default class ServerListStore {
 
     // 进入模块
     if (module) {
-      module.open();
+      module.open({type:'replace'});
     } else if (serverStore.modules.length > 0) {
       Actions.gotoAction('moduleList');
     } else {

@@ -89,11 +89,16 @@ export default class ServerList extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.navBar}/>
-        <GiftedListView paginationFetchingView={this.renderSpinner} rowView={this.renderRowView} onFetch={this.onFetch} firstLoader // display a loader for the first fetching
+        <GiftedListView
+          paginationFetchingView={this.renderSpinner}
+          rowView={this.renderRowView}
+          onFetch={this.onFetch}
+          firstLoader // display a loader for the first fetching
           pagination // enable infinite scrolling using touch to load more
           refreshable // enable pull-to-refresh for iOS and touch-to-refresh for Android
           withSections // enable sections
-          customStyles={styles.listView} refreshableTintColor={styles.refreshableTintColor}/>
+          customStyles={styles.listView}
+          refreshableTintColor={styles.refreshableTintColor}/>
       </View>
     );
   }

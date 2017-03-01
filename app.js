@@ -22,7 +22,7 @@ import spdefine from './spdefine';
 
 const msgs = {
   Success: '环境准备已就绪。',
-  NetworkConnectFailed: '网络尚未连接，建议开启WIFI或3G网络，否则数据无法更新和保存提交。',
+  NetworkConnectFailed: '网络尚未连接，建议开启WIFI或4G网络，否则数据无法更新和保存提交。',
   Failed: '应用启动失败，稍后重试...',
   Loading: '开始启动... ',
   DevLoading: '获取开发者选项...',
@@ -103,6 +103,7 @@ export default class extends React.Component {
     this.syncFile = this.syncFile.bind(this);
     this.syncVersion = this.syncVersion.bind(this);
     this.clearMessageList = this.clearMessageList.bind(this);
+    this.handleConnected = this.handleConnected.bind(this);
   }
 
   finished(code) {
@@ -401,39 +402,42 @@ export default class extends React.Component {
     });
   }
 
+  handleConnected(isConnected) {
+    global.isConnected = isConnected;
+    if (this.handled) {
+      // 网络请求不能关闭，但是这里只需要处理一次
+      return;
+    }
+    this.pushMessage(msgs.Loading);
+    this.loadDevOptions(() => {
+      this.initEnv();
+      this.loadCoreFile();
+    });
+  }
+
   prepare() {
-    const me = this;
     this.setState({ code: 0, animating: true });
     this.pushMessage(msgs.netInfoChecking);
-
-    function handleConnected(isConnected) {
-      global.isConnected = isConnected;
-      if (me.handled) {
-        // 网络请求不能关闭，但是这里只需要处理一次
-        return;
-      }
-      me.pushMessage(msgs.Loading);
-      me.loadDevOptions(() => {
-        me.initEnv();
-        me.loadCoreFile();
-      });
-    }
-
+    NetInfo.isConnected.fetch().done((isConnected) => {
+      //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+      this.handleConnected(isConnected);
+    });
     function handleFirstConnectivityChange(isConnected) {
-      handleConnected(isConnected);
-      // NetInfo.isConnected.removeEventListener(
-      //   'change',
-      //   handleFirstConnectivityChange
-      // );
+      //console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
+      NetInfo.isConnected.removeEventListener(
+        'change',
+        handleFirstConnectivityChange
+      );
     }
-    NetInfo.isConnected.addEventListener('change',
-      handleFirstConnectivityChange);
+    NetInfo.isConnected.addEventListener(
+      'change',
+      handleFirstConnectivityChange
+    );
   }
 
   componentDidMount() {
     this._start = new Date().getTime();
     this.prepare();
-
   }
 
   onPressFeed() {

@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleProvider} from '@shoutem/theme';
-import {I18nextProvider} from 'react-i18next';
-import {BackAndroid} from 'react-native';
-import {observer} from 'mobx-react/native';
+import { StyleProvider } from '@shoutem/theme';
+import { I18nextProvider } from 'react-i18next';
+import { BackAndroid } from 'react-native';
+import { observer } from 'mobx-react/native';
 import './core/Error'; // 导入全局异常处理
 import i18n from './core/I18n';
 import * as Push from './core/Push';
-import {Actions} from './core/Router';
+import { Actions } from './core/Router';
 
 import Theme from './stores/Theme';
 import I18nStore from './stores/I18n';
@@ -31,8 +31,12 @@ export default class App extends React.Component {
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', () => {
       console.log('go back');
-      Actions.pop();
-      return false;
+      try {
+        Actions.pop();
+        return false;
+      } catch (err) {
+        console.warn(err);
+      }
     });
 
     // 开启push

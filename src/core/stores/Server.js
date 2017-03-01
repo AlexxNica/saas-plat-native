@@ -23,7 +23,7 @@ export default class ServerStore {
 
   @action openModule(moduleName, viewName, options) {
     assert(moduleName);
-    if (typeof viewName !== 'string') {
+    if (viewName && typeof viewName !== 'string') {
       viewName = null;
       options = viewName;
     }

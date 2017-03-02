@@ -2,9 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  devServer: {
-    contentBase: path.join(__dirname, 'www')
-  },
   entry: [
     path.join(__dirname, '../index.web.js')
   ],
@@ -14,7 +11,6 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loaders: [
-          'react-hot',
           'babel-loader?cacheDirectory=true'
         ]
       },
@@ -31,7 +27,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.NODE_ENV': 'production'
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin()

@@ -13,6 +13,7 @@
     "publish": "saasplat publish -a -u -n -w src ",
     "spdefine": "node --harmony dev/genSpDefines",
     "web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors --quiet",
+    "buildweb": "webpack --config web/webpack.config.js",
     "storybook": "start-storybook -p 9001 -c web/.storybook"
   },
   "dependencies": {
@@ -89,6 +90,6 @@
     "url-loader": "^0.5.7",
     "watch": "^0.18.0",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "^2.4.1"
+    "webpack-dev-server": "^1.14.1"
   }
 }

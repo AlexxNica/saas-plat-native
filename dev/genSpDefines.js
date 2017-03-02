@@ -7,7 +7,9 @@ var fs = require("fs");
 var content = [];
 
 const writeSpdefine = (key, version) => {
-  if (key == 'jcore-react-native'){
+  if (key == 'jcore-react-native'
+||  key == "react-native-web"
+||  key ==  "react-native-windows" ){
     return;
   }
   if (key == 'mobx-react') {

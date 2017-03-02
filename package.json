@@ -1,5 +1,5 @@
 {
-  "name": "saas-plat-native",
+  "name": "Saasplat",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,9 @@
     "build": "node dev/build.js",
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
-    "spdefine": "node --harmony dev/genSpDefines"
+    "spdefine": "node --harmony dev/genSpDefines",
+    "web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors --quiet",
+    "storybook": "start-storybook -p 9001 -c web/.storybook"
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.2",
@@ -49,6 +51,8 @@
     "react-native-touch-id": "^1.2.4",
     "react-native-vector-icons": "^4.0.0",
     "react-native-video": "^0.9.0",
+    "react-native-web": "0.0.75",
+    "react-native-windows": "^0.40.0-rc.2",
     "react-native-zip-archive": "0.0.11",
     "slash": "^1.0.0"
   },
@@ -56,6 +60,7 @@
     "babel": "^6.5.2",
     "babel-core": "^6.8.0",
     "babel-loader": "^6.2.4",
+    "babel-plugin-root-import": "^5.0.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-remove-console": "^6.5.0",
     "babel-plugin-transform-runtime": "^6.15.0",
@@ -65,7 +70,6 @@
     "babel-preset-stage-1": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
     "babel-preset-stage-3": "^6.5.0",
-    "babel-plugin-root-import": "^5.0.0",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
     "eslint": "^3.15.0",
@@ -80,8 +84,11 @@
     "jsx-loader": "^0.13.2",
     "mocha": "^3.2.0",
     "npm": "^4.2.0",
+    "react-hot-loader": "^1.3.1",
+    "rnpm-plugin-windows": "^0.2.4",
     "url-loader": "^0.5.7",
     "watch": "^0.18.0",
-    "webpack": "^1.13.0"
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^2.4.1"
   }
 }

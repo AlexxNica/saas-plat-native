@@ -16,7 +16,7 @@
     "preload": true
   },
   "dependencies": {
-    "react-native-awesome-button": "^1.6.0",
+    "react-native-awesome-button": "github:saas-plat/react-native-awesome-button",
     "react-native-smart-gesture-password": "^2.1.0"
   }
 }

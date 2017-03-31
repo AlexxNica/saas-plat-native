@@ -58,9 +58,6 @@ const msgs = {
 
 const BASE_CORE = 'core';
 
-const DEV_URL = __DEV__ ? 'http://test.saas-plat.com:8202/app/dev' :
-  'http://api.saas-plat.com/app/dev';
-
 let lastGlobalError;
 global.devOptions = {
   debugMode: false,
@@ -323,7 +320,7 @@ export default class extends React.Component {
       const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
       // 联网从平台获取开发者选项
       this.pushMessage(msgs.DevLoading);
-      fetch(`${DEV_URL}?did=${deviceID}&uuid=${deviceUUID}`).then((response) => {
+      fetch(`${config.dev}?did=${deviceID}&uuid=${deviceUUID}`).then((response) => {
         return response.json();
       }).then((json) => {
         if (json.errno) {

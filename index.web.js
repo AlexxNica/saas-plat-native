@@ -1,8 +1,7 @@
- import {AppRegistry} from 'react-native';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './app';
 import './spdefine';
 import './bundles';
-AppRegistry.registerComponent('Saasplat', () => App);
-AppRegistry.runApplication('Saasplat', {
-  rootTag: document.getElementById('saas-plat')
-});
+
+ReactDOM.render(App, document.getElementById('saas-plat'));

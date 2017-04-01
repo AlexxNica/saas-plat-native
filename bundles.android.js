@@ -186,14 +186,6 @@ spdefine('react-native-video', function (global, require, module, exports) {
   module.exports = require('react-native-video');
   module.exports.version = '0.9.0';
 });
-spdefine('react-native-web', function (global, require, module, exports) {
-  module.exports = require('react-native-web');
-  module.exports.version = '0.0.75';
-});
-spdefine('react-native-windows', function (global, require, module, exports) {
-  module.exports = require('react-native-windows');
-  module.exports.version = '0.40.0-rc.2';
-});
 spdefine('react-native-zip-archive', function (global, require, module, exports) {
   module.exports = require('react-native-zip-archive');
   module.exports.version = '0.0.11';

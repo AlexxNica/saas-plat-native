@@ -9,6 +9,7 @@ var content = [];
 const writeSpdefine = (key, version) => {
   if (key == 'jcore-react-native'
 ||  key == "react-native-web"
+||  key == "antd"
 ||  key ==  "react-native-windows" ){
     return;
   }
@@ -52,5 +53,5 @@ for (var p in dependencies) {
 
 fs.writeFileSync(__dirname + '/../bundles.ios.js', content.join('\n'));
 fs.writeFileSync(__dirname + '/../bundles.android.js', content.join('\n'));
-fs.writeFileSync(__dirname + '/../bundles.windows.js', content.join('\n'));
-fs.writeFileSync(__dirname + '/../bundles.web.js', content.join('\n'));
+//fs.writeFileSync(__dirname + '/../bundles.windows.js', content.join('\n'));
+//fs.writeFileSync(__dirname + '/../bundles.web.js', content.join('\n'));

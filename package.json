@@ -12,6 +12,8 @@
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "spdefine": "node --harmony dev/genSpDefines",
+    "web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors ",
+    "buildweb": "webpack --config web/webpack.config.js",
     "storybook": "start-storybook -p 9001 -c web/.storybook"
   },
   "dependencies": {

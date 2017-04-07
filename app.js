@@ -69,7 +69,7 @@ global.options = {
 
 const locales = {};
 if (lang) {
-  locales[lang] = require('../locales/' + lang);
+  locales[lang] = require('./locales/' + lang);
 }
 
 const T = function(txt) {

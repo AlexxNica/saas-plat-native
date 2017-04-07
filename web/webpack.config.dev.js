@@ -1,11 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
+var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
   //页面入口文件配置
   entry: {
-    main: [
+    bundle: [
       //'webpack/hot/dev-server',
       'webpack-hot-middleware/client',
       '../index.web.js'
@@ -56,12 +57,17 @@ module.exports = {
   },
   //其它解决方案配置
   resolve: {
-    extensions: ['', '.js', '.jsx', '.less', '.css']
+    extensions: ['', '.js', '.web.js', '.less', '.css'],
+    alias: {
+      'react-native': 'react-native-web'
+    }
   },
   //插件项
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new ChunkModuleIDPlugin(),
     new webpack.DefinePlugin({
       '__DEV__': true
     })

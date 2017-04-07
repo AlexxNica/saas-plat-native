@@ -1,4 +1,4 @@
-  {
+  export default {
     "不支持的平台语言环境": "Unsupported platform language environment",
 
     "环境准备已就绪": "The environment is ready",

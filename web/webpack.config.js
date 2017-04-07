@@ -60,7 +60,7 @@ module.exports = {
     new webpack.DefinePlugin({
       '__DEV__': true,
       'process.env.NODE_ENV': '"production"'
-    })
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         //supresses warnings, usually from module minification

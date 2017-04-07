@@ -7,7 +7,6 @@ module.exports = {
   //页面入口文件配置
   entry: {
     bundle: [
-      //'webpack/hot/dev-server',
       'webpack-hot-middleware/client',
       '../index.web.js'
     ]

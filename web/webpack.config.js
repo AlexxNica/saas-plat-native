@@ -6,7 +6,10 @@ var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
 module.exports = {
   //页面入口文件配置
   entry: {
-    bundle: [path.normalize(__dirname + '/../index.web.js')]
+    bundle: [
+      "babel-polyfill",
+      path.normalize(__dirname + '/../index.web.js')
+    ]
   },
   //入口文件输出配置
   output: {

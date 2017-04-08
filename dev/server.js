@@ -39,6 +39,12 @@ if (arguments.indexOf('--web')>-1) {
 
   app.get('/', function(req, res) {
     res.write(md.fileSystem.readFileSync(__dirname + '/../web/www/index.html'));
+    res.end();
+  });
+
+  app.get('/favicon.ico', function(req, res) {
+    res.write(fs.readFileSync(__dirname + '/../web/www/favicon.ico'));
+    res.end();
   });
 }
 

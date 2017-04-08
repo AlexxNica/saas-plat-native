@@ -9,6 +9,7 @@ module.exports = {
   entry: {
     bundle: [
       'webpack-hot-middleware/client',
+      "babel-polyfill",
       __dirname + '/../index.web.js'
     ]
   },
@@ -34,7 +35,9 @@ module.exports = {
             'es2015',
             'es2017',
             'stage-0',
-            'stage-1'
+            'stage-1',
+            'stage-2',
+            'stage-3'
           ],
           'plugins': [
             'transform-runtime',

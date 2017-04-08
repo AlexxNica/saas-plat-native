@@ -12,13 +12,21 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   StyleSheet,
-  AsyncStorage,
+  AsyncStorage
 } from 'react-native';
-const SplashScreen = (Platform.OS === 'android' || Platform.OS === 'ios') &&
-  require('@remobile/react-native-splashscreen');
+const SplashScreen = (Platform.OS === 'android' || Platform.OS === 'ios') && require('@remobile/react-native-splashscreen');
 import Storage from 'react-native-storage';
 import config from './config';
 import spdefine from './spdefine';
+
+const BASE_CORE = 'core';
+const locales = {};
+let lastGlobalError;
+let lang;
+
+const T = function(txt) {
+  return (lang && locales[lang] && locales[lang][txt]) || txt;
+};
 
 let deviceID = Platform.OS;
 let deviceUUID;
@@ -29,37 +37,37 @@ switch (Platform.OS) {
     deviceID = DeviceInfo.getDeviceId(); // iPhone7,2
     deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
     break;
+  case 'web':
+    // web 由服务器获取ip
+    break;
   case 'windows':
     // todo
   case 'macos':
     // todo
   default:
-    console.error(__T('不支持的平台设备', Platform.OS));
+    console.error(T('不支持的平台设备'), Platform.OS);
 }
 
-const BASE_CORE = 'core';
+switch (Platform.OS) {
+  case 'web':
+    lang = navigator.language || navigator.browserLanguage || navigator.systemLanguage;
+    break;
+  case 'android':
+  case 'ios':
+    lang = require('react-native-locale-detector');
+    break;
+  case 'windows':
+    // todo
+  case 'macos':
+    // todo
+  default:
+    console.error(T('不支持的平台语言环境'), Platform.OS);
+}
 
-let lastGlobalError;
 global.devOptions = {
   debugMode: false,
   cacheDisable: false
 };
-
-let lang;
-switch (Platform.OS) {
-  case 'web':
-    lang = navigator.language || navigator.browserLanguage || navigator
-      .systemLanguage;
-  case 'android':
-  case 'ios':
-    lang = require('react-native-locale-detector');
-  case 'windows':
-    // todo
-  case 'macos':
-    // todo
-  default:
-    console.error(__T('不支持的平台语言环境', Platform.OS));
-}
 
 global.options = {
   get language() {
@@ -67,17 +75,15 @@ global.options = {
   }
 };
 
-const locales = {};
 if (lang) {
-  locales[lang] = require('./locales/' + lang);
+  try {
+    locales[lang] = require('./locales/' + lang);
+  } catch (err) {
+    if (lang !== 'zh-CN') {
+      console.error(err);
+    }
+  }
 }
-
-const T = function(txt) {
-  return (lang &&
-      locales[lang] &&
-      locales[lang][txt]) ||
-    txt;
-};
 
 global.__errorHandler = function(err) {
   debugger;
@@ -87,11 +93,9 @@ global.__errorHandler = function(err) {
 function invoke(script) {
   'use strict';
   // todo 暂时使用一个大trycache防止崩溃退出
-  let spscript =
-    "spdefine('__app__',function(global, require, module, exports) {\n" +
-    "require=global.sprequire;" +
-    "function __loadcode(){\n" + script + "\n}" + // try调用func减少性能损失
-    "try{__loadcode();}catch(err){global.__errorHandler(err);}\n});";
+  let spscript = "spdefine('__app__',function(global, require, module, exports) {\nrequire=global." +
+      "sprequire;function __loadcode(){\n" + script + "\n}" + // try调用func减少性能损失
+  "try{__loadcode();}catch(err){global.__errorHandler(err);}\n});";
   if (__DEV__) {
     spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');";
   }
@@ -119,7 +123,7 @@ export default class extends React.Component {
   }
 
   finished(code) {
-    this.setState({ code: code, animating: false });
+    this.setState({code: code, animating: false});
     // ios和android上有启动画面
     if (Platform.OS === 'android' || Platform.OS === 'ios') {
       // 成功是不隐藏的，等在platform加载完再隐藏
@@ -142,45 +146,41 @@ export default class extends React.Component {
     }
   }
 
-  syncFile({ resolve, reject, id }) {
+  syncFile({resolve, reject, id}) {
     const me = this;
     if (!global.isConnected) {
       reject(T('网络尚未连接'));
       return;
     }
     this.pushMessage(T('开始同步内核脚本...'));
-    fetch(
-      `${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`
-    ).then((response) => {
+    fetch(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`).then((response) => {
       if (response.status == 200)
         return response.text();
       throw T('网络连接已拒绝') + ' (' + response.status + ')';
     }).then(text => {
       me.pushMessage(T('内核脚本下载完成'));
       if (id != 'HEAD') { // 每次加载最新版不保存
-        me.store.save({ key: 'file', id: id, rawData: text });
+        me.store.save({key: 'file', id: id, rawData: text});
         me.pushMessage(T('fileSaved'));
       }
       resolve(text);
     }).catch((error) => {
       if (me.debugMode) {
-        me.pushMessage(
-          `${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`
-        );
+        me.pushMessage(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`);
       }
       reject(error);
     });
   }
 
-  syncVersion({ reject, resolve }) {
+  syncVersion({reject, resolve}) {
     const me = this;
     if (!global.isConnected) {
       reject(T('netInfoCheckFailed'));
       return;
     }
-    let timeoutId = __DEV__ ?
-      1 :
-      setTimeout(function() {
+    let timeoutId = __DEV__
+      ? 1
+      : setTimeout(function() {
         if (!timeoutId)
           return;
         timeoutId = null;
@@ -210,7 +210,7 @@ export default class extends React.Component {
       } else {
         me.pushMessage(T('内核程序版本同步完成'));
         if (json.data.version != 'HEAD') { // HEAD是最新版就不要保存
-          me.store.save({ key: 'version', rawData: json.data });
+          me.store.save({key: 'version', rawData: json.data});
           me.pushMessage(T('内核最新版本已经保存，版本号:') + json.data.version);
         }
         resolve(json.data);
@@ -260,9 +260,9 @@ export default class extends React.Component {
     }
     this.pushMessage(T('内核程序加载成功'));
     spdefine('saasplat-native', function(global, require, module, exports) {
-      module.exports = sp.__esModule ?
-        sp.default :
-        sp;
+      module.exports = sp.__esModule
+        ? sp.default
+        : sp;
     });
     this.pushMessage(T('环境准备已就绪'));
     this.finished(200);
@@ -273,29 +273,29 @@ export default class extends React.Component {
     const me = this;
     this.pushMessage(T('开始读取内核脚本...'));
     if (__DEV__ || global.devOptions.cacheDisable) {
-      this.store.remove({ key: 'file', id: version });
+      this.store.remove({key: 'file', id: version});
     }
     // 如果版本加载成功，开始加载代码
     this.store.load({
       key: 'file',
       id: version,
-      syncInBackground: (__DEV__ || global.devOptions.cacheDisable) ?
-        false : true
+      syncInBackground: (__DEV__ || global.devOptions.cacheDisable)
+        ? false
+        : true
     }).then(ret => {
       me.pushMessage(T('内核脚本读取成功'));
       if (!me.loadScript(ret)) {
         // 当前版本的文件无效，清楚缓存
-        me.store.remove({ key: 'file', id: version });
+        me.store.remove({key: 'file', id: version});
       }
     }).catch(err => {
       //如果没有找到数据且没有同步方法，
       if (err && me.debugMode) {
         //或者有其他异常，则在catch中返回
-        me.pushMessage(T('内核程序脚本下载失败') + ', ' + (err.message ||
-          err));
+        me.pushMessage(T('内核程序脚本下载失败') + ', ' + (err.message || err));
       }
       // 当前版本已过期删除
-      me.store.remove({ key: 'version' });
+      me.store.remove({key: 'version'});
       me.pushMessage(T('应用启动失败，稍后重试...'));
       me.finished(404);
     });
@@ -305,14 +305,15 @@ export default class extends React.Component {
     const me = this;
     this.pushMessage(T('versionUploading'));
     if (__DEV__ || global.devOptions.cacheDisable) {
-      this.store.remove({ key: 'version' });
+      this.store.remove({key: 'version'});
     }
     // 版本默认每天检查一次，就算过期也是先返回老版本，下次打开才是新版
     this.store.load({
       key: 'version',
       autoSync,
-      syncInBackground: (__DEV__ || global.devOptions.cacheDisable) ?
-        false : true
+      syncInBackground: (__DEV__ || global.devOptions.cacheDisable)
+        ? false
+        : true
     }).then(ret => {
       me.pushMessage(T('内核版本读取完成，当前版本:') + ret.version);
       me.loadFile(ret.version);
@@ -329,21 +330,23 @@ export default class extends React.Component {
 
   pushMessage(message) {
     console.log(message);
-    this.setState({ messageList: this.state.messageList.concat(message) });
+    this.setState({messageList: this.state.messageList.concat(message)});
   }
 
   loadDevOptions(callback) {
     if (global.isConnected) {
       // 联网从平台获取开发者选项
       this.pushMessage(T('获取开发者选项...'));
-      fetch(`${config.dev}?did=${deviceID}&uuid=${deviceUUID}`).then((
-        response) => {
+      fetch(`${config.dev}?did=${deviceID}&uuid=${deviceUUID}`).then((response) => {
         return response.json();
       }).then((json) => {
         if (json.errno) {
           this.pushMessage(json.errmsg);
         } else {
-          global.devOptions = { ...global.devOptions, ...json.data };
+          global.devOptions = {
+            ...global.devOptions,
+            ...json.data
+          };
         }
       }).catch(err => {
         this.pushMessage(err);
@@ -377,12 +380,11 @@ export default class extends React.Component {
       this.pushMessage(T('网络连接成功'));
       // 如果网络连接，获取最新版本
       this.syncVersion({
-        resolve: function({ version }) {
+        resolve: function({version}) {
           me.loadFile(version);
         },
         reject: function(err) {
-          me.pushMessage(T('内核程序版本获取失败') + ', ' + (err.message ||
-            err));
+          me.pushMessage(T('内核程序版本获取失败') + ', ' + (err.message || err));
           me.loadVersion(false);
         }
       });
@@ -406,8 +408,9 @@ export default class extends React.Component {
     this.store = new Storage({
       size: 1, // 默认保存最近1个版本
       storageBackend: AsyncStorage,
-      defaultExpires: (__DEV__ || global.devOptions.cacheDisable) ?
-        1 : null, // 永不过期
+      defaultExpires: (__DEV__ || global.devOptions.cacheDisable)
+        ? 1
+        : null, // 永不过期
       autoSync: true,
       syncInBackground: !(__DEV__ || global.devOptions.cacheDisable),
       sync: {
@@ -431,7 +434,7 @@ export default class extends React.Component {
   }
 
   prepare() {
-    this.setState({ code: 0, animating: true });
+    this.setState({code: 0, animating: true});
     this.pushMessage(T('开始检查网络连接情况...'));
     NetInfo.isConnected.fetch().done((isConnected) => {
       //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
@@ -440,15 +443,9 @@ export default class extends React.Component {
 
     function handleFirstConnectivityChange(isConnected) {
       //console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
-      NetInfo.isConnected.removeEventListener(
-        'change',
-        handleFirstConnectivityChange
-      );
+      NetInfo.isConnected.removeEventListener('change', handleFirstConnectivityChange);
     }
-    NetInfo.isConnected.addEventListener(
-      'change',
-      handleFirstConnectivityChange
-    );
+    NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
   }
 
   componentDidMount() {
@@ -464,7 +461,7 @@ export default class extends React.Component {
   }
 
   clearMessageList() {
-    this.setState({ messageList: [] });
+    this.setState({messageList: []});
   }
 
   render() {
@@ -473,30 +470,55 @@ export default class extends React.Component {
       const Component = sp.App;
       return <Component/>;
     }
+    switch (Platform.OS) {
+      case 'android':
+      case 'ios':
+        return this.renderApp();
+      case 'web':
+        return this.renderWeb();
+      case 'windows':
+        // todo
+      case 'macos':
+        // todo
+      default:
+        console.error(T('不支持的平台视图'), Platform.OS);
+        return null;
+    }
+  }
+
+  renderWeb(){
+    return <div>Loading</div>;
+  }
+
+  renderApp() {
     if (!global.devOptions.debugMode) {
-      const messageContent = this.state.messageList.length > 0 ?
-        this.state.messageList[this.state.messageList.length - 1] :
-        '';
+      const messageContent = this.state.messageList.length > 0
+        ? this.state.messageList[this.state.messageList.length - 1]
+        : '';
       let lastErrorText = null;
       if (lastGlobalError) {
         lastErrorText = (
           <Text style={styles.messageError}>
-          {lastGlobalError}
-        </Text>
+            {lastGlobalError}
+          </Text>
         );
       }
       return (
         <View style={styles.container}>
           <StatusBar hidden={false} barStyle='default'/>{this.state.animating
-            ? <ActivityIndicator animating={true} style={{
-              height: 50
-            }} size='small' />
+            ? <ActivityIndicator
+                animating={true}
+                style={{
+                height: 50
+              }}
+                size='small'/>
             : <View style={{
               height: 50
             }}/>}
           <TouchableOpacity onPress={this.onPressFeed}>
             <View>
-              <Text style={[
+              <Text
+                style={[
                 styles.message, {
                   marginBottom: lastGlobalError
                     ? 20
@@ -516,10 +538,15 @@ export default class extends React.Component {
       return (
         <View style={styles.container}>
           <StatusBar hidden={false} barStyle='default'/>
-          <ScrollView style={styles.messageList} contentContainerStyle={styles.messageListContainer}>
+          <ScrollView
+            style={styles.messageList}
+            contentContainerStyle={styles.messageListContainer}>
             {this.state.messageList.map((message, i) => (
               <View key={i} style={styles.row}>
-                <TouchableHighlight activeOpacity={0.5} style={styles.rowContent} underlayColor='transparent'>
+                <TouchableHighlight
+                  activeOpacity={0.5}
+                  style={styles.rowContent}
+                  underlayColor='transparent'>
                   <Text style={styles.rowText}>
                     {message}
                   </Text>
@@ -528,8 +555,13 @@ export default class extends React.Component {
             ))}
           </ScrollView>
           <View style={styles.buttons}>
-            <TouchableHighlight activeOpacity={0.5} onPress={this.onPressFeed} style={styles.button} underlayColor='transparent'>
-              <Text style={[
+            <TouchableHighlight
+              activeOpacity={0.5}
+              onPress={this.onPressFeed}
+              style={styles.button}
+              underlayColor='transparent'>
+              <Text
+                style={[
                 styles.buttonText, this.state.animating
                   ? styles.buttonDisabled
                   : null
@@ -537,7 +569,11 @@ export default class extends React.Component {
                 {T('重新加载')}
               </Text>
             </TouchableHighlight>
-            <TouchableHighlight activeOpacity={0.5} onPress={this.clearMessageList} style={styles.button} underlayColor='transparent'>
+            <TouchableHighlight
+              activeOpacity={0.5}
+              onPress={this.clearMessageList}
+              style={styles.button}
+              underlayColor='transparent'>
               <Text style={styles.buttonText}>
                 {T('清空所有')}
               </Text>

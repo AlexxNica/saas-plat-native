@@ -4,7 +4,7 @@ var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var root = path.dirname(__dirname);
 
-require('./http');
+require('./server');
 require('./watch');
 
 

@@ -54,3 +54,4 @@ fastlane/screenshots
 /lib
 
 /web/dist
+/web/www/index.html

@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
 
 module.exports = {
@@ -8,21 +9,21 @@ module.exports = {
   entry: {
     bundle: [
       'webpack-hot-middleware/client',
-      '../index.web.js'
+      __dirname + '/../index.web.js'
     ]
   },
   //入口文件输出配置
   output: {
-    publicPath: 'http://localhost:8300/dist/',
-    path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js'
+    publicPath: 'http://localhost:8202/dist',
+    path: path.join(__dirname, 'www', 'dist'),
+    filename: '[name].[hash:5].js',
+    chunkFilename: '[name].chunk.[hash:5].js'
   },
   module: {
     //加载器配置
     loaders: [{
       test: /\.js|\.jsx$/,
-      exclude: /node_modules/,
+      exclude: /node_modules[\\|\/](?!react-native-storage|@remobile\\react-native-splashscreen|react-native-locale-detector)/,
       loaders: [
         'react-hot',
         'babel?' + JSON.stringify({
@@ -63,10 +64,14 @@ module.exports = {
   },
   //插件项
   plugins: [
+    new HtmlWebpackPlugin({
+      template: __dirname + "/index.temp.html",
+      filename: __dirname + '/www/index.html'
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),
-    new ChunkModuleIDPlugin(),
+    //new ChunkModuleIDPlugin(),
     new webpack.DefinePlugin({
       '__DEV__': true
     })

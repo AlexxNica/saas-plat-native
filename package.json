@@ -6,14 +6,14 @@
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "start": "node --harmony dev/start",
     "client": "node node_modules/react-native/local-cli/cli.js start",
-    "http": "node --harmony dev/http.js",
+    "server": "node --harmony dev/server.js",
     "watch": "node --harmony dev/watch.js",
     "build": "node dev/build.js",
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "spdefine": "node --harmony dev/genSpDefines",
-    "web": "webpack-dev-server --port 3000 --config web/webpack.config.dev.js --inline --hot --colors ",
-    "buildweb": "webpack --config web/webpack.config.js",
+    "web": "node dev/server.js --web",
+    "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
     "storybook": "start-storybook -p 9001 -c web/.storybook"
   },
   "dependencies": {
@@ -85,6 +85,7 @@
     "eslint-plugin-react-native": "^2.2.1",
     "file-loader": "^0.8.5",
     "glob": "^7.1.1",
+    "html-webpack-plugin": "^2.28.0",
     "jsx-loader": "^0.13.2",
     "mocha": "^3.2.0",
     "npm": "^4.2.0",
@@ -93,6 +94,7 @@
     "url-loader": "^0.5.7",
     "watch": "^0.18.0",
     "webpack": "^1.13.0",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-hot-middleware": "^2.18.0"
   }
 }

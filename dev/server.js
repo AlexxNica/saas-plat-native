@@ -10,11 +10,9 @@ var httpProxyMiddleware = require('http-proxy-middleware');
 var app = express();
 var compiler = webpack(config);
 
-var arguments = process.argv.splice(2);
+var args = process.argv.splice(2);
 
-if (arguments.indexOf('--web')>-1) {
-  console.log('启用web');
-
+if (args.indexOf('--web')>-1) {
   var md = require('webpack-dev-middleware')(compiler, {
     publicPath: config.output.publicPath,
     noInfo: false,
@@ -61,7 +59,12 @@ global.readJsonFile = function(filename) {
   return json3;
 }
 
-console.log('启用/api/v1');
+app.get('/assets/*', function(req, res) {
+  var pathname = url.parse(req.url).pathname;
+  res.write(fs.readFileSync(__dirname + '/bundles'+pathname));
+  res.end();
+});
+
 app.get('/api/v1/*', function(request, response) {
   var pathname = url.parse(request.url).pathname;
   var realPath = path.join(__dirname, 'api', pathname.substr('/api/v1'.length) , request.method.toLocaleLowerCase() + '.js');

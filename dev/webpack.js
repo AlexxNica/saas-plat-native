@@ -112,11 +112,11 @@ module.exports = function() {
             {
               test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$|\.(eot?|woff?|woff2?|ttf?|svg?|png?|jpg?|gif?)/,
               loader: path.join(__dirname, 'loaders', 'assets-loader'),
-              query:{
-                limit:8192,
-                name:'[name].[hash:6].[ext]',
-                publicPath:'http://assets.saas-plat.com/[path]',
-                outputPath: path.join(__dirname, 'bundles', 'assets', '[path]')
+              query: {
+                limit: 8192,
+                name: 'assets/[name].[hash:6].[ext]',
+                //publicPath: 'http://app.saas-plat.com/'
+                publicPath: 'http://localhost:8202/'
               }
             }, {
               test: /\.js$/,
@@ -156,7 +156,16 @@ module.exports = function() {
               'react-native': 'react-native-web'
             }
             : null
-        }
+        },
+        plugins: [
+          {
+            apply: function(compiler) {
+              compiler.plugin("compile", function(params) {
+                console.log("The compiler is starting to compile...");
+              });
+            }
+          }
+        ]
       });
 
       // 不输出文件 bundles.fs = compiler.outputFileSystem = new MemoryFS();

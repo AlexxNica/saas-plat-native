@@ -14,10 +14,10 @@ import {
   StyleSheet,
   AsyncStorage
 } from 'react-native';
-const SplashScreen = (Platform.OS === 'android' || Platform.OS === 'ios') && require('@remobile/react-native-splashscreen');
 import Storage from 'react-native-storage';
 import config from './config';
 import spdefine from './spdefine';
+import querystring from 'querystring';
 
 const BASE_CORE = 'core';
 const locales = {};
@@ -99,9 +99,16 @@ function invoke(script) {
   if (__DEV__) {
     spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');";
   }
-  // chrome引擎new function比eval快一倍以上
-  (new Function(spscript))();
-  //eval(spscript);
+  if (Platform.OS === 'web') {
+    const body = document.getElementsByTagName('body')[0];
+    const scripttag = document.createElement('script');
+    scripttag.appendChild(spscript);
+    body.appendChild(scripttag);
+  } else {
+    // chrome引擎new function比eval快一倍以上
+    (new Function(spscript))();
+    //eval(spscript);
+  }
 }
 
 // 加载平台组件
@@ -115,7 +122,7 @@ export default class extends React.Component {
       messageList: []
     };
 
-    this.onPress = this.onPressFeed.bind(this);
+    this.onPressFeed = this.onPressFeed.bind(this);
     this.syncFile = this.syncFile.bind(this);
     this.syncVersion = this.syncVersion.bind(this);
     this.clearMessageList = this.clearMessageList.bind(this);
@@ -134,12 +141,12 @@ export default class extends React.Component {
         if (dif > 2000) { // 至少显示2s，要不一闪而过体验不好
           // 恢复状态条
           StatusBar.setHidden(false);
-          SplashScreen.hide();
+          require('@remobile/react-native-splashscreen').hide();
         } else {
           setTimeout(() => {
             // 恢复状态条
             StatusBar.setHidden(false);
-            SplashScreen.hide();
+            require('@remobile/react-native-splashscreen').hide();
           }, dif);
         }
       }
@@ -154,13 +161,14 @@ export default class extends React.Component {
     }
     this.pushMessage(T('开始同步内核脚本...'));
     fetch(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`).then((response) => {
-      if (response.status == 200)
+      if (response.status === 200) {
         return response.text();
+      }
       throw T('网络连接已拒绝') + ' (' + response.status + ')';
     }).then(text => {
       me.pushMessage(T('内核脚本下载完成'));
-      if (id != 'HEAD') { // 每次加载最新版不保存
-        me.store.save({key: 'file', id: id, rawData: text});
+      if (id !== 'HEAD') { // 每次加载最新版不保存
+        me.store.save({key: 'file', id, rawData: text});
         me.pushMessage(T('fileSaved'));
       }
       resolve(text);
@@ -337,20 +345,30 @@ export default class extends React.Component {
     if (global.isConnected) {
       // 联网从平台获取开发者选项
       this.pushMessage(T('获取开发者选项...'));
-      fetch(`${config.dev}?did=${deviceID}&uuid=${deviceUUID}`).then((response) => {
-        return response.json();
-      }).then((json) => {
-        if (json.errno) {
-          this.pushMessage(json.errmsg);
-        } else {
-          global.devOptions = {
-            ...global.devOptions,
-            ...json.data
-          };
-        }
-      }).catch(err => {
-        this.pushMessage(err);
-      }).done(() => {
+      fetch(`${config.dev}?${querystring.stringify({did: deviceID, uuid: deviceUUID})}`).then((response) => {
+          return response.json();
+        }).then((json) => {
+          if (json.errno) {
+            this.pushMessage(json.errmsg);
+          } else {
+            global.devOptions = {
+              ...global.devOptions,
+              ...json.data
+            };
+          }
+        }).catch(err => {
+          this.pushMessage(err);
+        }).then(() => {
+          if (global.devOptions.cacheDisable) {
+            this.pushMessage(T('系统已经禁用缓存'));
+          }
+          if (global.devOptions.debugMode) {
+            this.pushMessage(T('系统已经启用调试模式'));
+          }
+          if (callback) {
+            callback();
+          }
+        });} else {
         if (global.devOptions.cacheDisable) {
           this.pushMessage(T('系统已经禁用缓存'));
         }
@@ -360,138 +378,121 @@ export default class extends React.Component {
         if (callback) {
           callback();
         }
-      });
-    } else {
-      if (global.devOptions.cacheDisable) {
-        this.pushMessage(T('系统已经禁用缓存'));
-      }
-      if (global.devOptions.debugMode) {
-        this.pushMessage(T('系统已经启用调试模式'));
-      }
-      if (callback) {
-        callback();
+      }}
+
+    loadCoreFile() {
+      if (global.isConnected) {
+        const me = this;
+        this.pushMessage(T('网络连接成功'));
+        // 如果网络连接，获取最新版本
+        this.syncVersion({
+          resolve: function({version}) {
+            me.loadFile(version);
+          },
+          reject: function(err) {
+            me.pushMessage(T('内核程序版本获取失败') + ', ' + (err.message || err));
+            me.loadVersion(false);
+          }
+        });
+      } else {
+        alert(T('网络尚未连接，建议开启WIFI或4G网络，否则数据无法更新和保存提交'));
+        this.pushMessage(T('网络尚未连接'));
+        this.loadVersion();
       }
     }
-  }
 
-  loadCoreFile() {
-    if (global.isConnected) {
-      const me = this;
-      this.pushMessage(T('网络连接成功'));
-      // 如果网络连接，获取最新版本
-      this.syncVersion({
-        resolve: function({version}) {
-          me.loadFile(version);
-        },
-        reject: function(err) {
-          me.pushMessage(T('内核程序版本获取失败') + ', ' + (err.message || err));
-          me.loadVersion(false);
+    initEnv() {
+      if (Platform.OS === 'android' || Platform.OS === 'ios') {
+        // 调试模式不显示启动画面，直接显示加载过程
+        if (global.devOptions.debugMode) {
+          // 恢复状态条
+          StatusBar.setHidden(false);
+          require('@remobile/react-native-splashscreen').hide();
+        }
+      }
+
+      this.store = new Storage({
+        size: 1, // 默认保存最近1个版本
+        storageBackend: AsyncStorage,
+        defaultExpires: (__DEV__ || global.devOptions.cacheDisable)
+          ? 1
+          : null, // 永不过期
+        autoSync: true,
+        syncInBackground: !(__DEV__ || global.devOptions.cacheDisable),
+        sync: {
+          file: this.syncFile,
+          version: this.syncVersion
         }
       });
-    } else {
-      alert(T('网络尚未连接，建议开启WIFI或4G网络，否则数据无法更新和保存提交'));
-      this.pushMessage(T('网络尚未连接'));
-      this.loadVersion();
     }
-  }
 
-  initEnv() {
-    if (Platform.OS === 'android' || Platform.OS === 'ios') {
-      // 调试模式不显示启动画面，直接显示加载过程
-      if (global.devOptions.debugMode) {
-        // 恢复状态条
-        StatusBar.setHidden(false);
-        SplashScreen.hide();
+    handleConnected(isConnected) {
+      global.isConnected = isConnected;
+      if (this.handled) {
+        // 网络请求不能关闭，但是这里只需要处理一次
+        return;
+      }
+      this.pushMessage(T('开始启动...'));
+      this.loadDevOptions(() => {
+        this.initEnv();
+        this.loadCoreFile();
+      });
+    }
+
+    prepare() {
+      this.setState({code: 0, animating: true});
+      this.pushMessage(T('开始检查网络连接情况...'));
+      NetInfo.isConnected.fetch().then((isConnected) => {
+        //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
+        this.handleConnected(isConnected);
+      });
+
+      function handleFirstConnectivityChange(isConnected) {
+        //console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
+        NetInfo.isConnected.removeEventListener('change', handleFirstConnectivityChange);
+      }
+      NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
+    }
+
+    componentDidMount() {
+      this._start = new Date().getTime();
+      this.prepare();
+    }
+
+    onPressFeed() {
+      if (this.state.animating) {
+        return;
+      }
+      this.prepare();
+    }
+
+    clearMessageList() {
+      this.setState({messageList: []});
+    }
+
+    render() {
+      if (this.state.code === 200) {
+        const sp = global.require('__app__');
+        const Component = sp.App;
+        return <Component/>;
+      }
+      switch (Platform.OS) {
+        case 'android':
+        case 'ios':
+          return this.renderApp();
+        case 'web':
+          return this.renderWeb();
+        case 'windows':
+          // todo
+        case 'macos':
+          // todo
+        default:
+          console.error(T('不支持的平台视图'), Platform.OS);
+          return null;
       }
     }
 
-    this.store = new Storage({
-      size: 1, // 默认保存最近1个版本
-      storageBackend: AsyncStorage,
-      defaultExpires: (__DEV__ || global.devOptions.cacheDisable)
-        ? 1
-        : null, // 永不过期
-      autoSync: true,
-      syncInBackground: !(__DEV__ || global.devOptions.cacheDisable),
-      sync: {
-        file: this.syncFile,
-        version: this.syncVersion
-      }
-    });
-  }
-
-  handleConnected(isConnected) {
-    global.isConnected = isConnected;
-    if (this.handled) {
-      // 网络请求不能关闭，但是这里只需要处理一次
-      return;
-    }
-    this.pushMessage(T('开始启动...'));
-    this.loadDevOptions(() => {
-      this.initEnv();
-      this.loadCoreFile();
-    });
-  }
-
-  prepare() {
-    this.setState({code: 0, animating: true});
-    this.pushMessage(T('开始检查网络连接情况...'));
-    NetInfo.isConnected.fetch().done((isConnected) => {
-      //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
-      this.handleConnected(isConnected);
-    });
-
-    function handleFirstConnectivityChange(isConnected) {
-      //console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
-      NetInfo.isConnected.removeEventListener('change', handleFirstConnectivityChange);
-    }
-    NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
-  }
-
-  componentDidMount() {
-    this._start = new Date().getTime();
-    this.prepare();
-  }
-
-  onPressFeed() {
-    if (this.state.animating) {
-      return;
-    }
-    this.prepare();
-  }
-
-  clearMessageList() {
-    this.setState({messageList: []});
-  }
-
-  render() {
-    if (this.state.code === 200) {
-      const sp = global.require('__app__');
-      const Component = sp.App;
-      return <Component/>;
-    }
-    switch (Platform.OS) {
-      case 'android':
-      case 'ios':
-        return this.renderApp();
-      case 'web':
-        return this.renderWeb();
-      case 'windows':
-        // todo
-      case 'macos':
-        // todo
-      default:
-        console.error(T('不支持的平台视图'), Platform.OS);
-        return null;
-    }
-  }
-
-  renderWeb(){
-    return <div>Loading</div>;
-  }
-
-  renderApp() {
-    if (!global.devOptions.debugMode) {
+    renderWeb() {
       const messageContent = this.state.messageList.length > 0
         ? this.state.messageList[this.state.messageList.length - 1]
         : '';
@@ -505,7 +506,7 @@ export default class extends React.Component {
       }
       return (
         <View style={styles.container}>
-          <StatusBar hidden={false} barStyle='default'/>{this.state.animating
+          {this.state.animating
             ? <ActivityIndicator
                 animating={true}
                 style={{
@@ -534,111 +535,157 @@ export default class extends React.Component {
           </TouchableOpacity>
         </View>
       );
-    } else {
-      return (
-        <View style={styles.container}>
-          <StatusBar hidden={false} barStyle='default'/>
-          <ScrollView
-            style={styles.messageList}
-            contentContainerStyle={styles.messageListContainer}>
-            {this.state.messageList.map((message, i) => (
-              <View key={i} style={styles.row}>
-                <TouchableHighlight
-                  activeOpacity={0.5}
-                  style={styles.rowContent}
-                  underlayColor='transparent'>
-                  <Text style={styles.rowText}>
-                    {message}
-                  </Text>
-                </TouchableHighlight>
+    }
+
+    renderApp() {
+      if (!global.devOptions.debugMode) {
+        const messageContent = this.state.messageList.length > 0
+          ? this.state.messageList[this.state.messageList.length - 1]
+          : '';
+        let lastErrorText = null;
+        if (lastGlobalError) {
+          lastErrorText = (
+            <Text style={styles.messageError}>
+              {lastGlobalError}
+            </Text>
+          );
+        }
+        return (
+          <View style={styles.container}>
+            <StatusBar hidden={false} barStyle='default'/>{this.state.animating
+              ? <ActivityIndicator
+                  animating={true}
+                  style={{
+                  height: 50
+                }}
+                  size='small'/>
+              : <View style={{
+                height: 50
+              }}/>}
+            <TouchableOpacity onPress={this.onPressFeed}>
+              <View>
+                <Text
+                  style={[
+                  styles.message, {
+                    marginBottom: lastGlobalError
+                      ? 20
+                      : 120
+                  }
+                ]}>
+                  {messageContent + (this.state.code !== 0
+                    ? ('(' + this.state.code + ')')
+                    : '')}
+                </Text>
+                {lastErrorText}
               </View>
-            ))}
-          </ScrollView>
-          <View style={styles.buttons}>
-            <TouchableHighlight
-              activeOpacity={0.5}
-              onPress={this.onPressFeed}
-              style={styles.button}
-              underlayColor='transparent'>
-              <Text
-                style={[
-                styles.buttonText, this.state.animating
-                  ? styles.buttonDisabled
-                  : null
-              ]}>
-                {T('重新加载')}
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              activeOpacity={0.5}
-              onPress={this.clearMessageList}
-              style={styles.button}
-              underlayColor='transparent'>
-              <Text style={styles.buttonText}>
-                {T('清空所有')}
-              </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
-        </View>
-      );
+        );
+      } else {
+        return (
+          <View style={styles.container}>
+            <StatusBar hidden={false} barStyle='default'/>
+            <ScrollView
+              style={styles.messageList}
+              contentContainerStyle={styles.messageListContainer}>
+              {this.state.messageList.map((message, i) => (
+                <View key={i} style={styles.row}>
+                  <TouchableHighlight
+                    activeOpacity={0.5}
+                    style={styles.rowContent}
+                    underlayColor='transparent'>
+                    <Text style={styles.rowText}>
+                      {message}
+                    </Text>
+                  </TouchableHighlight>
+                </View>
+              ))}
+            </ScrollView>
+            <View style={styles.buttons}>
+              <TouchableHighlight
+                activeOpacity={0.5}
+                onPress={this.onPressFeed}
+                style={styles.button}
+                underlayColor='transparent'>
+                <Text
+                  style={[
+                  styles.buttonText, this.state.animating
+                    ? styles.buttonDisabled
+                    : null
+                ]}>
+                  {T('重新加载')}
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                activeOpacity={0.5}
+                onPress={this.clearMessageList}
+                style={styles.button}
+                underlayColor='transparent'>
+                <Text style={styles.buttonText}>
+                  {T('清空所有')}
+                </Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        );
+      }
     }
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff'
-  },
-  message: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#111'
-  },
-  messageError: {
-    fontSize: 14,
-    color: '#ccc'
-  },
-  messageList: {
-    padding: 15,
-    position: 'absolute',
-    top: 39,
-    left: 0,
-    right: 0,
-    bottom: 60
-  },
-  messageListContainer: {},
-  buttons: {
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-  button: {
-    flex: 1,
-    padding: 22
-  },
-  buttonText: {
-    color: '#111',
-    fontSize: 14,
-    textAlign: 'center'
-  },
-  buttonDisabled: {
-    color: '#ccc'
-  },
-  row: {
-    height: 36,
-    marginTop: 1
-  },
-  rowText: {
-    color: '#111',
-    fontSize: 16,
-    fontWeight: '600'
-  },
-  rowContent: {
-    flex: 1
-  }
-});
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff'
+    },
+    message: {
+      fontSize: 16,
+      textAlign: 'center',
+      color: '#111'
+    },
+    messageError: {
+      fontSize: 14,
+      color: '#ccc'
+    },
+    messageList: {
+      padding: 15,
+      position: 'absolute',
+      top: 39,
+      left: 0,
+      right: 0,
+      bottom: 60
+    },
+    messageListContainer: {},
+    buttons: {
+      flexDirection: 'row',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0
+    },
+    button: {
+      flex: 1,
+      padding: 22
+    },
+    buttonText: {
+      color: '#111',
+      fontSize: 14,
+      textAlign: 'center'
+    },
+    buttonDisabled: {
+      color: '#ccc'
+    },
+    row: {
+      height: 36,
+      marginTop: 1
+    },
+    rowText: {
+      color: '#111',
+      fontSize: 16,
+      fontWeight: '600'
+    },
+    rowContent: {
+      flex: 1
+    }
+  });

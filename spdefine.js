@@ -24,12 +24,10 @@ if (Platform.OS === 'web') {
     let moduleId = spModuleId++;
     moduleIds.set(moduleName, moduleId);
     __webpack_require__.m[moduleId] = (module, exports, require) => {
-      debugger
       return factory(global, require, module, exports)
     };
   };
   global.require = global.sprequire = (moduleName) => {
-    debugger
     return __webpack_require__(moduleIds.get(moduleName) || moduleName);
   };
 }

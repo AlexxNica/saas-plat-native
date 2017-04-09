@@ -1,4 +1,4 @@
-const server = __DEV__? 'http://test.saas-plat.com:8202' : 'http://api.saas-plat.com';
+const server = __DEV__? 'http://localhost:8202/api/v1' : 'http://api.saas-plat.com/v1';
 
 export default {
 	version: server+'/app/version',

@@ -59,7 +59,7 @@ export default class extends Component {
     assert(this.props.onDone);  // onDone必须有值
     this.props.onDone();
   }
-  
+
   render() {
     // onDone 在action中设置的，在PlatformLoading.js中
     return (

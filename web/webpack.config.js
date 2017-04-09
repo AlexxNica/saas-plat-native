@@ -37,17 +37,6 @@ module.exports = {
             ],
             'plugins': ['transform-runtime', 'transform-decorators-legacy']
           })]
-      }, {
-        test: /\.less|\.css$/,
-        //exclude: /node_modules/,
-        loader: 'style-loader!css-loader!autoprefixer-loader!less-loader'
-      }, {
-        test: /\.scss$/,
-        //exclude: /node_modules/,
-        loader: 'style-loader!css-loader!autoprefixer-loader!scss-loader'
-      }, {
-        test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$|\.(eot?|woff?|woff2?|ttf?|svg?|png?|jpg?|gif?)/,
-        loader: 'url-loader?limit=8192&name=[name].[ext]'
       }
     ]
   },

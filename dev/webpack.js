@@ -51,13 +51,11 @@ module.exports = function() {
       if (fs.existsSync(packagefilename)) {
         var packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
         if (fs.existsSync(mainfullfilename)) {
-          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
-            '1.0.0'] = mainfullfilename;
+          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version || '1.0.0'] = mainfullfilename;
         } else {
           mainfullfilename = path.join(dir, 'src', mainfile);
           if (fs.existsSync(mainfullfilename)) {
-            entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
-              '1.0.0'] = mainfullfilename;
+            entry[packagejson2.name + '.' + platform + '-' + packagejson2.version || '1.0.0'] = mainfullfilename;
           }
         }
       }
@@ -72,8 +70,7 @@ module.exports = function() {
 
     run: function() {
       // externals
-      var file = fs.readFileSync(path.join(path.dirname(__dirname),
-        'package.json'));
+      var file = fs.readFileSync(path.join(path.dirname(__dirname), 'package.json'));
       var packagejson = JSON.parse(file);
       var externals = ['saasplat-native'];
       for (var k in packagejson.dependencies) {
@@ -82,11 +79,12 @@ module.exports = function() {
       }
       //  console.log(externals);
 
-      var list = config.bundles;
+      var list = [];
       findEntry(list, path.join(__dirname, '../src'));
+      list = list.concat(config.bundles);
       var entry = getEntry(list);
       // console.log(list);
-       console.log(entry);
+      console.log(entry);
 
       // returns a Compiler instance
       var compiler = webpack({
@@ -99,7 +97,9 @@ module.exports = function() {
         },
         externals: externals,
         resolve: {
-          extensions: ['', '.js', '.' + platform + '.js', '.png',
+          extensions: [
+            '', '.js', '.' + platform + '.js',
+            '.png',
             '.jpg'
           ]
         },
@@ -108,34 +108,58 @@ module.exports = function() {
           fs: 'empty'
         },
         module: {
-          loaders: [{
-            test: /\.(png|jpg)$/,
-            loader: path.join(__dirname, 'loaders', 'assets-loader'),
-          }, {
-            test: /\.js$/,
-            //exclude: new RegExp('^'+config.BUNDLE_SRC),
-            loader: 'babel',
-            query: {
-              sourceMaps: 'yes',
-              //sourceRoot: config.BUNDLE_SRC,
-              presets: ["es2015", "stage-0", "stage-1", "stage-2",
-                "stage-3", "react"
-              ],
-              plugins: [
-                'transform-decorators-legacy'
-                // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {
-                //   "file": fi,
-                //   "nsRootDir": __dirname + '\\..\\bundles\\'
-                // }]
-                //'transform-runtime'
-              ]
+          loaders: [
+            {
+              test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$|\.(eot?|woff?|woff2?|ttf?|svg?|png?|jpg?|gif?)/,
+              loader: path.join(__dirname, 'loaders', 'assets-loader'),
+              query:{
+                limit:8192,
+                name:'[name].[hash:6].[ext]',
+                publicPath:'http://assets.saas-plat.com/[path]',
+                outputPath: path.join(__dirname, 'bundles', 'assets', '[path]')
+              }
+            }, {
+              test: /\.js$/,
+              //exclude: new RegExp('^'+config.BUNDLE_SRC),
+              loader: 'babel',
+              query: {
+                sourceMaps: 'yes',
+                //sourceRoot: config.BUNDLE_SRC,
+                presets: [
+                  "es2015",
+                  "es2017",
+                  "stage-0",
+                  "stage-1",
+                  "stage-2",
+                  "stage-3",
+                  "react"
+                ],
+                plugins: [
+                  'transform-decorators-legacy',
+                  // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {   "file":
+                  // fi,   "nsRootDir": __dirname + '\\..\\bundles\\' }]
+                  'transform-runtime'
+                ]
+              }
             }
-          }]
+          ]
+        },
+        //其它解决方案配置
+        resolve: {
+          extensions: platform == 'web'
+            ? [
+              '', '.js', '.' + platform + '.js'
+            ]
+            : null,
+          alias: platform == 'web'
+            ? {
+              'react-native': 'react-native-web'
+            }
+            : null
         }
       });
 
-      // 不输出文件
-      // bundles.fs = compiler.outputFileSystem = new MemoryFS();
+      // 不输出文件 bundles.fs = compiler.outputFileSystem = new MemoryFS();
 
       watcher = compiler.watch({ // watch options:
         aggregateTimeout: 300, // wait so long for more changes
@@ -148,8 +172,7 @@ module.exports = function() {
         }
 
         var jsonStats = stats.toJson();
-        if (jsonStats.errors.length > 0 || jsonStats.warnings.length >
-          0) {
+        if (jsonStats.errors.length > 0 || jsonStats.warnings.length > 0) {
           for (var i in jsonStats.errors) {
             console.log(jsonStats.errors[i] + ' error'.error);
           }
@@ -157,14 +180,13 @@ module.exports = function() {
           for (var k in jsonStats.warnings) {
             console.log(jsonStats.warnings[k] + ''.warn);
           }
-          console.log('-------- ' + new Date().toLocaleString().info +
-            ' -------');
+          console.log('-------- ' + new Date().toLocaleString().info + ' -------');
         } else {
-          console.log('webpack' + ' complate'.info);
+          console.log('webpack complate'.info);
         }
       });
 
-      console.log(platform + ' webpack compiler ' + 'run'.info);
+      console.log(platform + ' webpack compiler run'.info);
     },
 
     close: function(cb) {

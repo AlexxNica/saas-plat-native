@@ -55,9 +55,8 @@ https://github.com/Bob1993/react-native-imagefooter-listview
 
 
 
-1、web版本编译通过
-2、web版可以加载运行
-3、平台功能可以在pc和手机的浏览器上运行
+
+3、web响应式支持
 
 
 

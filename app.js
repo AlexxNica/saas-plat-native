@@ -87,7 +87,10 @@ if (lang) {
 
 global.__errorHandler = function(err) {
   debugger;
-  lastGlobalError = err;
+  !devOptions.debugMode && console.log(err);
+  lastGlobalError = devOptions.debugMode
+    ? encodeURIComponent(err)
+    : T('内核程序执行失败');
 };
 
 function invoke(script) {
@@ -102,7 +105,7 @@ function invoke(script) {
   if (Platform.OS === 'web') {
     const body = document.getElementsByTagName('body')[0];
     const scripttag = document.createElement('script');
-    scripttag.appendChild(spscript);
+    scripttag.innerHTML = spscript;
     body.appendChild(scripttag);
   } else {
     // chrome引擎new function比eval快一倍以上
@@ -118,7 +121,7 @@ export default class extends React.Component {
     super(props);
     this.state = {
       code: 0,
-      animating: true,
+      loading: true,
       messageList: []
     };
 
@@ -130,7 +133,7 @@ export default class extends React.Component {
   }
 
   finished(code) {
-    this.setState({code: code, animating: false});
+    this.setState({code: code, loading: false});
     // ios和android上有启动画面
     if (Platform.OS === 'android' || Platform.OS === 'ios') {
       // 成功是不隐藏的，等在platform加载完再隐藏
@@ -440,7 +443,7 @@ export default class extends React.Component {
     }
 
     prepare() {
-      this.setState({code: 0, animating: true});
+      this.setState({code: 0, loading: true});
       this.pushMessage(T('开始检查网络连接情况...'));
       NetInfo.isConnected.fetch().then((isConnected) => {
         //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
@@ -460,7 +463,7 @@ export default class extends React.Component {
     }
 
     onPressFeed() {
-      if (this.state.animating) {
+      if (this.state.loading) {
         return;
       }
       this.prepare();
@@ -506,26 +509,11 @@ export default class extends React.Component {
       }
       return (
         <View style={styles.container}>
-          {this.state.animating
-            ? <ActivityIndicator
-                animating={true}
-                style={{
-                height: 50
-              }}
-                size='small'/>
-            : <View style={{
-              height: 50
-            }}/>}
+          <ActivityIndicator animating={this.state.loading}
+            style={{height: 50}} size='small'/>
           <TouchableOpacity onPress={this.onPressFeed}>
-            <View>
-              <Text
-                style={[
-                styles.message, {
-                  marginBottom: lastGlobalError
-                    ? 20
-                    : 120
-                }
-              ]}>
+            <View style={{marginBottom:120}}>
+              <Text style={styles.message}>
                 {messageContent + (this.state.code !== 0
                   ? ('(' + this.state.code + ')')
                   : '')}
@@ -552,9 +540,9 @@ export default class extends React.Component {
         }
         return (
           <View style={styles.container}>
-            <StatusBar hidden={false} barStyle='default'/>{this.state.animating
+            <StatusBar hidden={false} barStyle='default'/>{this.state.loading
               ? <ActivityIndicator
-                  animating={true}
+                  loading={true}
                   style={{
                   height: 50
                 }}
@@ -563,15 +551,8 @@ export default class extends React.Component {
                 height: 50
               }}/>}
             <TouchableOpacity onPress={this.onPressFeed}>
-              <View>
-                <Text
-                  style={[
-                  styles.message, {
-                    marginBottom: lastGlobalError
-                      ? 20
-                      : 120
-                  }
-                ]}>
+              <View style={{marginBottom:120}}>
+                <Text style={styles.message}>
                   {messageContent + (this.state.code !== 0
                     ? ('(' + this.state.code + ')')
                     : '')}
@@ -609,7 +590,7 @@ export default class extends React.Component {
                 underlayColor='transparent'>
                 <Text
                   style={[
-                  styles.buttonText, this.state.animating
+                  styles.buttonText, this.state.loading
                     ? styles.buttonDisabled
                     : null
                 ]}>

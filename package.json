@@ -27,6 +27,7 @@
     "core-decorators": "^0.15.0",
     "hoist-non-react-statics": "^1.2.0",
     "i18next": "^4.2.0",
+    "i18next-browser-languagedetector": "^1.0.1",
     "i18next-react-native-language-detector": "^1.0.2",
     "immutable": "^3.7.6",
     "jcore-react-native": "^1.0.0",

@@ -66,6 +66,14 @@ module.exports = {
     //new ChunkModuleIDPlugin(),
     new webpack.DefinePlugin({
       '__DEV__': true
-    })
+    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     //supresses warnings, usually from module minification
+    //     warnings: false
+    //   },
+    //   sourceMap: true,
+    //    mangle: false
+    // })
   ]
 };

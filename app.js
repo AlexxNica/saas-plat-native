@@ -94,24 +94,31 @@ global.__errorHandler = function(err) {
 };
 
 function invoke(script) {
-  'use strict';
-  // todo 暂时使用一个大trycache防止崩溃退出
-  let spscript = "spdefine('__app__',function(global, require, module, exports) {\nrequire=global." +
-      "sprequire;function __loadcode(){\n" + script + "\n}" + // try调用func减少性能损失
-  "try{__loadcode();}catch(err){global.__errorHandler(err);}\n});";
-  if (__DEV__) {
-    spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');";
-  }
-  // if (Platform.OS === 'web') {
-  //   const body = document.getElementsByTagName('body')[0];
-  //   const scripttag = document.createElement('script');
-  //   scripttag.innerHTML = spscript;
-  //   body.appendChild(scripttag);
-  // } else {
-    // chrome引擎new function比eval快一倍以上
-    (new Function(spscript))();
-    //eval(spscript);
+  spdefine('__app__',function(global, require, module, exports) {
+    try{
+      eval(script);
+    }catch(err){
+      global.__errorHandler(err);
+    }
+  });
+  //'use strict';
+  // // todo 暂时使用一个大trycache防止崩溃退出
+  // let spscript = "spdefine('__app__',function(global, require, module, exports) {\nrequire=global." +
+  //     "sprequire;function __loadcode(){\neval('" + script + "')\n}" + // try调用func减少性能损失
+  // "try{__loadcode();}catch(err){global.__errorHandler(err);}\n});";
+  // if (__DEV__) {
+  //   spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');";
   // }
+  // // if (Platform.OS === 'web') {
+  // //   const body = document.getElementsByTagName('body')[0];
+  // //   const scripttag = document.createElement('script');
+  // //   scripttag.innerHTML = spscript;
+  // //   body.appendChild(scripttag);
+  // // } else {
+  //   // chrome引擎new function比eval快一倍以上
+  //   (new Function(spscript))();
+  //   //eval(spscript);
+  // // }
 }
 
 // 加载平台组件

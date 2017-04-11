@@ -1,14 +1,30 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import assert from 'assert';
 import i18next from 'i18next';
-import i18nextReactNative from 'i18next-react-native-language-detector';
 import * as i18nextReact from 'react-i18next';
-import {tx} from '../utils/internal';
+import { tx } from '../utils/internal';
+
+let LngDetector;
+
+switch (Platform.OS) {
+  case 'android':
+  case 'ios':
+    LngDetector = require('i18next-react-native-language-detector');
+    break;
+  case 'web':
+    LngDetector = require('i18next-browser-languagedetector');
+    break;
+  case 'windows':
+  case 'macos':
+  default:
+    console.error(tx('尚未支持的平台语言'), Platform.OS);
+}
 
 // ********************* StoreBackend **************************
 
 function getDefaults() {
-  return {store: null};
+  return { store: null };
 }
 
 class StoreBackend {
@@ -54,7 +70,9 @@ class StoreBackend {
   }
 
   create(languages, namespace, key, fallbackValue) {
-    console.warn(`${languages}${tx('Lang')}${namespace}${tx('LangNeed')}${key}${tx('LangDefine')}`);
+    console.warn(
+      `${languages}${tx('Lang')}${namespace}${tx('LangNeed')}${key}${tx('LangDefine')}`
+    );
   }
 }
 
@@ -63,7 +81,7 @@ StoreBackend.type = 'backend';
 // ********************* MemoryCache **************************
 
 function getDefaults() {
-  return {enabled: false};
+  return { enabled: false };
 }
 
 class MemoryCache {
@@ -96,13 +114,13 @@ MemoryCache.type = 'cache';
 
 // **************** config *****************************
 
-i18next.use(MemoryCache).use(StoreBackend).use(i18nextReactNative);
+i18next.use(MemoryCache).use(StoreBackend).use(LngDetector);
 
 i18next.tx = (ns, key, lng) => {
   if (typeof ns === 'string') {
     ns = [ns];
   }
-  return i18next.t(key, {ns, lng});
+  return i18next.t(key, { ns, lng });
 };
 
 export function translate(ns) {
@@ -117,12 +135,14 @@ export function translate(ns) {
       if (this.translatedComponent) {
         TranslatedComponent = this.translatedComponent;
       } else {
-        if (props.bundleName && !ns.find(item => item.startsWith(`${props.bundleName}.`))) {
+        if (props.bundleName && !ns.find(item => item.startsWith(
+            `${props.bundleName}.`))) {
           ns = ns.map(item => `${props.bundleName}.${item}`);
         }
         assert(ns.length > 0);
         // StoreBackend为同步加载，所以直接wait即可
-        TranslatedComponent = i18nextReact.translate(ns, {wait: true})(WarppedComponent);
+        TranslatedComponent = i18nextReact.translate(ns, { wait: true })(
+          WarppedComponent);
         this.translatedComponent = TranslatedComponent;
       }
       return <TranslatedComponent {...props}/>;

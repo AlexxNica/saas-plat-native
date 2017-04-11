@@ -63,7 +63,9 @@ module.exports = {
       compress: {
         //supresses warnings, usually from module minification
         warnings: false
-      }
+      },
+      sourceMap: true,
+       mangle: true
     })
   ]
 };

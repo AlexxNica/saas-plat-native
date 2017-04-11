@@ -19,6 +19,10 @@ spdefine('i18next', function (global, __require, module, exports) {
   module.exports = require('i18next');
   module.exports.version = '4.2.0';
 });
+spdefine('i18next-browser-languagedetector', function (global, __require, module, exports) {
+  module.exports = require('i18next-browser-languagedetector');
+  module.exports.version = '1.0.1';
+});
 
 spdefine('immutable', function (global, __require, module, exports) {
   module.exports = require('immutable');

@@ -1,11 +1,10 @@
 var url = require('url');
 var fs = require('fs');
-var mine = require('./mine').types;
 var path = require('path');
 var webpack = require('webpack');
 var express = require('express');
 var config = require('../web/webpack.config.dev');
-var httpProxyMiddleware = require('http-proxy-middleware');
+//var httpProxyMiddleware = require('http-proxy-middleware');
 
 var app = express();
 var compiler = webpack(config);
@@ -105,6 +104,11 @@ app.get('/api/v1/*', function(request, response) {
   });
 });
 
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 app.listen(8202, function(err) {
   if (err) {
     return console.error(err);
@@ -112,6 +116,3 @@ app.listen(8202, function(err) {
 
   console.log('Listening at http://localhost:8202/');
 });
-
-function noop() {}
-process.on('uncaughtException', noop)

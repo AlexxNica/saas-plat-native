@@ -1,6 +1,6 @@
 var url = require('url');
 var querystring = require('querystring');
-var bundles = require('./bundles');
+var bundles = require('../../../bundles');
 
 exports.custom = function(request, response) {
   var theurl = url.parse(request.url);

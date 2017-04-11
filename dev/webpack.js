@@ -103,7 +103,7 @@ module.exports = function() {
             '.jpg'
           ]
         },
-        devtool: '#cheap-module-source-map', // inline-source-map
+        devtool: '#cheap-module-inline-source-map', //'#cheap-module-source-map',
         node: {
           fs: 'empty'
         },

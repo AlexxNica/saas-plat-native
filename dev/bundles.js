@@ -12,7 +12,7 @@ function bigThen(ver1, ver2) {
   return false;
 }
 
-function getdeps(name, platform, version, dev, rootpath) {
+function getdeps(name, platform, version, dev, ext) {
   if (version == 'HEAD' || !version) {
     var ps = name.split('/');
     var filename = ps[ps.length - 1];
@@ -33,7 +33,7 @@ function getdeps(name, platform, version, dev, rootpath) {
     //console.log(maxVer);
     version = maxVer.join('.');
   }
-  var file = path.join(__dirname, 'bundles', name + '.' + (platform || 'ios') + '-' + version + '.js');
+  var file = path.join(__dirname, 'bundles', name + '.' + (platform || 'ios') + '-' + version + ext);
   if (!bundles.fs.existsSync(file)) {
     console.log('bundle ' + file + ' not found.');
     return '';
@@ -49,10 +49,9 @@ function getdeps(name, platform, version, dev, rootpath) {
 }
 
 exports.get = function (name, platform, version, dev) {
-  return getdeps(name, platform, version, dev);
+  return getdeps(name, platform, version, dev, '.js');
 };
 
 exports.map = function (name, platform, version, dev) {
-  var fileContent = bundles.fs.readFileSync(path.join(__dirname, 'bundles', name + '.js.map'));
-  return fileContent ? fileContent.toString() : '';
+  return getdeps(name, platform, version, dev, '.js.map');
 };

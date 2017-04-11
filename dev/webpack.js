@@ -103,7 +103,7 @@ module.exports = function() {
             '.jpg'
           ]
         },
-        devtool: '#source-map', // inline-source-map
+        devtool: '#cheap-module-source-map', // inline-source-map
         node: {
           fs: 'empty'
         },
@@ -120,7 +120,7 @@ module.exports = function() {
               }
             }, {
               test: /\.js$/,
-              //exclude: new RegExp('^'+config.BUNDLE_SRC),
+              //exclude: /node_modules/,
               loader: 'babel',
               query: {
                 sourceMaps: 'yes',
@@ -138,7 +138,7 @@ module.exports = function() {
                   'transform-decorators-legacy',
                   // [path.normalize(__dirname + "\\plugins\\babel-relative-import"), {   "file":
                   // fi,   "nsRootDir": __dirname + '\\..\\bundles\\' }]
-                  'transform-runtime'
+                  //'transform-runtime'
                 ]
               }
             }

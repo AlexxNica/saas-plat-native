@@ -1,4 +1,3 @@
-var loaderUtils = require("loader-utils");
 var mime = require("mime");
 var images = require("images");
 var path = require('path');

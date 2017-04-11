@@ -6,7 +6,7 @@
   "dependencies": {
     "file-loader": "^0.11.1",
     "images": "^3.0.0",
-    "loader-utils": "0.2.x",
+    "loader-utils": "^1.1.0",
     "mime": "1.2.x",
     "url-loader": "^0.5.8"
   },

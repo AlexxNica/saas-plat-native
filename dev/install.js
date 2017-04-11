@@ -24,6 +24,12 @@ function installPackage(dir, cb) {
           //args.push(name);
         }
       }
+      if (userPackage.devDependencies) {
+        for (var name in userPackage.devDependencies) {
+          args.push(name + '@' + userPackage.devDependencies[name]);
+          //args.push(name);
+        }
+      }
     }
     console.log(args);
     npm.commands.install(dir, args, cb);
@@ -31,6 +37,7 @@ function installPackage(dir, cb) {
 }
 
 var installPackages = [
+  '.',
   'dev/loaders/assets-loader',
   'dev/plugins/babel-relative-import',
   'src/core',

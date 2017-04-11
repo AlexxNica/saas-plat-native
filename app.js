@@ -102,16 +102,16 @@ function invoke(script) {
   if (__DEV__) {
     spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');";
   }
-  if (Platform.OS === 'web') {
-    const body = document.getElementsByTagName('body')[0];
-    const scripttag = document.createElement('script');
-    scripttag.innerHTML = spscript;
-    body.appendChild(scripttag);
-  } else {
+  // if (Platform.OS === 'web') {
+  //   const body = document.getElementsByTagName('body')[0];
+  //   const scripttag = document.createElement('script');
+  //   scripttag.innerHTML = spscript;
+  //   body.appendChild(scripttag);
+  // } else {
     // chrome引擎new function比eval快一倍以上
     (new Function(spscript))();
     //eval(spscript);
-  }
+  // }
 }
 
 // 加载平台组件

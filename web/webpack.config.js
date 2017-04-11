@@ -23,7 +23,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js|\.jsx$/,
-        exclude: /node_modules[\\|\/](?!react-native-storage|@remobile\\react-native-splashscreen|react-native-locale-detector)/,
+        exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
         loaders: ['babel-loader?' + JSON.stringify({
             'compact': false,
             'presets': [
@@ -35,7 +35,9 @@ module.exports = {
               'stage-2',
               'stage-3'
             ],
-            'plugins': ['transform-runtime', 'transform-decorators-legacy']
+            'plugins': [
+              //'transform-runtime',
+              'transform-decorators-legacy']
           })]
       }
     ]

@@ -9,7 +9,7 @@ module.exports = {
   entry: {
     bundle: [
       'webpack-hot-middleware/client',
-      "babel-polyfill",
+      //"babel-polyfill",
       __dirname + '/../index.web.js'
     ]
   },
@@ -24,7 +24,7 @@ module.exports = {
     //加载器配置
     loaders: [{
       test: /\.js|\.jsx$/,
-      exclude: /node_modules[\\|\/](?!react-native-storage|@remobile\\react-native-splashscreen|react-native-locale-detector)/,
+      exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
       loaders: [
         'react-hot',
         'babel?' + JSON.stringify({
@@ -40,7 +40,7 @@ module.exports = {
             'stage-3'
           ],
           'plugins': [
-            'transform-runtime',
+            //'transform-runtime',
             'transform-decorators-legacy'
           ]
         })

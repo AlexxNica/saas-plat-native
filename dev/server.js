@@ -6,6 +6,8 @@ var express = require('express');
 var config = require('../web/webpack.config.dev');
 //var httpProxyMiddleware = require('http-proxy-middleware');
 
+
+
 var app = express();
 var compiler = webpack(config);
 
@@ -115,4 +117,6 @@ app.listen(8202, function(err) {
   }
 
   console.log('Listening at http://localhost:8202/');
+
+  //require('./buildSrc');
 });

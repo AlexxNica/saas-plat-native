@@ -55,7 +55,7 @@ class Statistics {
         // 调试器bug忽略
         if (msg === 'Attempted to transition from state `RESPONDER_INACTIVE_PRESS_IN` to `RESPONDER_A' +
             'CTIVE_LONG_PRESS_IN`, which is not supported. This is most likely due to `Toucha' +
-            'ble.longPressDelayTimeout` not being cancelled.' || 
+            'ble.longPressDelayTimeout` not being cancelled.' ||
             msg === 'Remote debugger is in a background tab which may cause apps to perform slowly. F' +
             'ix this by foregrounding the tab (or opening it in a separate window).') {
           return;
@@ -93,7 +93,8 @@ class Statistics {
     if (this.logs.length <= 0) {
       return;
     }
-    const data = new Buffer(lzwcompress.pack(this.logs)).toString('base64');
+    const data = lzwcompress.pack(this.logs);
+    debugger;
     this.logs = []; // 日志需要清空，要不会越来越大
     try {
       apis.sendLogs(data);

@@ -20,32 +20,31 @@ module.exports = {
   },
   module: {
     //加载器配置
-    loaders: [
-      {
-        test: /\.js|\.jsx$/,
-        exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
-        loaders: ['babel-loader?' + JSON.stringify({
-            'compact': false,
-            'presets': [
-              'react',
-              'es2015',
-              'es2017',
-              'stage-0',
-              'stage-1',
-              'stage-2',
-              'stage-3'
-            ],
-            'plugins': [
-              //'transform-runtime',
-              'transform-decorators-legacy']
-          })]
-      }
-    ]
+    loaders: [{
+      test: /\.js|\.jsx$/,
+      exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
+      loaders: ['babel-loader?' + JSON.stringify({
+        'compact': false,
+        'presets': [
+          'react',
+          'es2015',
+          'es2017',
+          'stage-0',
+          'stage-1',
+          'stage-2',
+          'stage-3'
+        ],
+        'plugins': [
+          //'transform-runtime',
+          'transform-decorators-legacy'
+        ]
+      })]
+    }]
   },
   //其它解决方案配置
   resolve: {
     extensions: [
-      '', '.js', '.web.js', '.less', '.css'
+      '', '.web.js', '.js', '.less', '.css'
     ],
     alias: {
       'react-native': 'react-native-web'
@@ -58,14 +57,14 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({'__DEV__': true, 'process.env.NODE_ENV': '"production"'}),
+    new webpack.DefinePlugin({ '__DEV__': true, 'process.env.NODE_ENV': '"production"' }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         //supresses warnings, usually from module minification
         warnings: false
       },
       sourceMap: true,
-       mangle: true
+      mangle: true
     })
   ]
 };

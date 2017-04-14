@@ -78,3 +78,13 @@ spdefine('react-dom', function (global, __require, module, exports) {
   module.exports = require('react-dom');
   module.exports.version = '15.4.2';
 });
+
+spdefine('react-router', function (global, __require, module, exports) {
+  module.exports = require('react-router');
+  module.exports.version = '4.1.1';
+});
+
+spdefine('react-router-dom', function (global, __require, module, exports) {
+  module.exports = require('react-router-dom');
+  module.exports.version = '4.1.1';
+});

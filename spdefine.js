@@ -24,7 +24,7 @@ if (Platform.OS === 'web') {
     let moduleId = spModuleId++;
     moduleIds.set(moduleName, moduleId);
     __webpack_require__.m[moduleId] = (module, exports, require) => {
-      return factory(global, require, module, exports)
+      return factory(global, global.sprequire, module, exports)
     };
   };
   global.require = global.sprequire = (moduleName) => {

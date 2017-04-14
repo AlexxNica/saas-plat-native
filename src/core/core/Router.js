@@ -12,7 +12,7 @@ import {tx} from '../utils/internal';
 
 import config from '../config';
 
-export const Scene = FluxScene;
+export const Route = FluxScene;
 export const DefaultRenderer = FluxDefaultRenderer;
 
 export const Actions = class {

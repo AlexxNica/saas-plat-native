@@ -5,8 +5,6 @@ var exec = require('child_process').exec;
 var root = path.dirname(__dirname);
 
 require('./server');
-require('./watch');
-
 
 var cli = exec('node ' + path.join(root, 'node_modules/react-native/local-cli/cli.js start'));
 cli.stdout.on('data', function (data) {

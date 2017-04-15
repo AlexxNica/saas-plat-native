@@ -41,8 +41,8 @@ spdefine('mobx', function (global, __require, module, exports) {
   module.exports = require('mobx');
   module.exports.version = '3.1.0';
 });
-spdefine('mobx-react/native', function (global, __require, module, exports) {
-  module.exports = require('mobx-react/native');
+spdefine('mobx-react', function (global, __require, module, exports) {
+  module.exports = require('mobx-react');
   module.exports.version = '4.1.0';
 });
 spdefine('react', function (global, __require, module, exports) {

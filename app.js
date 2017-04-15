@@ -187,7 +187,7 @@ export default class extends React.Component {
       }
       resolve(text);
     }).catch((error) => {
-      if (me.debugMode) {
+      if (global.devOptions.debugMode) {
         me.pushMessage(`${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`);
       }
       reject(error);
@@ -242,7 +242,7 @@ export default class extends React.Component {
         clearTimeout(timeoutId);
         timeoutId = null;
       }
-      if (me.debugMode) {
+      if (global.devOptions.debugMode) {
         me.pushMessage(config.version);
       }
       reject(error);
@@ -312,14 +312,14 @@ export default class extends React.Component {
       }
     }).catch(err => {
       //如果没有找到数据且没有同步方法，
-      if (err && me.debugMode) {
+      if (err && global.devOptions.debugMode) {
         //或者有其他异常，则在catch中返回
         me.pushMessage(T('内核程序脚本下载失败') + ', ' + (err.message || err));
       }
       // 当前版本已过期删除
       me.store.remove({key: 'version'});
       me.pushMessage(T('应用启动失败，稍后重试...'));
-      me.finished(404);
+      me.finished(500);
     });
   }
 
@@ -341,7 +341,7 @@ export default class extends React.Component {
       me.loadFile(ret.version);
     }).catch(err => {
       // 如果没有找到数据且没有同步方法，
-      if (err && me.debugMode) {
+      if (err && global.devOptions.debugMode) {
         // 或者有其他异常，则在catch中返回
         me.pushMessage(T('内核程序版本获取失败') + ', ' + (err.message || err));
       }

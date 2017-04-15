@@ -4,12 +4,15 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  TouchableHighlight
+  TouchableHighlight,
+  Platform
 } from 'react-native';
 import {autobind} from 'core-decorators';
 import GiftedListView from 'react-native-gifted-listview';
 import {connectStore, connectStyle, translate} from 'saasplat-native';
-import {observer} from 'mobx-react/native';
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
 
 @translate('ServerListLocales')
 @connectStyle('ServerListTheme')

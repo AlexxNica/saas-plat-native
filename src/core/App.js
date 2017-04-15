@@ -1,17 +1,20 @@
 import React from 'react';
-import { StyleProvider } from '@shoutem/theme';
-import { I18nextProvider } from 'react-i18next';
-import { BackAndroid } from 'react-native';
-import { observer } from 'mobx-react/native';
+import {Platform, BackAndroid} from 'react-native';
+import {StyleProvider} from '@shoutem/theme';
+import {I18nextProvider} from 'react-i18next';
 import './core/Error'; // 导入全局异常处理
 import i18n from './core/I18n';
 import * as Push from './core/Push';
-import { Actions } from './core/Router';
+import {Actions} from './core/Router';
 
 import Theme from './stores/Theme';
 import I18nStore from './stores/I18n';
 
 import ViewPort from './components/ViewPort';
+
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
 
 i18n.init({
   fallbackLng: ['default'],

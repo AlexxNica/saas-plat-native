@@ -39,14 +39,14 @@ export default class ThemeStore {
         const coreTheme = defaultThemes[name];
         let theme = this.themes.get(name);
         if (!theme) {
-          theme = observable(new Map());
+          theme = observable.map();
           this.themes.set(name, theme);
         }
         for (const p in coreTheme) {
           if (coreTheme.hasOwnProperty(p)) {
             theme.set(`${ns
               ? ns + '.'
-              : ''}${p}`, coreTheme[p]);
+              : ''}${p}`, observable(coreTheme[p]));
           }
         }
       }
@@ -90,7 +90,7 @@ export default class ThemeStore {
     assert(key, '主题命名空间不能为空');
     let theth = this.themes.get(name);
     if (!theth) {
-      theth = observable(new Map());
+      theth = observable.map();
       this.themes.set(name, theth);
     }
     theth.set(key, theme);

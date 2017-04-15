@@ -1,7 +1,7 @@
 import {Router as FluxRouter, Scene as FluxScene, Actions as FluxActions, Reducer, DefaultRenderer as FluxDefaultRenderer} from 'react-native-router-flux';
 import assert from 'assert';
 import React from 'react';
-import {observer} from 'mobx-react/native';
+import {Platform} from 'react-native';
 import bundle from './Bundle';
 
 import RouterStore from '../stores/Router';
@@ -11,6 +11,10 @@ import statistics from '../utils/Statistics';
 import {tx} from '../utils/internal';
 
 import config from '../config';
+
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
 
 export const Route = FluxScene;
 export const DefaultRenderer = FluxDefaultRenderer;

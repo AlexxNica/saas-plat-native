@@ -1,12 +1,14 @@
 import React from 'react';
-import {Text, View, Image, Dimensions} from 'react-native';
+import {Text, View, Image, Dimensions, Platform} from 'react-native';
 import ParallaxView from 'react-native-parallax-view';
 import {Col, Row, Grid} from "react-native-easy-grid";
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import Avatar from 'react-native-interactive-avatar';
 import {autobind} from 'core-decorators';
 import {connectStore, connectStyle, translate, Actions} from 'saasplat-native';
-import {observer} from 'mobx-react/native';
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
 
 @translate('ConsoleLocales')
 @connectStyle('ConsoleTheme')

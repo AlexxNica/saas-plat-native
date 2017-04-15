@@ -101,7 +101,10 @@ module.exports = function() {
         externals: externals,
         devtool: '#cheap-module-source-map', //'#cheap-module-source-map',
         node: {
-          fs: 'empty'
+          fs: 'empty',
+          // global: true,
+          // Buffer: true,
+          // console: true
         },
         module: {
           loaders: [{
@@ -143,7 +146,7 @@ module.exports = function() {
           extensions: ['', '.'+platform + '.js', '.js', '.png', '.jpg'],
           alias: platform == 'web' ? {
             'react-native': 'react-native-web'
-          } : null
+          } : undefined
         },
         plugins: [{
           apply: function(compiler) {
@@ -183,7 +186,7 @@ module.exports = function() {
           console.log('webpack complate'.info);
         }
       });
- 
+
     },
 
     close: function(cb) {

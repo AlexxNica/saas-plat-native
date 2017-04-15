@@ -1,17 +1,10 @@
-import DeviceInfo from 'react-native-device-info';
 import lzwcompress from 'lzwcompress';
+//import {Buffer} from 'buffer';
 import RouterStore from '../stores/Router';
 import UserStore from '../stores/User';
 import {tx} from './internal';
 import * as apis from '../apis/PlatformApis';
-
-const uniqueID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
-
-const deviceId = DeviceInfo.getDeviceId(); // iPhone7,2
-const systemVersion = DeviceInfo.getSystemVersion(); // 9.0
-const readableVersion = DeviceInfo.getReadableVersion(); // 1.1.0.89
-const deviceLocale = DeviceInfo.getDeviceLocale(); // en-US
-const deviceCountry = DeviceInfo.getDeviceCountry(); // US
+import device from '../core/Device';
 
 class Statistics {
   constructor() {
@@ -21,11 +14,11 @@ class Statistics {
     setTimeout(() => {
       this.log({
         how: 'use',
-        what: deviceId,
-        systemVersion,
-        readableVersion,
-        deviceLocale,
-        deviceCountry
+        what: device.deviceId,
+        systemVersion: device.systemVersion,
+        readableVersion: device.readableVersion,
+        deviceLocale: device.deviceLocale,
+        deviceCountry: device.deviceCountry
       });
     });
 
@@ -55,8 +48,7 @@ class Statistics {
         // 调试器bug忽略
         if (msg === 'Attempted to transition from state `RESPONDER_INACTIVE_PRESS_IN` to `RESPONDER_A' +
             'CTIVE_LONG_PRESS_IN`, which is not supported. This is most likely due to `Toucha' +
-            'ble.longPressDelayTimeout` not being cancelled.' ||
-            msg === 'Remote debugger is in a background tab which may cause apps to perform slowly. F' +
+            'ble.longPressDelayTimeout` not being cancelled.' || msg === 'Remote debugger is in a background tab which may cause apps to perform slowly. F' +
             'ix this by foregrounding the tab (or opening it in a separate window).') {
           return;
         }
@@ -93,8 +85,7 @@ class Statistics {
     if (this.logs.length <= 0) {
       return;
     }
-    const data = lzwcompress.pack(this.logs);
-    debugger;
+    const data = new Buffer(lzwcompress.pack(this.logs)).toString('base64');
     this.logs = []; // 日志需要清空，要不会越来越大
     try {
       apis.sendLogs(data);

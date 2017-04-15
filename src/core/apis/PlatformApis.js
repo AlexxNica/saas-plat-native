@@ -1,8 +1,7 @@
-import DeviceInfo from 'react-native-device-info';
 import {Platform, Dimensions} from 'react-native';
 import config from '../config';
 import {fetchJson} from '../utils/helper';
-
+import device from '../core/Device';
 const {width} = Dimensions.get('window');
 
 const ScreenTypes = [
@@ -22,18 +21,10 @@ const ScreenTypes = [
 ];
 
 const screen = ScreenTypes.find(item => width < item[1]);
-const deviceType = 'phone'; // todo tv ?
-const deviceID = DeviceInfo.getDeviceId(); // iPhone7,2
-//const deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
-// systemVersion : DeviceInfo.getSystemVersion(), // 9.0  version :
-// DeviceInfo.getReadableVersion(), // 1.1.0.89  locale :
-// DeviceInfo.getDeviceLocale(), // en-US  country :
-// DeviceInfo.getDeviceCountry(), // US
+const deviceID = device.deviceID;
 
 export function connectPlatform() {
-  return fetchJson({
-    url: config.platform.connection
-  });
+  return fetchJson({url: config.platform.connection});
 }
 
 export function sendLogs(data) {
@@ -53,5 +44,5 @@ export function loginPlatUser(encUsername, passwordHash) {
 }
 
 export function findServer(id) {
-  return fetchJson({url: `${config.platform.server}?id=${id}&dt=${deviceType}&os=${Platform.OS}&v=${Platform.version}&s=${screen}&did=${deviceID}`});
+  return fetchJson({url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${screen}`});
 }

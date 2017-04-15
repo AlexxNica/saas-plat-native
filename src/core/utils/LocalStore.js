@@ -7,7 +7,7 @@ from 'react-native';
 import Storage from 'react-native-storage';
 
 // 本地缓存
-export default global.storage = new Storage({
+export default new Storage({
   // 最大容量，默认值1000条数据循环存储
   size: 2000,
 

@@ -57,7 +57,8 @@ module.exports = {
     }),
     new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({ '__DEV__': true, 'process.env.NODE_ENV': '"production"' }),
+     new webpack.DefinePlugin({ '__DEV__': false, 'process.env.NODE_ENV': '"production"' }),
+    // new webpack.ProvidePlugin({ '__DEV__': false }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         //supresses warnings, usually from module minification

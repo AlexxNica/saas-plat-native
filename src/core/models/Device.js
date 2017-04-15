@@ -1,5 +1,4 @@
 import {observable} from 'mobx';
-import DeviceInfo from 'react-native-device-info';
 
 export default class DeviceModel {
   store;
@@ -10,7 +9,7 @@ export default class DeviceModel {
   constructor(store, id, version, debug) {
     this.store = store;
     this.id = id;
-    this.version = version || DeviceInfo.getVersion();
+    this.version = version ;
     this.phone = debug;
   }
 

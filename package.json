@@ -3,19 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
-    "start": "node --harmony dev/start",
-    "client": "node node_modules/react-native/local-cli/cli.js start",
-    "server": "node --harmony dev/server.js",
+    "start": "node dev/start.js --ios --android",
+    "startweb": "node dev/start.js --web",
+
+    "build": "node dev/build.js --android --ios",
+    "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
+
+    "watchios": "node --harmony dev/buildSrc.js --ios --watch",
+    "watchandroid": "node --harmony dev/buildSrc.js --android  --watch",
     "watchweb": "node --harmony dev/buildSrc.js --web --watch",
-    "watchai": "node --harmony dev/buildSrc.js --android --ios --watch",
-    "buildai": "node dev/build.js --android --ios",
+
+    "storybook": "start-storybook -p 9001 -c web/.storybook",
+
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
-    "spdefine": "node --harmony dev/genSpDefines",
-    "web": "node dev/server.js --web",
-    "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
-    "storybook": "start-storybook -p 9001 -c web/.storybook"
+    "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
+    "spdefine": "node --harmony dev/genSpDefines"
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.2",

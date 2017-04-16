@@ -7,10 +7,10 @@ import LocalStore from './utils/LocalStore';
 // core
 import Bundle from './core/Bundle';
 import Registry from './core/Registry';
-import {Scene, Actions} from './core/Router';
+import {Route, Actions} from './core/Router';
 import * as Theme from './core/Theme';
 import I18n from './core/I18n';
-import Store from './core/Store';
+import * as Store from './core/Store';
 
 // fx
 import CommandBus from './fx/CommandBus';
@@ -46,7 +46,7 @@ export default {
   Theme,
   Store,
   Registry, // 注册模块
-  Scene, // 注册路由
+  Route, // 注册路由
   Actions, // 路由跳转
 
   // fx

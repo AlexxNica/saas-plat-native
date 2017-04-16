@@ -118,7 +118,7 @@ class Statistics {
     const scene = store.currentScene || {};
     const user = UserStore.getStore().user || {};
     this.logs.push({
-      id: uniqueID,
+      id: device.uniqueID,
       when: when || (new Date()).getTime(),
       who: who || user.name,
       where: where || scene.name,

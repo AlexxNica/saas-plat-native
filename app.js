@@ -22,7 +22,7 @@ import vm from 'vm';
 
 const BASE_CORE = 'core';
 const locales = {};
-let lastGlobalError;
+global.lastGlobalError = '';
 let lang;
 
 const T = function(txt) {
@@ -99,30 +99,18 @@ if (lang) {
 }
 
 function invoke(script) {
-  spdefine('__app__', function(global, require, module, exports) {
-    //try { eval(script);
-    const context = new vm.createContext({
-      ...global,
-      require,
-      module,
-      exports
-    });
-    const scriptExe = new vm.Script(script);
-    scriptExe.runInContext(context);
-    // } catch (err) {   !devOptions.debugMode && console.log(err); lastGlobalError
-    // = devOptions.debugMode     ? encodeURIComponent(err)     : T('内核程序执行失败'); }
-  });
-  // 'use strict'; // todo 暂时使用一个大trycache防止崩溃退出 let spscript =
-  // "spdefine('__app__',function(global, require, module, exports)
-  // {\nrequire=global." +     "sprequire;function __loadcode(){\neval('" + script
-  // + "')\n}" + // try调用func减少性能损失
-  // "try{__loadcode();}catch(err){global.__errorHandler(err);}\n});"; if
-  // (__DEV__) {   spscript += "\n\nconsole.log('" + T('内核程序开始运行') + "');"; } //
-  // if (Platform.OS === 'web') { //   const body =
-  // document.getElementsByTagName('body')[0]; //   const scripttag =
-  // document.createElement('script'); //   scripttag.innerHTML = spscript; //
-  // body.appendChild(scripttag); // } else {   // chrome引擎new function比eval快一倍以上
-  // (new Function(spscript))();   //eval(spscript); // }
+  let scriptex = "spdefine('__app__',function(global, require, module, exports){\n function __load" +
+      "code(){\n" + script + "\n}" + // try调用func减少性能损失
+  "try{__loadcode();}catch(err){global.lastGlobalError = err;}\n});";
+  // chrome引擎new function比eval快一倍以上
+  (new Function(scriptex))();
+  // eval(scriptex); // spdefine('__app__', function(global, require, module,
+  // exports) {   try { const context = new vm.createContext({   options,
+  // devOptions,   require,  module,   exports,   __DEV__ }); const scriptExe =
+  // new vm.Script(script);  scriptExe.runInContext(context);   } catch (err) {
+  //  !devOptions.debugMode && console.log(err);     lastGlobalError =
+  // devOptions.debugMode       ? encodeURIComponent(err)       : T('内核程序执行失败');
+  // } });
 }
 
 // 加载平台组件

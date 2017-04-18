@@ -5,16 +5,12 @@
   "scripts": {
     "start": "node dev/start.js --ios --android",
     "startweb": "node dev/start.js --web",
-
     "build": "node dev/build.js --android --ios",
     "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
-
     "watchios": "node --harmony dev/buildSrc.js --ios --watch",
     "watchandroid": "node --harmony dev/buildSrc.js --android  --watch",
     "watchweb": "node --harmony dev/buildSrc.js --web --watch",
-
     "storybook": "start-storybook -p 9001 -c web/.storybook",
-
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
@@ -65,7 +61,8 @@
     "react-native-zip-archive": "0.0.11",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
-    "slash": "^1.0.0"
+    "slash": "^1.0.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "babel": "^6.5.2",
@@ -85,6 +82,7 @@
     "babel-preset-stage-3": "^6.5.0",
     "chai": "^3.5.0",
     "colors": "^1.1.2",
+    "copy-webpack-plugin": "^4.0.1",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",

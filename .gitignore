@@ -55,3 +55,5 @@ fastlane/screenshots
 
 /web/dist
 /web/www/index.html
+
+/web/www/polyfill.min.js

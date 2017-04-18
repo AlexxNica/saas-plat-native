@@ -420,7 +420,7 @@ class Bundle {
         checkLoadResult();
         return;
       }
-      NetInfo.isConnected.fetch().done((isConnected) => {
+      NetInfo.isConnected.fetch().then((isConnected) => {
         if (!isConnected) {
           // adminBundleLoaded = adminBundleLoadFailed = true;
           errorCode = tx('NetworkFailed');

@@ -20,10 +20,10 @@ switch (Platform.OS) {
     break;
   case 'web':
     const browser = {};
-    if (/(msie|chrome|firefox|opera|netscape)\D+(\d[\d.]*)/.test(navigator.userAgent.toLowerCase())) {
+    if (/(msie|rv|chrome|firefox|opera|netscape)\D+(\d[\d.]*)/.test(navigator.userAgent.toLowerCase())) {
       browser.name = RegExp.$1;
       browser.version = RegExp.$2;
-    } else if (/version\D+(\d[\d.]*).*safari/.test(userAgent)) {
+    } else if (/version\D+(\d[\d.]*).*safari/.test(navigator.userAgent.toLowerCase())) {
       browser.name = 'safari';
       browser.version = RegExp.$2;
     } else {

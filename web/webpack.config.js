@@ -2,12 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   //页面入口文件配置
   entry: {
     bundle: [
-      "babel-polyfill",
       path.normalize(__dirname + '/../index.web.js')
     ]
   },
@@ -15,8 +15,7 @@ module.exports = {
   output: {
     //publicPath: '/dist',
     path: __dirname + '/www/dist/',
-    filename: '[name].[hash:5].js',
-    chunkFilename: '[name].chunk.[hash:5].js'
+    filename: '[name].[chunkhash:5].js'
   },
   module: {
     //加载器配置
@@ -51,6 +50,11 @@ module.exports = {
     }
   },
   plugins: [
+    new CopyWebpackPlugin([{
+      from: path.join(__dirname,
+        '../node_modules/babel-polyfill/dist/polyfill.min.js'),
+      to: path.join(__dirname, 'www')
+    }]),
     new HtmlWebpackPlugin({
       template: __dirname + '/index.temp.html',
       filename: __dirname + '/www/index.html'

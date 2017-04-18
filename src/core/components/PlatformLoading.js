@@ -1,6 +1,6 @@
 import React from 'react';
 import assert from 'assert';
-import {View, StatusBar, Text, TouchableOpacity} from 'react-native';
+import {View, StatusBar, Text, TouchableOpacity, Platform} from 'react-native';
 import {autobind} from 'core-decorators';
 import Spinner from './Spinner';
 import bundle from '../core/Bundle';

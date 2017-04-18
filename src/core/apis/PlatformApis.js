@@ -1,8 +1,8 @@
-import {Platform, Dimensions} from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 import config from '../config';
-import {fetchJson} from '../utils/helper';
+import { fetchJson } from '../utils/helper';
 import device from '../core/Device';
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const ScreenTypes = [
   [
@@ -11,7 +11,7 @@ const ScreenTypes = [
   [
     'xs', 768
   ], // 手机
-  ['sm' : 992], // PAD
+  ['sm': 992], // PAD
   [
     'md', 1200
   ], // PC MAC
@@ -24,7 +24,7 @@ const screen = ScreenTypes.find(item => width < item[1]);
 const deviceID = device.deviceID;
 
 export function connectPlatform() {
-  return fetchJson({url: config.platform.connection});
+  return fetchJson({ url: config.platform.connection });
 }
 
 export function sendLogs(data) {
@@ -40,9 +40,9 @@ export function sendLogs(data) {
 }
 
 export function loginPlatUser(encUsername, passwordHash) {
-  return fetchJson({url: `${config.platform.account}?name=${encUsername}&passwordHash=${passwordHash}`});
+  return fetchJson({ url: `${config.platform.account}?name=${encUsername}&passwordHash=${passwordHash}` });
 }
 
 export function findServer(id) {
-  return fetchJson({url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${screen}`});
+  return fetchJson({ url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${screen}` });
 }

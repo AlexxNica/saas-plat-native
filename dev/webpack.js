@@ -183,7 +183,7 @@ module.exports = function() {
           console.log('-------- ' + new Date().toLocaleString().info +
             ' -------');
         } else {
-          console.log('webpack complate'.info);
+          console.log('webpack built src complate'.info);
         }
       });
 

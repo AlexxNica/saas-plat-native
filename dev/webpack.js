@@ -99,7 +99,7 @@ module.exports = function() {
           filename: '[name].js'
         },
         externals: externals,
-        devtool: '#cheap-module-source-map', //'#cheap-module-source-map',
+        devtool: '#cheap-module-eval-source-map', //'#cheap-module-source-map',
         node: {
           fs: 'empty',
           // global: true,

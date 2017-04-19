@@ -28,6 +28,11 @@ if (Platform.OS === 'web') {
     };
   };
   global.require = global.sprequire = (moduleName) => {
+    if (__DEV__){
+      if (!moduleIds.has(moduleName)){
+        throw `${moduleName} not define`;
+      }
+    }
     return __webpack_require__(moduleIds.get(moduleName) || moduleName);
   };
 }

@@ -4,7 +4,7 @@ var path = require('path');
 exports.default = function () {
 
   var json2 = {
-    bundleServer: 'http://test.saas-plat.com:8202/bundle/file',
+    bundleServer: 'http://localhost:8202/api/v1/bundle/file',
     bundles: []
   };
   var root = path.join(__dirname,  '../../../../src/platform');

@@ -1,19 +1,19 @@
 import React from 'react';
+import { View } from 'react-native';
 
 import Password from './PasswordLogin';
 import Quick from './QuickLogin';
-import {connectStore} from 'saasplat-native';
+import { connectStore, Route, Redirect } from 'saasplat-native';
 
-export default connectStore('userStore')((props) => {
-  let Component;
-  if (props.passwordMode) {
-    Component = Password;
-  } else if (props.quickMode) {
-    Component = Quick;
-  } else {
-    Component = props.userStore.loginState && props.userStore.loginState.token
-      ? Quick
-      : Password;
-  }
-  return <Component {...props}/>;
+export default connectStore('userStore')(({ match, userStore }) => {
+  return (
+    <View>
+      {match.isExact && userStore.loginState && userStore.loginState.token?
+      <Redirect to={{
+         pathname: `${match.url}/quick`
+       }}/>:null}
+      <Route path={`${match.url}/password`} component={Password}/>
+      <Route path={`${match.url}/quick`} component={Quick}/>
+    </View>
+  );
 });

@@ -1,13 +1,13 @@
 import React from 'react';
 import {View} from 'react-native';
-import AppView from './AppView';
+import AppRouter from './AppRouter';
 
 export default function ViewPort(props) {
   return (
     <View style={{
       flex: 1
     }}>
-      <AppView/>
+      <AppRouter/>
       {!__DEV__ && (Platform.OS === 'android' || Platform.OS === 'ios') && require('./DebugView')}
     </View>
   );

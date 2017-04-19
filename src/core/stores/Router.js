@@ -6,12 +6,12 @@ import { tx } from '../utils/internal';
 @registerStore('routerStore')
 export default class RouterStore {
   @observable currentBundle = null;
-  @observable currentScene = null;
-  @observable scenes = new Map(); // {path:[{ns,router,handler}]}
+  @observable currentRoute = null;
+  @observable routes = new Map(); // {path:[{ns,router,handler}]}
 
-  @action removeScene(ns, name) {
+  @action removeRoute(ns, name) {
     assert(ns);
-    this.scenes.forEach((items, path) => {
+    this.routes.forEach((items, path) => {
       const removes = items.filter(item => item.ns === ns && (!name ||
         name === item.name));
       for (const item of removes) {
@@ -21,37 +21,36 @@ export default class RouterStore {
     });
   }
 
-  @action clearScenes() {
-    this.scenes.clear();
+  @action clearRoutes() {
+    this.routes.clear();
     console.log(tx('ClearAllRouter'));
   }
 
-  @action addScene(path, ns, name, route, handler) {
-    debugger
+  @action addRoute(path, ns, name, route, handler) {
     if (typeof path === 'object') {
       const obj = path;
       for (const { path, ns, name, route, handler } of obj) {
-        this.addSceneItem(path, ns, name, route, handler);
+        this.addRouteItem(path, ns, name, route, handler);
       }
     } else {
-      this.addSceneItem(path, ns, name, route, handler);
+      this.addRouteItem(path, ns, name, route, handler);
     }
   }
 
-  addSceneItem(path, ns, name, route, handler) {
+  addRouteItem(path, ns, name, route, handler) {
     assert(path);
     assert(ns);
     assert(name);
     assert(route);
 
-    let items = this.scenes.get(path);
+    let items = this.routes.get(path);
     if (!items) {
-      // obser没用，buildscene不会观察改变 items = observable([]);
+      // obser没用，buildroute不会观察改变 items = observable([]);
       items = [];
     }
-    // router 无法计算，移到core/router去buildscene
+    // router 无法计算，移到core/router去buildroute
     items.push({ ns, name, route, handler });
-    this.scenes.set(path, items);
+    this.routes.set(path, items);
     console.log(tx('RouterAdded'), path, ns, name);
 
   }
@@ -60,8 +59,8 @@ export default class RouterStore {
     this.currentBundle = bundle;
   }
 
-  @action entryScene(scene) {
-    this.currentScene = scene;
+  @action entryRoute(route) {
+    this.currentRoute = route;
   }
 
   static getStore() {

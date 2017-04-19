@@ -1,5 +1,5 @@
 import React from 'react';
-import {Registry, Scene, themeStore} from 'saasplat-native';
+import {Registry, Route} from 'saasplat-native';
 
 import Browser from '../components/Browser';
 import NoModule from '../components/NoModule';
@@ -17,30 +17,30 @@ import Console from '../components/Console';
 
 import {tr} from '../utils';
 
-Registry.registerRootRoute(() => <Scene key='index'>
-  <Scene key='home' hideNavBar component={ServerList}/>
-  <Scene
-    key='notFoundServer'
+Registry.registerRootRoute(() => <Route path='index'>
+  <Route path='home' hideNavBar component={ServerList}/>
+  <Route
+    path='notFoundServer'
     component={NoServer}
     backTitle={tr('CreateServer')}/>
-  <Scene key='createServer' hideNavBar={false}>
-    <Scene key='introduce' component={Introduce}/>
-    <Scene key='baseInfo' component={BaseInfo} backTitle={tr('Introduce')}/>
-    <Scene key='hostSelector' component={HostSelector} backTitle={tr('BaseInfo')}/>
-    <Scene key='submit' component={ServerSubmit} backTitle={tr('HostSelector')}/>
-    <Scene key='pay' component={Pay} backTitle={tr('ServerSubmit')}/>
-    <Scene key='complate' component={CreateSuccess} title={tr('CreateSuccess')}/>
-  </Scene>
-  <Scene
-    key='portal'
+  <Route path='createServer' hideNavBar={false}>
+    <Route path='introduce' component={Introduce}/>
+    <Route path='baseInfo' component={BaseInfo} backTitle={tr('Introduce')}/>
+    <Route path='hostSelector' component={HostSelector} backTitle={tr('BaseInfo')}/>
+    <Route path='submit' component={ServerSubmit} backTitle={tr('HostSelector')}/>
+    <Route path='pay' component={Pay} backTitle={tr('ServerSubmit')}/>
+    <Route path='complate' component={CreateSuccess} title={tr('CreateSuccess')}/>
+  </Route>
+  <Route
+    path='portal'
     hideNavBar
-    routeRegisterUniqueKey='portal'
+    routeRegisterUniquepath='portal'
     enablePortalController>
-    <Scene key='notFoundModule' component={NoModule}/>
-    <Scene key='moduleList' component={ModuleList}/>
-  </Scene>
-  <Scene key='user' hideNavBar={false}>
-    <Scene key='console' hideNavBar component={Console}/>
-  </Scene>
-  <Scene key='openWeb' hideNavBar={false} component={Browser}/>
-</Scene>);
+    <Route path='notFoundModule' component={NoModule}/>
+    <Route path='moduleList' component={ModuleList}/>
+  </Route>
+  <Route path='user' hideNavBar={false}>
+    <Route path='console' hideNavBar component={Console}/>
+  </Route>
+  <Route path='openWeb' hideNavBar={false} component={Browser}/>
+</Route>);

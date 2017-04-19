@@ -38,12 +38,17 @@ module.exports = {
           'transform-decorators-legacy'
         ]
       })]
+    }, {
+      test: /\.ttf$/,
+      loader: "url-loader", // or directly file-loader
+      include: path.resolve(__dirname,
+        "../node_modules/react-native-vector-icons"),
     }]
   },
   //其它解决方案配置
   resolve: {
     extensions: [
-      '', '.web.js', '.js', '.less', '.css'
+      '', '.web.js', '.js'
     ],
     alias: {
       'react-native': 'react-native-web'

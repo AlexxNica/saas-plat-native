@@ -30,6 +30,7 @@ if (Platform.OS === 'web') {
   global.require = global.sprequire = (moduleName) => {
     if (__DEV__){
       if (!moduleIds.has(moduleName)){
+        debugger;
         throw `${moduleName} not define`;
       }
     }

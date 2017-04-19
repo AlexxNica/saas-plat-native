@@ -1,3 +1,22 @@
+function registerFont(fontfile){
+  // generate required css
+  var fontfileIcons = require("react-native-vector-icons/Fonts/"+fontfile+".ttf");
+  const reactNativeVectorIconsRequiredStyles = "@font-face { src:url(" +
+    fontfileIcons + ");font-family: "+fontfile+"; }"
+
+  // create stylesheet
+  const style = document.createElement('style');
+  style.type = 'text/css';
+  if (style.styleSheet) {
+    style.styleSheet.cssText = reactNativeVectorIconsRequiredStyles;
+  } else {
+    style.appendChild(document.createTextNode(
+      reactNativeVectorIconsRequiredStyles));
+  }
+
+  // inject stylesheet
+  document.head.appendChild(style);
+}
 
 spdefine('@shoutem/theme', function (global, __require, module, exports) {
   module.exports = require('@shoutem/theme');
@@ -22,6 +41,56 @@ spdefine('i18next', function (global, __require, module, exports) {
 spdefine('i18next-browser-languagedetector', function (global, __require, module, exports) {
   module.exports = require('i18next-browser-languagedetector');
   module.exports.version = '1.0.1';
+});
+
+spdefine('react-native-vector-icons/Entypo', function (global, require, module, exports) {
+  registerFont('Entypo');
+  module.exports = require('react-native-vector-icons/Entypo');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/EvilIcons', function (global, require, module, exports) {
+  registerFont('EvilIcons');
+  module.exports = require('react-native-vector-icons/EvilIcons');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/FontAwesome', function (global, require, module, exports) {
+  registerFont('FontAwesome');
+  module.exports = require('react-native-vector-icons/FontAwesome');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/Foundation', function (global, require, module, exports) {
+  registerFont('Foundation');
+  module.exports = require('react-native-vector-icons/Foundation');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/Ionicons', function (global, require, module, exports) {
+  registerFont('Ionicons');
+  module.exports = require('react-native-vector-icons/Ionicons');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/MaterialIcons', function (global, require, module, exports) {
+  registerFont('MaterialIcons');
+  module.exports = require('react-native-vector-icons/MaterialIcons');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/Octicons', function (global, require, module, exports) {
+  registerFont('Octicons');
+  module.exports = require('react-native-vector-icons/Octicons');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/Zocial', function (global, require, module, exports) {
+  registerFont('Zocial');
+  module.exports = require('react-native-vector-icons/Zocial');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons/SimpleLineIcons', function (global, require, module, exports) {
+  registerFont('SimpleLineIcons');
+  module.exports = require('react-native-vector-icons/SimpleLineIcons');
+  module.exports.version = '4.0.0';
+});
+spdefine('react-native-vector-icons', function (global, require, module, exports) {
+  module.exports = require('react-native-vector-icons');
+  module.exports.version = '4.0.0';
 });
 
 spdefine('immutable', function (global, __require, module, exports) {

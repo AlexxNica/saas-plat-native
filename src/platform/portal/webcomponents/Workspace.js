@@ -5,13 +5,13 @@ import {
 } from 'react-native';
 
 
-export default class ServerRegister extends React.Component {
+export default class Workspace extends React.Component {
 
   render() {
     return (
       <View >
         <Text >
-          web ServerRegister
+          web Workspace
         </Text>
       </View>
     );

@@ -7,4 +7,4 @@ export default {
   CreateSuccess : '成功',
   ChangeServer : '服务器',
   CreateServer : '创建'
-}
+};

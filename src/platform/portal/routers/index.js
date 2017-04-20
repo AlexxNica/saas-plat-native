@@ -13,7 +13,6 @@ import ServerSubmit from '../components/ServerSubmit';
 import Pay from '../components/Pay';
 import CreateSuccess from '../components/Completed';
 
-import Console from '../components/Console';
 
 import {tr} from '../utils';
 

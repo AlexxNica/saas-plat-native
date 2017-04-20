@@ -1,23 +1,19 @@
-import React from 'react';
-import { Registry, Route } from 'saasplat-native';
+import { Registry } from 'saasplat-native';
+
 import Login from '../components/Login';
 import GetForgetPassword from '../components/GetForgetPassword';
 import Register from '../components/Register';
 
 Registry.registerRootRoute(({ t }) => [{
-  {
-    path: '/login',
-    component: Login,
-    title: t('登录')
-  },
-  {
-    path: '/register',
-    component: Register,
-    title: t('注册')
-  },
-  {
-    path: '/getForgetPassword',
-    component: GetForgetPassword,
-    title: t('重置密码')
-  }
+  path: '/',
+  component: Login,
+  title: t('登录')
+}, {
+  path: '/register',
+  component: Register,
+  title: t('注册')
+}, {
+  path: '/getForgetPassword',
+  component: GetForgetPassword,
+  title: t('重置密码')
 }]);

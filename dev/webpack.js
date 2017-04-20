@@ -87,6 +87,7 @@ module.exports = function() {
       list = list.concat(config.bundles);
       var entry = getEntry(list);
       // console.log(list);
+      
       console.log(entry);
 
       // returns a Compiler instance
@@ -143,7 +144,9 @@ module.exports = function() {
         },
         //其它解决方案配置
         resolve: {
-          extensions: ['', '.'+platform + '.js', '.js', '.png', '.jpg'],
+          extensions: ['', '.' + platform + '.js', '.js', '.png',
+            '.jpg'
+          ],
           alias: platform == 'web' ? {
             'react-native': 'react-native-web'
           } : undefined

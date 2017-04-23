@@ -8,10 +8,46 @@ import {connectStyle} from '../core/Theme';
 import {translate} from '../core/I18n';
 import {connectStore} from '../core/Store';
 
+import ModuleLoading from './ModuleLoading';
+import MessageView from './MessageView';
+import AppIntro from './AppIntro';
+
+import {tx} from '../utils/internal';
+
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
+
+let Route,
+  Switch;
+switch (Platform.OS) {
+  case 'android':
+  case 'ios':
+  case 'windows':
+  case 'macos':
+    {
+      const NativeRouter = require('react-router-native');
+      Route = NativeRouter.Route;
+      Switch = NativeRouter.Switch;
+      break;
+    }
+  case 'web':
+    {
+      const BrowserRouter = require('react-router-dom');
+      Route = BrowserRouter.Route;
+      Switch = BrowserRouter.Switch;
+      break;
+    }
+  default:
+    console.error(tx('不支持的路由平台'), Platform.OS);
+    break;
+}
+
 // 平台组件加载等待
 @translate('core.PlatformLoading')
 @connectStyle('core.PlatformLoading')
-@connectStore(['userStore', 'systemStore'])
+@connectStore(['userStore', 'systemStore', 'routerStore'])
+@observer
 export default class PlatformLoading extends React.Component {
 
   constructor(props) {
@@ -30,6 +66,17 @@ export default class PlatformLoading extends React.Component {
         message: message || this.props.t('环境尚未准备就绪，稍后重试...(500)')
       });
     }
+
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      // 恢复状态条
+      StatusBar.setHidden(false);
+      require('@remobile/react-native-splashscreen').hide();
+    }
+
+    if (this._isMounted) {
+      this.setState({success: true});
+    }
+
     if (code === 'complated') {
       const appVersion = this.props.systemStore.options.appVersion;
       // console.log(this.props.t('user version:'+appVersion);
@@ -38,21 +85,20 @@ export default class PlatformLoading extends React.Component {
       try {
         (this.props.systemStore.config.version !== appVersion && !global.devOptions.debugMode)
           ? this.props.history.replace('/appintro')
-          : this.props.history.replace(this.props.location.pathname || '/login')
+          : this.props.history.replace(this.props.location.pathname === '/'
+            ? '/login'
+            : this.props.location.pathname)
       } catch (err) {
         debugger;
-        if (Platform.OS === 'web') {
-          this.setState({animating: false, message: this.props.t('系统无法登录，请刷新后重试~(500.2)')});
-        } else {
-          this.setState({animating: false, message: this.props.t('系统无法登录，请完全退出应用稍后重试~(500.2)')});
+        console.warn(err);
+        if (this._isMounted) {
+          if (Platform.OS === 'web') {
+            this.setState({animating: false, message: this.props.t('系统无法登录，请刷新后重试~(500.2)')});
+          } else {
+            this.setState({animating: false, message: this.props.t('系统无法登录，请完全退出应用稍后重试~(500.2)')});
+          }
         }
       }
-    }
-
-    if (Platform.OS === 'android' || Platform.OS === 'ios') {
-      // 恢复状态条
-      StatusBar.setHidden(false);
-      require('@remobile/react-native-splashscreen').hide();
     }
   }
 
@@ -132,20 +178,29 @@ export default class PlatformLoading extends React.Component {
   }
 
   render() {
-    return (
-      <View style={this.props.style.container}>
-        {(Platform.OS === 'android' || Platform.OS === 'ios')
-          ? <StatusBar hidden={false} barStyle='default'/>
-          : null}
-        <Spinner visible={this.state.animating}/>
-        <TouchableOpacity onPress={this.onPressFeed}>
-          <View>
-            <Text style={this.props.style.success}>
-              {this.state.message}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
+    if (this.state.success === true) {
+      return (<Switch>
+        <Route path='/appintro' component={AppIntro}/>
+        <Route path='/404' component={MessageView} code={404}/>
+        {(this.props.routerStore.getRoutes('/')).map((item) => <Route {...item} key={item.path.replace(/\//g, '_')}/>)}
+        <Route component={ModuleLoading}/>
+      </Switch>);
+    } else {
+      return (
+        <View style={this.props.style.container}>
+          {(Platform.OS === 'android' || Platform.OS === 'ios')
+            ? <StatusBar hidden={false} barStyle='default'/>
+            : null}
+          <Spinner visible={this.state.animating}/>
+          <TouchableOpacity onPress={this.onPressFeed}>
+            <View>
+              <Text style={this.props.style.success}>
+                {this.state.message}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
   }
 }

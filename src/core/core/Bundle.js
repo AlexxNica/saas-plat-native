@@ -371,7 +371,7 @@ class Bundle {
           let spscript = "spdefine('" + vername + "', function(global, require, module, exports) {\nrequire=global.sprequire;" + script + "\n});";
 
           if (__DEV__) {
-            spscript += "\n\nconsole.log('运行" + vername + "');";
+            spscript += "\n\nconsole.log('运行包" + vername + "');";
           }
           invoke(spscript);
         }

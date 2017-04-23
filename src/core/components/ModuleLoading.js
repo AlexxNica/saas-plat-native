@@ -76,7 +76,7 @@ export default class ModuleLoading extends React.Component {
   }
 
   prepare(props) {
-    const name = Router.getBundle(props.path);
+    const name = Router.getBundle(props.location.pathname);
     if (!name || Bundle.hasLoad(name)) {
       props.history.replace('/404');
       return;
@@ -101,7 +101,6 @@ export default class ModuleLoading extends React.Component {
   }
 
   render() {
-    debugger
     let message;
     if (!this.state.messageErr) {
       switch (this.state.code) {

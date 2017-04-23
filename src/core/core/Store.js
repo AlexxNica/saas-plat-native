@@ -3,7 +3,7 @@ import React from 'react';
 
 import hook, {HookTypes} from './Hook';
 
-let storeList = [];
+const storeList = [];
 
 export function getStore(Store, getStoreHandler) {
   if (getStoreHandler) {

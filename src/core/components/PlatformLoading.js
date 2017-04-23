@@ -27,7 +27,7 @@ export default class PlatformLoading extends React.Component {
     if (this._isMounted) {
       this.setState({animating: false});
       this.setState({
-        message:message || this.props.t('环境尚未准备就绪，稍后重试...(500)')
+        message: message || this.props.t('环境尚未准备就绪，稍后重试...(500)')
       });
     }
     if (code === 'complated') {
@@ -35,15 +35,17 @@ export default class PlatformLoading extends React.Component {
       // console.log(this.props.t('user version:'+appVersion);
       // console.log(this.props.t('system version:'+System.getVersion());
       // 如果没有看过介绍页显示，否着直接进入登录页
-      if (!(this.props.systemStore.config.version !== appVersion
-        ? this.props.history.replace('/showAppIntro', {
-          onDone: () => {
-            this.props.history.replace('/login');
-          }
-        })
-        : this.props.history.replace('/login'))) {
+      try {
+        (this.props.systemStore.config.version !== appVersion && !global.devOptions.debugMode)
+          ? this.props.history.replace('/appintro')
+          : this.props.history.replace(this.props.location.pathname || '/login')
+      } catch (err) {
         debugger;
-        this.setState({animating: false, message: this.props.t('系统无法登录，请完全退出应用稍后重试~(500.2)')});
+        if (Platform.OS === 'web') {
+          this.setState({animating: false, message: this.props.t('系统无法登录，请刷新后重试~(500.2)')});
+        } else {
+          this.setState({animating: false, message: this.props.t('系统无法登录，请完全退出应用稍后重试~(500.2)')});
+        }
       }
     }
 
@@ -104,7 +106,7 @@ export default class PlatformLoading extends React.Component {
   startupSystem() {
     const me = this;
     me.loadBundle({bundles: bundle.getPreloads('platform'), server: this.props.systemStore.config.platform.bundle}).then((bundles) => {
-      me.finished('complated',this.props.t('环境准备已就绪~'));
+      me.finished('complated', this.props.t('环境准备已就绪~'));
     }).catch((err) => {
       console.log(me.props.t('加载平台失败'));
       console.warn(err);

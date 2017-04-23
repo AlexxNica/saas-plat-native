@@ -5,8 +5,12 @@ import ModuleLoading from './ModuleLoading';
 import MessageView from './MessageView';
 import AppIntro from './AppIntro';
 
-import RouterStore from '../stores/Router';
+import {connectStore} from '../core/Store';
 import {tx} from '../utils/internal';
+
+const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
 
 let Router,
   Route,
@@ -26,7 +30,7 @@ switch (Platform.OS) {
   case 'web':
     {
       const BrowserRouter = require('react-router-dom');
-      Router = BrowserRouter.NativeRouter;
+      Router = BrowserRouter.BrowserRouter;
       Route = BrowserRouter.Route;
       Switch = BrowserRouter.Switch;
       break;
@@ -36,7 +40,7 @@ switch (Platform.OS) {
     break;
 }
 
-export default() => {
+export default connectStore(['routerStore'])(observer((props) => {
   if (!Router) {
     return null;
   }
@@ -44,10 +48,11 @@ export default() => {
     <Router>
       <Switch>
         <Route exact path='/' component={PlatformLoading}/>
-        <Route path='/showAppIntro' component={AppIntro}/>
-        <Route path='/404' component={MessageView} code={404}/> {(RouterStore.getStore().routes['/'] || []).map(item => <Route {...item}/>)}
+        <Route path='/appintro' component={AppIntro}/>
+        <Route path='/404' component={MessageView} code={404}/>
+        {(props.routerStore.routes['/'] || []).map(item => <Route {...item}/>)}
         <Route component={ModuleLoading}/>
       </Switch>
     </Router>
   );
-};
+}));

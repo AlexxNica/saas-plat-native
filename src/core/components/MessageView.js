@@ -2,14 +2,19 @@ import React from 'react';
 import {
   View,
   Text,
+  Platform,
   StatusBar,
   TouchableOpacity,
   ToolbarAndroid
 } from 'react-native';
 import {autobind} from 'core-decorators';
+import {connectStyle} from '../core/Theme';
+import {translate} from '../core/I18n';
 import { tx } from '../utils/internal';
 
 // 消息提示
+@translate('core.MessageView')
+@connectStyle('core.MessageView')
 export default class MessageView extends React.Component {
 
   @autobind
@@ -45,8 +50,8 @@ export default class MessageView extends React.Component {
 
   render() {
     return (
-      <View style={this.props.style.page} title={this.props.t('MessageTitle')}>
-        <StatusBar hidden={false} barStyle='default'/>
+      <View style={this.props.style.page}>
+        {(Platform.OS === 'android' || Platform.OS === 'ios')?<StatusBar hidden={false} barStyle='default'/>:null}
         <View style={this.props.style.container}>
           <TouchableOpacity onPress={this.onPressFeed}>
             <View>

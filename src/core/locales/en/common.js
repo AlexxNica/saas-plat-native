@@ -1,8 +1,8 @@
 export default {
-'网络尚未连接' : 'NetworkNotConnected',
-'无法获得相关数据，请连接网络后重试..' : 'NetworkNotConnectedNoCache',
-'网络访问失败' : 'NetworkFailed',
-'当前服务器尚未连接' : 'ServerNotConnected',
+'网络尚未连接' : 'Network Not Connected',
+'无法获得相关数据，请连接网络后重试..' : 'Network Not Connected',
+'网络访问失败' : 'Network Failed',
+'当前服务器尚未连接' : 'Server Not Connected',
 
   // Store
 'Store名称未指定，不能注册' : 'StoreNameNull',

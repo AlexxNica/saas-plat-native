@@ -119,11 +119,11 @@ class LoadContext {
       this._actions.length = 0;
       this._isComplated = true;
       LoadContextManager.destroyCurrentContext();
-      console.log(tx('ModuleInstallComplate'));
+      console.log(tx('安装完成'));
       return true;
     } catch (err) {
       LoadContextManager.destroyCurrentContext();
-      console.log(tx('ModuleInstallFailed'));
+      console.log(tx('安装失败'));
       console.warn(err);
       return false;
     }

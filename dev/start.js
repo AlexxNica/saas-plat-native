@@ -36,27 +36,19 @@ if (args.indexOf('--web') > -1) {
   //
   // app.use('/api', proxy);
 
-  app.get('/', function(req, res) {
-    res.write(md.fileSystem.readFileSync(__dirname +
-      '/../web/www/index.html'));
-    res.end();
-  });
-
   app.get('/favicon.ico', function(req, res) {
     res.write(fs.readFileSync(__dirname + '/../web/www/favicon.ico'));
     res.end();
   });
 
   app.get('/dist/polyfill.min.js', function(req, res) {
-    res.sendFile(path.join(__dirname,
-      '../node_modules/babel-polyfill/dist/polyfill.min.js'));
+    res.sendFile(path.join(__dirname, '../node_modules/babel-polyfill/dist/polyfill.min.js'));
   });
 
 }
 
 if (args.indexOf('--ios') > -1 || args.indexOf('--android') > -1) {
-  var nativecli = 'node ' + path.join(root,
-    'node_modules/react-native/local-cli/cli.js start');
+  var nativecli = 'node ' + path.join(root, 'node_modules/react-native/local-cli/cli.js start');
   console.log(nativecli);
   var cli = exec(nativecli);
   cli.stdout.on('data', function(data) {
@@ -100,14 +92,12 @@ app.get('/assets/*', function(req, res) {
 
 app.get('/api/v1/*', function(request, response) {
   var pathname = url.parse(request.url).pathname;
-  var realPath = path.join(__dirname, 'api', pathname.substr('/api/v1'.length),
-    request.method.toLocaleLowerCase() + '.js');
+  var realPath = path.join(__dirname, 'api', pathname.substr('/api/v1'.length), request.method.toLocaleLowerCase() + '.js');
   console.log(realPath);
   fs.exists(realPath, function(exists) {
     if (!exists) {
-      response.writeHead(404, { 'Content-Type': 'application/json;charset=utf-8' });
-      response.write("This request URL " + pathname +
-        " was not found on this server.");
+      response.writeHead(404, {'Content-Type': 'application/json;charset=utf-8'});
+      response.write("This request URL " + pathname + " was not found on this server.");
       response.end();
     } else {
       delete require.cache[realPath];
@@ -121,7 +111,7 @@ app.get('/api/v1/*', function(request, response) {
         }
       } else {
         var contentType = 'application/json;charset=utf-8';
-        response.writeHead(200, { 'Content-Type': contentType });
+        response.writeHead(200, {'Content-Type': contentType});
         var data;
         try {
           //console.log(require.cache);
@@ -139,6 +129,14 @@ app.get('/api/v1/*', function(request, response) {
     }
   });
 });
+
+if (args.indexOf('--web') > -1) {
+  app.get('/*', function(req, res) {
+    res.write(md.fileSystem.readFileSync(__dirname + '/../web/www/index.html'));
+    res.end();
+  });
+
+}
 
 app.use(function(err, req, res, next) {
   console.error(err.stack);

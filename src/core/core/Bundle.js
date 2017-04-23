@@ -341,14 +341,14 @@ class Bundle {
         }
         loadSuccess = ctx.complateLoad();
         if (!loadSuccess) {
-          errorCode = tx('BundLoadFailed');
+          errorCode = tx('包加载失败');
         }
         return loadSuccess;
       }
 
       function checkLoadResult() {
         try {
-          console.log(tx('BundleLoadComplate') + (successCount + errorCount) + '/' + requestCount);
+          console.log(tx('包加载完成 ') + (successCount + errorCount) + '/' + requestCount);
           if (successCount + errorCount === requestCount) {
             loadBundles();
           }
@@ -371,7 +371,7 @@ class Bundle {
           let spscript = "spdefine('" + vername + "', function(global, require, module, exports) {\nrequire=global.sprequire;" + script + "\n});";
 
           if (__DEV__) {
-            spscript += "\n\nconsole.log('" + tx('RequireBundle') + vername + "');";
+            spscript += "\n\nconsole.log('运行" + vername + "');";
           }
           invoke(spscript);
         }
@@ -389,14 +389,14 @@ class Bundle {
           ? '&dev=true'
           : '';
         const fetchUrl = `${bundleServer}?name=${itemConfig.name}${verStr}&platform=${Platform.OS}${devStr}`;
-        console.log(`${tx('FetchBundle')}'${itemConfig.name}'...`);
+        console.log(`${tx('获取包')}'${itemConfig.name}'...`);
         fetch(fetchUrl).then((response) => {
           if (response.ok) {
             return response.text();
           }
           throw new TypeError('Network request failed (' + response.status + ')');
         }).then((responseText) => {
-          console.log(`${tx('response')}${itemConfig.name}`);
+          console.log(`${tx('加载包')}${itemConfig.name}`);
           loadDefine(itemConfig, responseText);
           if (itemConfig.version !== 'HEAD') { // 每次加载最新版不保存
             localStore.save({
@@ -407,10 +407,10 @@ class Bundle {
           }
           checkLoadResult();
         }).catch((error) => {
-          console.log(`'${itemConfig.name}'${tx('failed')}, ${fetchUrl}.`);
+          console.log(`${tx('加载失败')}'${itemConfig.name}'`, fetchUrl);
           console.warn(error);
           errorCount++;
-          errorCode = tx('NetworkFailed');
+          errorCode = tx('网络连接失败');
           checkLoadResult();
         });
       }
@@ -422,7 +422,7 @@ class Bundle {
       NetInfo.isConnected.fetch().then((isConnected) => {
         if (!isConnected) {
           // adminBundleLoaded = adminBundleLoadFailed = true;
-          errorCode = tx('NetworkFailed');
+          errorCode = tx('网络连接失败');
           errorCount = requestCount;
           checkLoadResult();
           return;
@@ -434,20 +434,20 @@ class Bundle {
           if (__DEV__ || me.cacheDisable) {
             requestUrl(item);
           } else {
-            console.log(tx('BundleLoadConfig'));
+            console.log(tx('读取包元数据'));
             localStore.load({
               key: 'bundleConfig',
               // 需要保存服务器地址，要不切换服务器有可能造成加载错误
               id: vername.replace(/_/g, '-')
             }).then((script) => {
-              console.log(tx('BundleLoadSuccess'));
+              console.log(tx('包元数据加载完成'));
               loadDefine(item, script);
               checkLoadResult();
             }).catch((err) => { // 没有缓冲数据会在catch中返回
               if (err && err.name !== 'NotFoundError') {
                 console.warn(err);
               }
-              console.log(tx('BundleLoadSuccess'));
+              console.log(tx('包加载成功'));
               requestUrl(item);
             });
           }

@@ -45,13 +45,13 @@ export default class RouterStore {
 
     let items = this.routes.get(path);
     if (!items) {
-      // obser没用，buildroute不会观察改变 items = observable([]);
-      items = [];
+      // obser没用，buildroute不会观察改变
+      items = observable([]);
+      //items = [];
       this.routes.set(path, items);
     }
     items.push({ns, name, route, handler});
-    console.log(tx('RouterAdded'), path, ns, name);
-
+    console.log(tx('注册路由'), path, ns, name);
   }
 
   @action entryBundle(bundle) {

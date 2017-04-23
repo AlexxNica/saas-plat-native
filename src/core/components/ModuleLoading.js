@@ -101,6 +101,7 @@ export default class ModuleLoading extends React.Component {
   }
 
   render() {
+    debugger
     let message;
     if (!this.state.messageErr) {
       switch (this.state.code) {

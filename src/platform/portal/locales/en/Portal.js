@@ -1,3 +1,3 @@
 export default {
-  PleaseSelectModule : '请打开一个模块...'
+  '请打开一个模块...' : 'PleaseSelectModule'
 };

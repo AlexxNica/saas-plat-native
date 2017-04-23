@@ -18,16 +18,16 @@ export default class PlatformLoading extends React.Component {
     super(props);
     this.state = {
       animating: true,
-      message: props.t('loading')
+      message: props.t('正在准备环境，请稍后...')
     };
   }
 
   @autobind
-  finished(code) {
+  finished(code, message) {
     if (this._isMounted) {
       this.setState({animating: false});
       this.setState({
-        message: this.props.t(code) || code || this.props.t('failed')
+        message:message || this.props.t('环境尚未准备就绪，稍后重试...(500)')
       });
     }
     if (code === 'complated') {
@@ -43,7 +43,7 @@ export default class PlatformLoading extends React.Component {
         })
         : this.props.history.replace('/login'))) {
         debugger;
-        this.setState({animating: false, message: this.props.t('loginfailed')});
+        this.setState({animating: false, message: this.props.t('系统无法登录，请完全退出应用稍后重试~(500.2)')});
       }
     }
 
@@ -69,7 +69,7 @@ export default class PlatformLoading extends React.Component {
   connect() {
     const me = this;
     return new Promise(async(resolve, reject) => {
-      console.log(me.props.t('StartFetchPlatform'));
+      console.log(me.props.t('开始连接平台网络...'));
       try {
         const platformConfig = await apis.connectPlatform();
         bundle.removeMetadata('platform');
@@ -78,7 +78,7 @@ export default class PlatformLoading extends React.Component {
         if (platformConfig.bundleServer) {
           me.props.systemStore.updateBundleServer(platformConfig.bundleServer);
         }
-        console.log(me.props.t('FetchPlatformSuccess'));
+        console.log(me.props.t('连接平台完成'));
         resolve(platformConfig);
       } catch (err) {
         me.finished(err);
@@ -90,12 +90,12 @@ export default class PlatformLoading extends React.Component {
   loadBundle(platformConfig) {
     const me = this;
     return new Promise((resolve, reject) => {
-      console.log(me.props.t('StartLoadPlatform'));
+      console.log(me.props.t('开始加载平台模块...'));
       bundle.load(platformConfig.bundles, platformConfig.server).then((bundles) => {
-        console.log(me.props.t('LoadPlatformSuccess'));
+        console.log(me.props.t('加载平台模块完成'));
         resolve(bundles);
       }).catch((err) => {
-        console.warn(me.props.t('LoadPlatformFail'));
+        console.warn(me.props.t('加载平台模块失败'));
         me.finished(err);
       });
     });
@@ -104,16 +104,16 @@ export default class PlatformLoading extends React.Component {
   startupSystem() {
     const me = this;
     me.loadBundle({bundles: bundle.getPreloads('platform'), server: this.props.systemStore.config.platform.bundle}).then((bundles) => {
-      me.finished('complated');
+      me.finished('complated',this.props.t('环境准备已就绪~'));
     }).catch((err) => {
-      console.log(me.props.t('SystemLoadFail'));
+      console.log(me.props.t('加载平台失败'));
       console.warn(err);
-      me.finished('bundlefailed');
+      me.finished('bundlefailed', this.props.t('系统加载失败，请稍后重试~(500.2)'));
     });
   }
 
   prepare() {
-    this.setState({animating: true, message: this.props.t('Prepare')});
+    this.setState({animating: true, message: this.props.t('正在准备环境，请稍后...')});
 
     this.connect(). // 连接获取平台基本配置信息
     then(() => this.props.systemStore.loadSystemOptions()). // 先加载系统选项，启动过程可能需要判断

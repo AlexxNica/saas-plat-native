@@ -17,7 +17,7 @@ export default class ModuleLoading extends React.Component {
     super(props);
     this.state = {
       animating: true,
-      message: 'ModuleLoading',
+      code: 'ModuleLoading',
       taskId: 0
     };
   }
@@ -38,17 +38,16 @@ export default class ModuleLoading extends React.Component {
   }
 
   finished(taskId) {
-    this.setState({animating: false, message: 'Success'});
+    this.setState({animating: false, code: 'Success'});
     try {
       if (!this.props.history.replace(this.props.path)) {
-        this.setState({animating: false, message: 'ModuleRouteNotRegisterd'});
+        this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
         this.showBack();
       }
     } catch (err) {
-      this.props.t('GotoFailed');
-      console.warn(err);
+      console.warn(this.props.t('GotoFailed'), err);
       if (this.state.taskId === taskId) {
-        this.setState({animating: false, message: 'ModuleRouteNotRegisterd'});
+        this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
         this.showBack();
       }
     }
@@ -56,14 +55,14 @@ export default class ModuleLoading extends React.Component {
 
   loadBundle(bundleConfig, taskId) {
     return new Promise((resolve, reject) => {
-      this.props.t('BundleLoading');
+      console.debug(this.props.t('开始加载包...'));
       Bundle.load(bundleConfig.bundles, bundleConfig.server).then((bundles) => {
-        this.props.t('BundleLoadComplated');
+        console.debug(this.props.t('包加载完成'));
         resolve(bundles);
       }).catch((err) => {
-        console.warn('load module failed');
+        console.warn(this.props.t('包加载失败'), err);
         if (this.state.taskId === taskId) {
-          this.setState({animating: false, message: 'Failed', messageErr: err});
+          this.setState({animating: false, code: 'Failed', messageErr: err});
           this.showBack();
         }
       });
@@ -88,7 +87,7 @@ export default class ModuleLoading extends React.Component {
       return;
     }
     const taskId = this.state.taskId + 1;
-    this.setState({animating: true, messageErr: null, message: 'Loading', taskId});
+    this.setState({animating: true, messageErr: null, code: 'Loading', taskId});
     this.loadBundle(bundleConfig, taskId).then(() => {
       // 如果模块配置了初始化方法，开始调用 支持promise
       if (this.props.initHandler && this.props.initHandler.length > 0) {
@@ -102,6 +101,26 @@ export default class ModuleLoading extends React.Component {
   }
 
   render() {
+    let message;
+    if (!this.state.messageErr) {
+      switch (this.state.code) {
+        case 'ModuleLoading':
+          message = this.props.t('正在加载，请稍后...');
+          break;
+        case 'Success':
+          message = this.props.t('模块已加载完毕');
+          break;
+        case 'ModuleRouteNotRegisterd':
+          message = this.props.t('模块无法打开~');
+          break;
+        case 'Failed':
+          message = this.props.t('模块加载失败，稍后重试...');
+          break;
+        case 'Loading':
+          message = this.props.t('正在加载，请稍后...');
+          break;
+      }
+    }
     return (
       <View style={this.props.style.container}>
         <StatusBar hidden={false} barStyle='default'/>
@@ -109,7 +128,7 @@ export default class ModuleLoading extends React.Component {
         <TouchableOpacity onPress={this.onPressFeed}>
           <View>
             <Text style={this.props.style.success}>
-              {this.state.messageErr || this.props.t(this.state.message)}
+              {this.state.messageErr || message}
             </Text>
           </View>
         </TouchableOpacity>

@@ -1,13 +1,7 @@
-import common from './zh-CN/common';
-import AppRouter from './zh-CN/AppView';
-import PlatformLoading from './zh-CN/PlatformLoading';
-import ModuleLoading from './zh-CN/ModuleLoading';
+import common from './en/common';
 
 export default {
-  'zh-CN' : {
+  'en' : {
     common,
-    PlatformLoading,
-    ModuleLoading,
-    AppRouter
   }
 };

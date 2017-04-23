@@ -1,10 +1,10 @@
 export default {
-  Introduce : '创建企业',
-  BaseInfo : '企业信息',
-  HostSelector : '主机租用',
-  ServerSubmit : '提交申请',
-  Pay : '支付年费',
-  CreateSuccess : '成功',
-  ChangeServer : '服务器',
-  CreateServer : '创建'
+  '创建企业' : 'Introduce',
+  '企业信息' : 'BaseInfo',
+  '主机租用' : 'HostSelector',
+  '提交申请' : 'ServerSubmit',
+  '支付年费' : 'Pay',
+  '成功' : 'CreateSuccess',
+  '服务器' : 'ChangeServer',
+  '创建' : 'CreateServer'
 };

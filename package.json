@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node dev/start.js --ios --web",
+    "start": "node dev/start.js --web",
     "startweb": "node dev/start.js --web",
     "build": "node dev/build.js --android --ios",
     "buildweb": "webpack --config web/webpack.config.js  --progress --colors",

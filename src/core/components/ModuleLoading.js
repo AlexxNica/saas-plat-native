@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
 import {autobind} from 'core-decorators';
 import Spinner from './Spinner';
-import bundle from '../core/Bundle';
+import Bundle from '../core/Bundle';
+import Router from '../core/Router';
 import {connectStyle} from '../core/Theme';
 import {translate} from '../core/I18n';
-import {Actions} from '../core/Router';
 
 // 模块加载等待
 @translate('core.ModuleLoading')
@@ -34,16 +34,13 @@ export default class ModuleLoading extends React.Component {
   }
 
   showBack() {
-    Actions.refresh({hideNavBar: false, title: this.props.t('ModuleLoadFailed')});
+    this.props.history.replace('/404');
   }
 
-  finished(actionConfig, taskId) {
+  finished(taskId) {
     this.setState({animating: false, message: 'Success'});
     try {
-      if (!Actions.gotoAction(actionConfig.action, {
-        type: 'replace',
-        ...actionConfig.param
-      })) {
+      if (!this.props.history.replace(this.props.path)) {
         this.setState({animating: false, message: 'ModuleRouteNotRegisterd'});
         this.showBack();
       }
@@ -60,7 +57,7 @@ export default class ModuleLoading extends React.Component {
   loadBundle(bundleConfig, taskId) {
     return new Promise((resolve, reject) => {
       this.props.t('BundleLoading');
-      bundle.load(bundleConfig.bundles, bundleConfig.server).then((bundles) => {
+      Bundle.load(bundleConfig.bundles, bundleConfig.server).then((bundles) => {
         this.props.t('BundleLoadComplated');
         resolve(bundles);
       }).catch((err) => {
@@ -80,27 +77,28 @@ export default class ModuleLoading extends React.Component {
   }
 
   prepare(props) {
-    const bundleConfig = props.bundleConfig;
-    const actionConfig = {
-      action: props.action,
-      param: props.actionParam
-    };
-    const taskId = this.state.taskId + 1;
-    if (bundleConfig) {
-      this.setState({animating: true, messageErr: null, message: 'Loading', taskId});
-      this.loadBundle(bundleConfig, taskId).then(() => {
-        // 如果模块配置了初始化方法，开始调用 支持promise
-        if (this.props.initHandler && this.props.initHandler.length > 0) {
-          this.handleInit(this.props.initHandler, this.props.module.name).then(() => {
-            this.finished(actionConfig, taskId);
-          });
-        } else {
-          this.finished(actionConfig, taskId);
-        }
-      });
-    } else {
-      this.setState({animating: false, message: 'NoBundle'});
+    const name = Router.getBundle(props.path);
+    if (!name || Bundle.hasLoad(name)) {
+      props.history.replace('/404');
+      return;
     }
+    const bundleConfig = Bundle.getBundle(name);
+    if (!bundleConfig) {
+      props.history.replace('/404');
+      return;
+    }
+    const taskId = this.state.taskId + 1;
+    this.setState({animating: true, messageErr: null, message: 'Loading', taskId});
+    this.loadBundle(bundleConfig, taskId).then(() => {
+      // 如果模块配置了初始化方法，开始调用 支持promise
+      if (this.props.initHandler && this.props.initHandler.length > 0) {
+        this.handleInit(this.props.initHandler, this.props.module.name).then(() => {
+          this.finished(taskId);
+        });
+      } else {
+        this.finished(taskId);
+      }
+    });
   }
 
   render() {

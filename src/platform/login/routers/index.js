@@ -4,16 +4,18 @@ import Login from '../components/Login';
 import GetForgetPassword from '../components/GetForgetPassword';
 import Register from '../components/Register';
 
-Registry.registerRootRoute(({ t }) => [{
-  path: '/',
+import {tr} from '../utils';
+
+Registry.registerRootRoute(() => [{
+  path: '/login',
   component: Login,
-  title: t('登录')
+  title: tr('登录')
 }, {
   path: '/register',
   component: Register,
-  title: t('注册')
+  title: tr('注册')
 }, {
   path: '/getForgetPassword',
   component: GetForgetPassword,
-  title: t('重置密码')
+  title: tr('重置密码')
 }]);

@@ -130,9 +130,13 @@ spdefine('react-native-passcode-auth', function (global, require, module, export
   module.exports = require('react-native-passcode-auth');
   module.exports.version = '1.0.0';
 });
-spdefine('react-native-router-flux', function (global, require, module, exports) {
-  module.exports = require('react-native-router-flux');
-  module.exports.version = '3.37.0';
+spdefine('react-router', function (global, __require, module, exports) {
+  module.exports = require('react-router');
+  module.exports.version = '4.1.1';
+});
+spdefine('react-router-Native', function (global, __require, module, exports) {
+  module.exports = require('react-router-Native');
+  module.exports.version = '4.1.1';
 });
 spdefine('react-native-storage', function (global, require, module, exports) {
   module.exports = require('react-native-storage');

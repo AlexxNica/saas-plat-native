@@ -61,14 +61,15 @@ export default class {
     ctx.removeRoute(path, name);
   }
 
-  // name 参数可以是 string 但是必须提供route       可以是 route        可以是 function
+  // name 参数可以是 string 但是必须提供route
+  // 可以是 route        可以是 function
   static registerRootRoute(name, route, afterBuild) {
     if (typeof name !== 'string') {
       afterBuild = route;
       route = name;
       name = 'default';
     }
-    this.registerRoute(name, 'root', route, afterBuild);
+    this.registerRoute(name, '/', route, afterBuild);
   }
 
   static registerTheme(name, theme) {

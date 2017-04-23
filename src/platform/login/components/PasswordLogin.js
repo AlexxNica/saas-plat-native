@@ -27,10 +27,10 @@ export default class PasswordLogin extends React.Component {
       username: this.props.userStore.loginState.username,
       password: '',
       emptyUsernameInput: false,
-      inputPlaceholder: props.t('LoginPlaceHolder'),
+      inputPlaceholder: props.t('输入手机号码/邮箱/会员名'),
       emptyPasswordInput: false,
-      inputPasswordPlaceholder: props.t('PasswordPlaceHolder'),
-      loginText: props.t('Login')
+      inputPasswordPlaceholder: props.t('输入登录密码'),
+      loginText: props.t('登录')
     };
   }
 
@@ -45,12 +45,12 @@ export default class PasswordLogin extends React.Component {
     if (!this.state.username) {
       this.setState({
         emptyUsernameInput: true,
-        inputPlaceholder: this.props.t('UsernameEmpty')
+        inputPlaceholder: this.props.t('用户名不能为空')
       });
       this.username.focus();
       return;
     }
-    console.log(this.props.t('Logining'));
+    console.log(this.props.t('正在登录...'));
     this.setState({ disabled: true, loginState: 'busy' });
     this.props.userStore.login({
       username: this.state.username,
@@ -65,14 +65,14 @@ export default class PasswordLogin extends React.Component {
   }
 
   showLoginMessage(msg) {
-    Alert.alert(this.props.t('Tip'), (msg && msg.toString()) || this.props.t(
-      'Error'), [{
-      text: this.props.t('ReLogin')
+    Alert.alert(this.props.t('提示'), (msg && msg.toString()) || this.props.t(
+      '错误，请重试~'), [{
+      text: this.props.t('再次登录')
     }]);
     this.setState({
       disabled: false,
       loginState: 'idle',
-      loginText: this.props.t('ReLogin')
+      loginText: this.props.t('再次登录')
     });
   }
 
@@ -84,7 +84,7 @@ export default class PasswordLogin extends React.Component {
     this.setState({
       username,
       emptyUsernameInput: false,
-      inputPlaceholder: this.props.t('LoginPlaceHolder')
+      inputPlaceholder: this.props.t('输入手机号码/邮箱/会员名')
     });
   }
 
@@ -92,7 +92,7 @@ export default class PasswordLogin extends React.Component {
     this.setState({
       password,
       emptyPasswordInput: false,
-      inputPasswordPlaceholder: this.props.t('PasswordPlaceHolder')
+      inputPasswordPlaceholder: this.props.t('输入登录密码')
     });
   }
 
@@ -214,7 +214,7 @@ export default class PasswordLogin extends React.Component {
                   onPress: this.handleLogin
                 },
                 busy: {
-                  text: this.props.t('Logining'),
+                  text: this.props.t('正在登录...'),
                   spinner: true,
                   spinnerProps: {
                     animated: true,
@@ -223,7 +223,7 @@ export default class PasswordLogin extends React.Component {
                   backgroundStyle: styles.busy
                 },
                 success: {
-                  text: this.props.t('Logined'),
+                  text: this.props.t('已登录'),
                   backgroundStyle: styles.success
                 }
               }}

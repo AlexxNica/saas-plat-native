@@ -19,19 +19,18 @@ function invoke(script) {
 }
 
 class Bundle {
-  modules = new Map();
+  installs = new Map(); // 全部安装项
+  loaded = {};  // 已经加载项
   initMethods = [];
   preloads = {};
   dependencies = {
     // module: {module: version}
   };
-
-  loaded = {};
-  cacheDisable = !!devOptions.cacheDisable;
+  cacheDisable = !!global.devOptions.cacheDisable;
 
   getBundle(name) {
     assert(name);
-    return this.modules.get(name);
+    return this.installs.get(name);
   }
 
   getDependencies(name) {
@@ -47,7 +46,7 @@ class Bundle {
   _build() {
     this.preloads = {};
     this.dependencies = {};
-    this.modules.forEach((item) => {
+    this.installs.forEach((item) => {
       const scope = item.scope;
       let preloadScope = this.preloads[scope];
       if (!preloadScope) {
@@ -87,14 +86,14 @@ class Bundle {
       assert(metadata.name);
       // assert(metadata.name.startsWith(scope + '/'), '元数据必须在' + scope + '范畴内');
 
-      this.modules.forEach((item) => {
+      this.installs.forEach((item) => {
         assert(item.name !== metadata.name);
       });
 
     }
 
     for (const metadata of metadatas) {
-      this.modules.set(metadata.name, {...metadata, scope});
+      this.installs.set(metadata.name, {...metadata, scope});
     }
     this._build();
 
@@ -103,13 +102,13 @@ class Bundle {
   removeMetadata(scope) {
     assert(scope);
     const deletes = [];
-    this.modules.forEach((item, key) => {
+    this.installs.forEach((item, key) => {
       if (item.scope === scope){
         deletes.push(key);
       }
     });
     for (const key of deletes) {
-      this.modules.delete(key);
+      this.installs.delete(key);
     }
     if (deletes.length > 0) {
       this._build();
@@ -199,14 +198,14 @@ class Bundle {
           themeStore.getStore().themes.keys().forEach(name => {
             themeStore.getStore().removeTheme(name, this.getKeys(themeStore.getStore().themes, null, item.ns.join('.'), name));
           });
-          routerStore.getStore().removeScene(item.ns.join('/')); // todo 这个函数需要重构到这里
+          routerStore.getStore().removeRoute(item.ns.join('/')); // todo 这个函数需要重构到这里
           this.removeInitMethod(item.ns.join('.'));
           break;
         case Actions.UNREGISTER_STORE:
           Store.unregisterStore(item.ns.concat(item.name).join('.'));
           break;
         case Actions.UNREGISTER_ROUTE:
-          routerStore.getStore().removeScene(item.path, item.name);
+          routerStore.getStore().removeRoute(item.path, item.name);
           break;
         case Actions.UNREGISTER_INITMETHOD:
           this.removeInitMethod(item.ns.join('.'), item.name);
@@ -264,7 +263,7 @@ class Bundle {
     i18nStore.getStore().addLocale(locales);
     themeStore.getStore().addTheme(themes);
     stores.forEach(({name, aliasName, filter, getStoreHandler, Class}) => Store.registerStore(name, aliasName, filter, getStoreHandler)(Class));
-    routerStore.getStore().addScene(routers);
+    routerStore.getStore().addRoute(routers);
     methods.forEach(({ns, name, handler}) => this.addInitMethod(ns, name, handler));
   }
 

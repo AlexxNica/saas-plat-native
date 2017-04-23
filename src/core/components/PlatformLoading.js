@@ -1,5 +1,4 @@
 import React from 'react';
-import assert from 'assert';
 import {View, StatusBar, Text, TouchableOpacity, Platform} from 'react-native';
 import {autobind} from 'core-decorators';
 import Spinner from './Spinner';
@@ -8,7 +7,6 @@ import * as apis from '../apis/PlatformApis';
 import {connectStyle} from '../core/Theme';
 import {translate} from '../core/I18n';
 import {connectStore} from '../core/Store';
-import {Actions} from '../core/Router';
 
 // 平台组件加载等待
 @translate('core.PlatformLoading')
@@ -38,12 +36,12 @@ export default class PlatformLoading extends React.Component {
       // console.log(this.props.t('system version:'+System.getVersion());
       // 如果没有看过介绍页显示，否着直接进入登录页
       if (!(this.props.systemStore.config.version !== appVersion
-        ? Actions.gotoAction('core/showAppIntro', {
+        ? this.props.history.replace('/showAppIntro', {
           onDone: () => {
-            Actions.gotoAction('saas-plat-login');
+            this.props.history.replace('/login');
           }
         })
-        : Actions.gotoAction('saas-plat-login'))) {
+        : this.props.history.replace('/login'))) {
         debugger;
         this.setState({animating: false, message: this.props.t('loginfailed')});
       }

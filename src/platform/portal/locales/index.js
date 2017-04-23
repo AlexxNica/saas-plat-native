@@ -1,8 +1,8 @@
 import {Registry} from 'saasplat-native';
 
-import router from './zh-CN/router';
-import ServerListLocales from './zh-CN/ServerList';
-import NoModuleLocales from './zh-CN/NoModule';
-import PortalLocales from './zh-CN/Portal';
+import router from './en/router';
+import ServerListLocales from './en/ServerList';
+import NoModuleLocales from './en/NoModule';
+import PortalLocales from './en/Portal';
 
 Registry.registerLocales(() => ({router, ServerListLocales, NoModuleLocales, PortalLocales}));

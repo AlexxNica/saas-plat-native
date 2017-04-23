@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   View,
   Text,
-  Platform,
   StatusBar,
   TouchableOpacity,
   ToolbarAndroid
 } from 'react-native';
 import {autobind} from 'core-decorators';
-import {Actions} from '../core/Router';
 import { tx } from '../utils/internal';
 
 // 消息提示
@@ -16,7 +14,7 @@ export default class MessageView extends React.Component {
 
   @autobind
   onPressFeed() {
-    Actions.pop();
+    this.props.history.goBack();
   }
 
   getTipMsg() {
@@ -35,7 +33,7 @@ export default class MessageView extends React.Component {
         tipMsg = tx('门户页配置错误，无法打开啦，点我进入管理控制台调整~。');
         break;
       case 'BaseLoadFailed':
-        tipMsg = tx('平台组件加载失败，请联系您专属运维工程师解决[Phone:') + config.support.phone + tx(']~。');
+        tipMsg = tx('平台组件加载失败，请进入社区http://community.saas-plat.com查找解决方案~。');
         break;
     }
     return tipMsg;

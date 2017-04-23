@@ -1,10 +1,14 @@
-import router from './zh-CN/router';
-import common from './zh-CN/common';
+import {Registry} from 'saasplat-native';
 
-import PasswordLoginLocale from './zh-CN/PasswordLogin';
+import router from './en/router';
+import common from './en/common';
+
+import PasswordLoginLocale from './en/PasswordLogin';
 
 export default {
   common,
   router,
   PasswordLoginLocale
 };
+
+Registry.registerLocales(() => ({common, router, PasswordLoginLocale}));

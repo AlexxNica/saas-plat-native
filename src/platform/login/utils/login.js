@@ -1,6 +1,5 @@
 import {
-  Actions,
-  User
+  Actions
 } from 'saasplat-native';
 
 export function login(userData) {

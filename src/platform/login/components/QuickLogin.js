@@ -10,9 +10,8 @@ import {
 } from 'react-native';
 import TouchID from 'react-native-touch-id';
 import PasscodeAuth from 'react-native-passcode-auth';
-import {autobind} from 'core-decorators';
-import {login} from '../utils/login';
-import {connectStore, connectStyle, translate, Actions} from 'saasplat-native';
+import { autobind } from 'core-decorators';
+import { connectStore, connectStyle, translate, Actions } from 'saasplat-native';
 
 @translate('saas-plat-login.QuickLogin')
 @connectStyle('saas-plat-login.QuickLogin')
@@ -22,43 +21,47 @@ export default class QuickLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      msgText: '点击进行指纹解锁'
+      msgText: 'Touch'
     };
   }
 
   handleLoginPress() {
     this.props.userStore.relogin().then(() => {
-      login();
+      this.props.history.replace('/portal');
     }).catch(err => {
       debugger
-      Alert.alert('登录', (err && err.message) || '最近登录账户恢复登录失败', [
-        {
-          text: '其他账户登录',
+      Alert.alert(this.props.t('登录'), (err && err.message) || this.props
+        .t('最近登录账户恢复登录失败'), [{
+          text: this.props.t('其他账户登录'),
           onPress: () => this.handleOtherPress()
         }, {
-          text: '取消'
-        }
-      ]);
+          text: this.props.t('取消')
+        }]);
     });
   }
 
   handleOtherPress() {
-    Actions.gotoAction('password', {type: 'refresh'});
+    Actions.gotoAction('password', { type: 'refresh' });
   }
 
   showTouchID() {
     const me = this;
-    TouchID.authenticate('通过Home键验证已有指纹').then((success) => {
+    TouchID.authenticate(this.props.t('通过Home键验证已有指纹')).then((success) => {
       if (success) {
         console.log('User authenticated with Touch ID');
         me.handleLoginPress.bind(me)();
       }
     }).catch((error) => {
-      if (error.name === 'LAErrorUserFallback' || error.name === 'LAErrorPasscodeNotSet' || error.name === 'LAErrorTouchIDNotAvailable' || error.name === 'LAErrorTouchIDNotEnrolle' || error.name === 'RCTTouchIDNotSupported') {
+      if (error.name === 'LAErrorUserFallback' || error.name ===
+        'LAErrorPasscodeNotSet' || error.name ===
+        'LAErrorTouchIDNotAvailable' || error.name ===
+        'LAErrorTouchIDNotEnrolle' || error.name ===
+        'RCTTouchIDNotSupported') {
         me.checkPasscode.bind(me)();
         return;
       }
-      if (error.name === 'LAErrorUserCancel' || error.name === 'LAErrorSystemCancel') {
+      if (error.name === 'LAErrorUserCancel' || error.name ===
+        'LAErrorSystemCancel') {
         return;
       }
       console.log('Authentication Failed');
@@ -66,7 +69,7 @@ export default class QuickLogin extends React.Component {
   }
 
   showPasscode() {
-    PasscodeAuth.authenticate('请输入解锁密码').then((success) => {
+    PasscodeAuth.authenticate(this.props.t('请输入解锁密码')).then((success) => {
       if (success) {
         console.log('User authenticated with Passcode');
         this.handleLoginPress();
@@ -91,14 +94,18 @@ export default class QuickLogin extends React.Component {
           this.passcodeAuthSupported = supported;
           me.showPasscode();
         }).catch((error) => {
-          if (error.name === 'LAErrorUserCancel' || error.name === 'LAErrorUserFallback' || error.name === 'LAErrorSystemCancel' || error.name === 'LAErrorPasscodeNotSet' || error.name === 'PasscodeAuthNotSupported') {
+          if (error.name === 'LAErrorUserCancel' || error.name ===
+            'LAErrorUserFallback' || error.name ===
+            'LAErrorSystemCancel' || error.name ===
+            'LAErrorPasscodeNotSet' || error.name ===
+            'PasscodeAuthNotSupported') {
             return;
           }
           console.log(error);
         });
       }
     } else {
-      this.setState({msgText: '当前设备不支持指密码解锁'});
+      this.setState({ msgCode: 'NotSupport' });
     }
   }
 
@@ -160,6 +167,8 @@ export default class QuickLogin extends React.Component {
   render() {
     const s = this.props.userStore.loginState;
     const styles = this.props.style;
+    const msgText = this.props.t(this.state.msgCode === 'Touch' ?
+      '点击进行指纹解锁' : '当前设备不支持指密码解锁');
     return (
       <View style={styles.flexContainer}>
         <StatusBar hidden={false}/>
@@ -177,7 +186,7 @@ export default class QuickLogin extends React.Component {
             <View style={styles.cellView}>
               <Image style={styles.figIcon} source={require('../assets/quick-fingerprint.png')}/>
               <Text style={[styles.text, styles.figText, styles.base.button.link]}>
-                {this.state.msgText}
+                {msgText}
               </Text>
             </View>
           </TouchableOpacity>
@@ -185,7 +194,7 @@ export default class QuickLogin extends React.Component {
         <TouchableOpacity onPress={this.handleOtherPress}>
           <View style={styles.cellBottom}>
             <Text style={[styles.text, styles.base.button.link]}>
-              登录其他账户
+              {this.props.t('登录其他账户')}
             </Text>
           </View>
         </TouchableOpacity>

@@ -26,11 +26,15 @@ export default class ModuleLoading extends React.Component {
     this.prepare(this.props);
   }
 
+  componentWillReceiveProps(nextProps){
+    this.prepare(nextProps);
+  }
+
   onPressFeed() {
     if (this.state.animating) {
       return;
     }
-    this.prepare();
+    this.prepare(this.props);
   }
 
   showBack() {
@@ -39,18 +43,21 @@ export default class ModuleLoading extends React.Component {
 
   finished(taskId) {
     this.setState({animating: false, code: 'Success'});
-    try {
-      if (!this.props.history.replace(this.props.path)) {
-        this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
-        this.showBack();
-      }
-    } catch (err) {
-      console.warn(this.props.t('GotoFailed'), err);
-      if (this.state.taskId === taskId) {
-        this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
-        this.showBack();
-      }
+    if (this.props.onComplated){
+      this.props.onComplated(this.props.bundleConfig);
     }
+    // try {
+    //   if (!this.props.history.replace(this.props.path)) {
+    //     this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
+    //     this.showBack();
+    //   }
+    // } catch (err) {
+    //   console.warn(this.props.t('GotoFailed'), err);
+    //   if (this.state.taskId === taskId) {
+    //     this.setState({animating: false, code: 'ModuleRouteNotRegisterd'});
+    //     this.showBack();
+    //   }
+    // }
   }
 
   loadBundle(bundleConfig, taskId) {
@@ -76,16 +83,7 @@ export default class ModuleLoading extends React.Component {
   }
 
   prepare(props) {
-    const name = Router.getBundle(props.location.pathname);
-    if (!name || Bundle.hasLoad(name)) {
-      props.history.replace('/404');
-      return;
-    }
-    const bundleConfig = Bundle.getBundle(name);
-    if (!bundleConfig) {
-      props.history.replace('/404');
-      return;
-    }
+    const bundleConfig = props.bundleConfig;
     const taskId = this.state.taskId + 1;
     this.setState({animating: true, messageErr: null, code: 'Loading', taskId});
     this.loadBundle(bundleConfig, taskId).then(() => {

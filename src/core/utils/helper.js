@@ -1,4 +1,5 @@
 import assert from 'assert';
+import {Platform} from 'react-native';
 import ServerStore from '../stores/Server';
 import UserStore from '../stores/User';
 import storage from './LocalStore';
@@ -13,6 +14,46 @@ export const tx = i18n.tx;
 export const translate = i18n.translate;
 export const connectStyle = theme.connectStyle;
 export const connectStore = Store.connectStore;
+
+// ******************* mobx ********************
+
+export const observer = Platform.OS === 'web'
+  ? require('mobx-react').observer
+  : require('mobx-react/native').observer;
+
+// ******************* router ******************************
+
+let RouterInternal,
+  RouteInternal,
+  SwitchInternal;
+switch (Platform.OS) {
+  case 'android':
+  case 'ios':
+  case 'windows':
+  case 'macos':
+    {
+      const NativeRouter = require('react-router-native');
+      RouterInternal = NativeRouter.NativeRouter;
+      RouteInternal = NativeRouter.Route;
+      SwitchInternal = NativeRouter.Switch;
+      break;
+    }
+  case 'web':
+    {
+      const BrowserRouter = require('react-router-dom');
+      RouterInternal = BrowserRouter.BrowserRouter;
+      RouteInternal = BrowserRouter.Route;
+      SwitchInternal = BrowserRouter.Switch;
+      break;
+    }
+  default:
+    console.error(tx('不支持的路由平台'), Platform.OS);
+    break;
+}
+
+export const Router = RouterInternal;
+export const Route = RouteInternal;
+export const Switch = SwitchInternal;
 
 // ********************** fetch utils ******************************
 

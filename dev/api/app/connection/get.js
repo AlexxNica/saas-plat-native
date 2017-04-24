@@ -1,13 +1,14 @@
 var fs = require('fs');
 var path = require('path');
 
-exports.default = function () {
+exports.default = function() {
 
   var json2 = {
     bundleServer: 'http://localhost:8202/api/v1/bundle/file',
+    routes: [],
     bundles: []
   };
-  var root = path.join(__dirname,  '../../../../src/platform');
+  var root = path.join(__dirname, '../../../../src/platform');
   var files = fs.readdirSync(root);
   for (var f in files) {
     var filename = path.join(root, files[f], 'package.json');
@@ -27,11 +28,16 @@ exports.default = function () {
         preload: json3.spconfig.preload,
         dependencies: json3.spconfig.dependencies
       };
-        json2.bundles.push(packageconfig);
+      json2.bundles.push(packageconfig);
     }
-
   }
 
+  var routefilename = path.join(__dirname, 'routes.json');
+  if (fs.existsSync(routefilename)) {
+    var routefile = fs.readFileSync(routefilename);
+    var json4 = JSON.parse(routefile);
+    json2.routes = json4;
+  }
 
- return json2;
+  return json2;
 }

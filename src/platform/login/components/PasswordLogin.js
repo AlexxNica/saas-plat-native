@@ -57,7 +57,7 @@ export default class PasswordLogin extends React.Component {
       password: this.state.password
     }).then(() => {
       this.setState({ loginState: 'success' });
-      login();
+      this.props.history.replace('/portal');
     }).catch((error) => {
       console.warn(error);
       this.showLoginMessage(error);

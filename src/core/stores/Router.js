@@ -1,23 +1,25 @@
 import assert from 'assert';
-import {observable, action, computed} from 'mobx';
-import {registerStore} from '../core/Store';
+import { observable, action } from 'mobx';
+import { registerStore } from '../core/Store';
 import Router from '../core/Router';
-import {tx} from '../utils/internal';
+import { tx } from '../utils/internal';
 
 @registerStore('routerStore')
 export default class RouterStore {
-  @observable currentBundle = null;
-  @observable currentRoute = null;
   @observable bundleRoutes = new Map(); // {path:[{ns,scope,name,route:[{path,component,...}],handler}]}
 
   getRoutes(path = '/') {
     let routes = [];
     (this.bundleRoutes.get(path) || []).forEach(item => {
+      let scope = item.scope || '';
+      if (scope.endsWith('/')) {
+        scope = scope.substr(0, scope.length - 1);
+      }
       routes = routes.concat((item.route).map(p => ({
         ...p,
-        path: (item.scope || '') + (p.path.startsWith('/')
-          ? p.path
-          : `/${p.path}`)
+        path: scope + (p.path.startsWith('/') ?
+          p.path :
+          `/${p.path}`)
       })));
     });
     return routes;
@@ -26,7 +28,8 @@ export default class RouterStore {
   @action removeRoute(ns, name) {
     assert(ns);
     this.bundleRoutes.forEach((items, path) => {
-      const removes = items.filter(item => item.ns === ns && (!name || name === item.name));
+      const removes = items.filter(item => item.ns === ns && (!name ||
+        name === item.name));
       for (const item of removes) {
         items.splice(items.indexOf(item), 1);
         console.log(tx('RouterRemoved'), path, ns, name);
@@ -42,8 +45,7 @@ export default class RouterStore {
   @action addRoute(path, ns, name, route, handler) {
     if (typeof path === 'object') {
       const obj = path;
-      for (const {path, ns, name, route, handler}
-      of obj) {
+      for (const { path, ns, name, route, handler } of obj) {
         this.addRouteItem(path, ns, name, route, handler);
       }
     } else {
@@ -64,16 +66,8 @@ export default class RouterStore {
       //items = [];
       this.bundleRoutes.set(path, items);
     }
-    items.push({ns, scope : Router.getPath(ns), name, route, handler});
+    items.push({ ns, scope: Router.getPath(ns), name, route, handler });
     console.log(tx('注册路由'), path, ns, name);
-  }
-
-  @action entryBundle(bundle) {
-    this.currentBundle = bundle;
-  }
-
-  @action entryRoute(route) {
-    this.currentRoute = route;
   }
 
   static getStore() {

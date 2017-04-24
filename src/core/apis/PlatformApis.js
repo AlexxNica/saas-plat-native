@@ -43,6 +43,10 @@ export function loginPlatUser(encUsername, passwordHash) {
   return fetchJson({ url: `${config.platform.account}?name=${encUsername}&passwordHash=${passwordHash}` });
 }
 
+export function loginPlatUserToken(token) {
+  return fetchJson({ url: `${config.platform.token}?token=${token}` });
+}
+
 export function findServer(id) {
   return fetchJson({ url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${screen}` });
 }

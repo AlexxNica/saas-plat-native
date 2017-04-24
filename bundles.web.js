@@ -18,10 +18,21 @@ function registerFont(fontfile){
   document.head.appendChild(style);
 }
 
+spdefine('nprogress', function (global, __require, module, exports) {
+  module.exports = require('nprogress');
+  module.exports.version = '0.2.0';
+});
+
+spdefine('query-string', function (global, __require, module, exports) {
+  module.exports = require('query-string');
+  module.exports.version = '4.3.4';
+});
+
 spdefine('@shoutem/theme', function (global, __require, module, exports) {
   module.exports = require('@shoutem/theme');
   module.exports.version = '0.8.10';
 });
+
 spdefine('assert', function (global, __require, module, exports) {
   module.exports = require('assert');
   module.exports.version = '1.4.1';

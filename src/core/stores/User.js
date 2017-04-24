@@ -37,20 +37,33 @@ export default class UserStore {
     this.user = null;
   }
 
-  @action login({ username, password }) {
+  @action login({ username, password, token }) {
     console.log(tx('LoginStart'));
     statistics.log({ how: 'login' });
     return new Promise(async(resolve, reject) => {
-      var encUsername = encodeURIComponent(username) || '';
-      var passwordHash = sha1(password).toString();
-      try {
-        const user = await apis.loginPlatUser(encUsername, passwordHash);
-        this.changeUser(user);
-        console.log(tx('LoginSuccess'));
-        resolve(user);
-      } catch (err) {
-        console.log(tx('LoginFailed'));
-        reject(err);
+      if (token) {
+        statistics.log({ how: 'sso' });
+        try {
+          const user = await apis.loginPlatUserToken(token);
+          this.changeUser(user);
+          console.log(tx('LoginSuccess'));
+          resolve(user);
+        } catch (err) {
+          console.log(tx('LoginFailed'));
+          reject(err);
+        }
+      } else {
+        var encUsername = encodeURIComponent(username) || '';
+        var passwordHash = sha1(password).toString();
+        try {
+          const user = await apis.loginPlatUser(encUsername, passwordHash);
+          this.changeUser(user);
+          console.log(tx('LoginSuccess'));
+          resolve(user);
+        } catch (err) {
+          console.log(tx('LoginFailed'));
+          reject(err);
+        }
       }
     });
   }

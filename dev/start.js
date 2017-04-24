@@ -36,6 +36,11 @@ if (args.indexOf('--web') > -1) {
   //
   // app.use('/api', proxy);
 
+  app.get('/usr/account/sso/login', function(req, res) {
+    res.redirect(req.query.redirect+'?token=aaaaaaaaaaaaaaaaaaaaaaaa');
+    res.end();
+  });
+
   app.get('/favicon.ico', function(req, res) {
     res.write(fs.readFileSync(__dirname + '/../web/www/favicon.ico'));
     res.end();
@@ -90,7 +95,7 @@ app.get('/assets/*', function(req, res) {
   res.end();
 });
 
-app.get('/api/v1/*', function(request, response) {
+function api(request, response) {
   var pathname = url.parse(request.url).pathname;
   var realPath = path.join(__dirname, 'api', pathname.substr('/api/v1'.length), request.method.toLocaleLowerCase() + '.js');
   console.log(realPath);
@@ -128,7 +133,12 @@ app.get('/api/v1/*', function(request, response) {
       }
     }
   });
-});
+}
+
+app.get('/api/v1/*', api);
+app.post('/api/v1/*', api);
+app.delete('/api/v1/*', api);
+app.put('/api/v1/*', api);
 
 if (args.indexOf('--web') > -1) {
   app.get('/*', function(req, res) {

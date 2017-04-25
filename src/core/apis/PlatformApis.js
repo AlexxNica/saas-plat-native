@@ -44,7 +44,7 @@ export function loginPlatUser(encUsername, passwordHash) {
 }
 
 export function loginPlatUserToken(token) {
-  return fetchJson({ url: `${config.platform.token}?token=${token}` });
+  return fetchJson({ url: `${config.platform.account}?token=${token}` });
 }
 
 export function findServer(id) {

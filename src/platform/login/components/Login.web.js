@@ -10,7 +10,7 @@ export default class Login extends React.Component {
   state = {}
 
   componentDidMount() {
-    this.props.userStore.login(queryString.parse(location.search).token).then(
+    this.props.userStore.login({token:queryString.parse(location.search).token}).then(
       () => {
         this.props.history.replace('/portal');
       }).catch((error) => {

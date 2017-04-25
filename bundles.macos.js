@@ -52,6 +52,10 @@ spdefine('react', function (global, require, module, exports) {
   module.exports = require('react');
   module.exports.version = '15.4.2';
 });
+spdefine('prop-types', function (global, __require, module, exports) {
+  module.exports = require('prop-types');
+  module.exports.version = '15.5.2';
+});
 spdefine('react-i18next', function (global, require, module, exports) {
   module.exports = require('react-i18next');
   module.exports.version = '2.2.0';

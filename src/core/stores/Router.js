@@ -2,7 +2,7 @@ import assert from 'assert';
 import { observable, action } from 'mobx';
 import { registerStore } from '../core/Store';
 import Router from '../core/Router';
-import { tx } from '../utils/internal';
+import { tx, trimEnd, fixStart } from '../utils/internal';
 
 @registerStore('routerStore')
 export default class RouterStore {
@@ -11,15 +11,11 @@ export default class RouterStore {
   getRoutes(path = '/') {
     let routes = [];
     (this.bundleRoutes.get(path) || []).forEach(item => {
-      let scope = item.scope || '';
-      if (scope.endsWith('/')) {
-        scope = scope.substr(0, scope.length - 1);
-      }
       routes = routes.concat((item.route).map(p => ({
         ...p,
-        path: scope + (p.path.startsWith('/') ?
-          p.path :
-          `/${p.path}`)
+        ns: item.ns,
+        //version: item.version,
+        path: item.parent + trimEnd(fixStart(p.path, '/'), '/')
       })));
     });
     return routes;
@@ -32,14 +28,14 @@ export default class RouterStore {
         name === item.name));
       for (const item of removes) {
         items.splice(items.indexOf(item), 1);
-        console.log(tx('RouterRemoved'), path, ns, name);
+        console.log(tx('路由已被移除'), path, ns, name);
       }
     });
   }
 
   @action clearRoutes() {
     this.bundleRoutes.clear();
-    console.log(tx('ClearAllRouter'));
+    console.log(tx('移除所有路由注册'));
   }
 
   @action addRoute(path, ns, name, route, handler) {
@@ -66,7 +62,7 @@ export default class RouterStore {
       //items = [];
       this.bundleRoutes.set(path, items);
     }
-    items.push({ ns, scope: Router.getPath(ns), name, route, handler });
+    items.push({ ns, parent: trimEnd(Router.getPath(ns) || '', '/'), name, route, handler });
     console.log(tx('注册路由'), path, ns, name);
   }
 

@@ -51,11 +51,8 @@ export default class PlatformLoading extends React.Component {
       // console.log(this.props.t('system version:'+System.getVersion());
       // 如果没有看过介绍页显示，否着直接进入登录页
       try {
-        (this.props.systemStore.config.version !== appVersion &&
-          !global.devOptions.debugMode) ?
-        this.props.history.replace('/appintro'):
-          this.props.location.pathname === '/' && this.props.history.replace(
-            '/login')
+        (this.props.systemStore.config.version === appVersion || global.devOptions.debugMode)
+          && this.props.location.pathname === '/' && this.props.history.replace('/login')
       } catch (err) {
         debugger;
         console.warn(err);

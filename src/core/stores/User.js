@@ -38,7 +38,7 @@ export default class UserStore {
   }
 
   @action login({ username, password, token }) {
-    console.log(tx('LoginStart'));
+    console.log(tx('开始登录'));
     statistics.log({ how: 'login' });
     return new Promise(async(resolve, reject) => {
       if (token) {
@@ -46,10 +46,10 @@ export default class UserStore {
         try {
           const user = await apis.loginPlatUserToken(token);
           this.changeUser(user);
-          console.log(tx('LoginSuccess'));
+          console.log(tx('登录完成'));
           resolve(user);
         } catch (err) {
-          console.log(tx('LoginFailed'));
+          console.log(tx('登录失败'));
           reject(err);
         }
       } else {
@@ -58,10 +58,10 @@ export default class UserStore {
         try {
           const user = await apis.loginPlatUser(encUsername, passwordHash);
           this.changeUser(user);
-          console.log(tx('LoginSuccess'));
+          console.log(tx('登录完成'));
           resolve(user);
         } catch (err) {
-          console.log(tx('LoginFailed'));
+          console.log(tx('登录失败'));
           reject(err);
         }
       }
@@ -74,7 +74,7 @@ export default class UserStore {
     assert(user.name, '用户不存在');
     assert(user.token, '用户token不存在');
 
-    console.log(tx('ChangeUser'));
+    console.log(tx('切换用户'));
     // 保持当前用户
     this.loginState = this.user = UserModel.fromJS(this, user);
 
@@ -140,7 +140,7 @@ export default class UserStore {
     let me = this;
     return new Promise(function(resolve, reject) {
       localStore.load({ key: 'historyList' }).then(result => {
-        console.log(tx('HistroyListLoadSuccess'));
+        console.log(tx('加载登录历史记录完成'));
         if (autoLoad) {
           me.historyList.clear();
           (result.items || []).forEach(s => me.historyList.add(
@@ -150,7 +150,7 @@ export default class UserStore {
       }).catch(err => {
         if (err && err.name != 'NotFoundError' && err.name !=
           'ExpiredError') {
-          console.log(tx('HistroyListLoadFailed'));
+          console.log(tx('加载登录历史记录失败'));
           console.warn(err);
           resolve();
         } else {

@@ -1,15 +1,17 @@
 import React from 'react';
-import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
-import {autobind} from 'core-decorators';
+import nprogress from 'nprogress';
+import { View, Text, StatusBar, TouchableOpacity, Platform } from 'react-native';
+import { autobind } from 'core-decorators';
 import Spinner from './Spinner';
 import Bundle from '../core/Bundle';
-import Router from '../core/Router';
-import {connectStyle} from '../core/Theme';
-import {translate} from '../core/I18n';
+import { connectStyle } from '../core/Theme';
+import { translate } from '../core/I18n';
+import { connectStore } from '../core/Store';
 
 // 模块加载等待
 @translate('core.ModuleLoading')
 @connectStyle('core.ModuleLoading')
+@connectStore(['systemStore'])
 @autobind
 export default class ModuleLoading extends React.Component {
 
@@ -26,8 +28,10 @@ export default class ModuleLoading extends React.Component {
     this.prepare(this.props);
   }
 
-  componentWillReceiveProps(nextProps){
-    this.prepare(nextProps);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.bundles != this.props.bundles) {
+      this.prepare(nextProps);
+    }
   }
 
   onPressFeed() {
@@ -42,9 +46,12 @@ export default class ModuleLoading extends React.Component {
   }
 
   finished(taskId) {
-    this.setState({animating: false, code: 'Success'});
-    if (this.props.onComplated){
-      this.props.onComplated(this.props.bundleConfig);
+    this.setState({ animating: false, code: 'Success' });
+    if (this.props.onComplated) {
+      this.props.onComplated(this.props.bundles);
+    }
+    if (Platform.OS === 'web') {
+      nprogress.done();
     }
     // try {
     //   if (!this.props.history.replace(this.props.path)) {
@@ -60,16 +67,23 @@ export default class ModuleLoading extends React.Component {
     // }
   }
 
-  loadBundle(bundleConfig, taskId) {
+  loadBundle(taskId) {
+    const bundles = this.props.bundles;
+    const server = this.props.systemStore.config.platform.bundle;
     return new Promise((resolve, reject) => {
-      console.debug(this.props.t('开始加载包...'));
-      Bundle.load(bundleConfig.bundles, bundleConfig.server).then((bundles) => {
-        console.debug(this.props.t('包加载完成'));
+      console.log(this.props.t('开始加载包...'));
+      Bundle.load(bundles, server).then((
+        bundles) => {
+        console.log(this.props.t('包加载完成'));
         resolve(bundles);
       }).catch((err) => {
         console.warn(this.props.t('包加载失败'), err);
         if (this.state.taskId === taskId) {
-          this.setState({animating: false, code: 'Failed', messageErr: err});
+          this.setState({
+            animating: false,
+            code: 'Failed',
+            messageErr: err
+          });
           this.showBack();
         }
       });
@@ -83,15 +97,23 @@ export default class ModuleLoading extends React.Component {
   }
 
   prepare(props) {
-    const bundleConfig = props.bundleConfig;
+    if (Platform.OS === 'web') {
+      nprogress.start();
+    }
     const taskId = this.state.taskId + 1;
-    this.setState({animating: true, messageErr: null, code: 'Loading', taskId});
-    this.loadBundle(bundleConfig, taskId).then(() => {
+    this.setState({
+      animating: true,
+      messageErr: null,
+      code: 'Loading',
+      taskId
+    });
+    this.loadBundle(taskId).then(() => {
       // 如果模块配置了初始化方法，开始调用 支持promise
       if (this.props.initHandler && this.props.initHandler.length > 0) {
-        this.handleInit(this.props.initHandler, this.props.module.name).then(() => {
-          this.finished(taskId);
-        });
+        this.handleInit(this.props.initHandler, this.props.module.name)
+          .then(() => {
+            this.finished(taskId);
+          });
       } else {
         this.finished(taskId);
       }
@@ -121,7 +143,9 @@ export default class ModuleLoading extends React.Component {
     }
     return (
       <View style={this.props.style.container}>
-        <StatusBar hidden={false} barStyle='default'/>
+      {(Platform.OS === 'android' || Platform.OS === 'ios')
+        ? <StatusBar hidden={false} barStyle='default'/>
+        : null}
         <Spinner visible={this.state.animating}/>
         <TouchableOpacity onPress={this.onPressFeed}>
           <View>

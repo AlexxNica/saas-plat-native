@@ -2,17 +2,19 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { autobind } from 'core-decorators';
 import nprogress from 'nprogress';
+import matchPath from 'react-router/matchPath';
 import Bundle from '../core/Bundle';
 import { connectStore } from '../core/Store';
-import Router from '../core/Router';
 import { Route, Switch, observer } from '../utils/helper';
+import { tx } from '../utils/internal';
 
 import PlatformLoading from './PlatformLoading';
 import ModuleLoading from './ModuleLoading';
 import MessageView from './MessageView';
 import AppIntro from './AppIntro';
+import {connectAuth} from './AuthedRoute';
 
-@connectStore(['routerStore', 'userStore'])
+@connectStore(['routerStore'])
 @observer
 export default class AppRouter extends React.Component {
   constructor(props) {
@@ -24,7 +26,7 @@ export default class AppRouter extends React.Component {
 
   @autobind
   loadView(location, action) {
-    // debugger;
+    console.log(tx('打开页面'), location.pathname);
     if (Platform.OS === 'web') {
       nprogress.done();
     }
@@ -32,27 +34,26 @@ export default class AppRouter extends React.Component {
 
   @autobind
   loadModule(location, action) {
-    debugger;
-    const name = Router.getBundle(location.pathname);
-    if (!name || Bundle.hasLoad(name)) {
-      return true;
-    }
-    const bundleConfig = Bundle.getBundle(name);
-    if (!bundleConfig) {
-      return true;
-    }
-    // 验证权限
-    if (!this.checkAuth(this.props)) {
-      return false;
-    }
     if (Platform.OS === 'web') {
       nprogress.start();
-    } else {
-      this.setState({
-        bundleConfig,
-        moduleLoading: true
-      });
     }
+    const route = this.props.routerStore.getRoutes('/').find(item =>
+      matchPath(location.pathname, item));
+    if (!route) {
+      // 不存在的路径需要返回404
+      return true;
+    }
+    if (Bundle.hasLoaded(route.ns)) {
+      return true;
+    }
+    const bundle = Bundle.getBundle(route.ns);
+    if (!bundle) {
+      return true;
+    }
+    this.setState({
+      bundles: [bundle],
+      moduleLoading: true
+    });
     return false;
   }
 
@@ -61,38 +62,14 @@ export default class AppRouter extends React.Component {
     this.setState({
       platformSuccess: true
     });
-    this.checkAuth(this.props);
   }
 
   @autobind
-  handleModuleLoaded(bundleConfig) {
-    if (this.state.bundleConfig === bundleConfig) {
-      if (Platform.OS === 'web') {
-        nprogress.done();
-      } else {
-        this.setState({
-          moduleLoading: false
-        });
-      }
-    }
-  }
-
-  @autobind
-  checkAuth({ location }) {
-    if (location.pathname != '/login' && location.pathname != '/sso') {
-      if (!this.props.userStore.user) {
-        this.props.history.push('/login');
-        return false;
-      }
-    }
-    // 平台公共页面不验证
-    return true;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    debugger
-    if (this.state.platformSuccess) {
-      this.checkAuth(nextProps);
+  handleModuleLoaded(bundles) {
+    if (this.state.bundles === bundles) {
+      this.setState({
+        moduleLoading: false
+      });
     }
   }
 
@@ -100,12 +77,16 @@ export default class AppRouter extends React.Component {
     const { history, location } = this.props;
     const props = { history, location };
     if (this.state.moduleLoading) {
-      return <ModuleLoading {...props} onComplated={this.handleModuleLoaded} bundleConfig={this.state.bundleConfig}/>;
+      return <ModuleLoading {...props} onComplated={this.handleModuleLoaded} bundles={this.state.bundles}/>;
     } else if (this.state.platformSuccess) {
       return (
         <Switch>
-          <Route path='/appintro' component={AppIntro}/>
-          {(this.props.routerStore.getRoutes('/')).map((item) => <Route {...item} key={item.path.replace(/\//g, '_')}/>)}
+          <Route exact path='/' component={AppIntro}/>
+          {this.props.routerStore.getRoutes('/').map((item) => {
+            // 如果没有明确标示不验证权限，都必须登录后才能访问
+            const AuthRoute = item.auth !== false ? connectAuth(item.roles)(Route) : Route;
+            return <AuthRoute {...item} key={item.path.replace(/\//g, '_')} />;
+          })}
           <Route component={MessageView} code={404}/>
         </Switch>
       );

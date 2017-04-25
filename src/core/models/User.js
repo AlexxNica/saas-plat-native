@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {observable, computed} from 'mobx';
+import { observable, computed } from 'mobx';
 import Server from './Server';
 
 export default class UserModel {
@@ -31,7 +31,11 @@ export default class UserModel {
   }
 
   isInRole(...roles) {
-    return roles.filter(role => this.roles.indexOf(role) === -1).length === 0;
+    if (arguments.length === 1 && Array.isArray(arguments[0])) {
+      roles = arguments[0];
+    }
+    return roles.filter(role => this.roles.indexOf(role) === -1).length ===
+      0;
   }
 
   hasServerAuth(authCode, serverIn) {
@@ -63,6 +67,8 @@ export default class UserModel {
   }
 
   static fromJS(store, object) {
-    return new UserModel(store, object.id, object.name, object.token, object.roles, (object.servers || []).map(s => Server.fromJS(store, s)), object.profiles, object.currentServer);
+    return new UserModel(store, object.id, object.name, object.token, object.roles,
+      (object.servers || []).map(s => Server.fromJS(store, s)), object.profiles,
+      object.currentServer);
   }
 }

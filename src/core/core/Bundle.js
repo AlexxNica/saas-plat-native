@@ -267,7 +267,7 @@ class Bundle {
     methods.forEach(({ns, name, handler}) => this.addInitMethod(ns, name, handler));
   }
 
-  hasLoaded({name, version}) {
+  hasLoaded(name, version) {
     return this.loaded[name] || false;
   }
 

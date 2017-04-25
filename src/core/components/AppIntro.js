@@ -1,50 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, StatusBar} from 'react-native';
+import {Text, View, Image, StatusBar} from 'react-native';
 import assert from 'assert';
 import AppIntro from 'react-native-app-intro';
 import {autobind} from 'core-decorators';
 import {connectStore} from '../core/Store';
-
-// 介绍页不能被主体化
-const styles = StyleSheet.create({
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-    padding: 15
-  },
-  header: {
-    flex: 0.5,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  pic: {
-    width: 75 * 2,
-    height: 63 * 2
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold'
-  },
-  info: {
-    flex: 0.5,
-    alignItems: 'center',
-    padding: 40
-  },
-  title: {
-    color: '#fff',
-    fontSize: 30,
-    paddingBottom: 20
-  },
-  description: {
-    color: '#fff',
-    fontSize: 20
-  }
-});
+import { connectStyle } from '../core/Theme';
 
 @connectStore(['systemStore'])
+@connectStyle('core.AppIntro')
 @autobind
 export default class AppIntroView extends Component {
   handleDone() {
@@ -59,12 +22,12 @@ export default class AppIntroView extends Component {
       <AppIntro onDoneBtnClick={this.handleDone} onSkipBtnClick={this.handleDone}>
         <View
           style={[
-          styles.slide, {
+          this.props.style.slide, {
             backgroundColor: '#fa931d'
           }
         ]}>
           <StatusBar barStyle="light-content"/>
-          <View style={styles.header}>
+          <View style={this.props.style.header}>
             <View>
               <Image
                 style={{
@@ -116,23 +79,23 @@ export default class AppIntroView extends Component {
                 source={require('../assets/1/c3.png')}/>
             </View>
           </View>
-          <View style={styles.info}>
+          <View style={this.props.style.info}>
             <View level={10}>
-              <Text style={styles.title}>管理云平台</Text>
+              <Text style={this.props.style.title}>管理云平台</Text>
             </View>
             <View level={15}>
-              <Text style={styles.description}>财务报表、生意往来随时掌控。</Text>
+              <Text style={this.props.style.description}>财务报表、生意往来随时掌控。</Text>
             </View>
           </View>
         </View>
         <View
           style={[
-          styles.slide, {
+          this.props.style.slide, {
             backgroundColor: '#a4b602'
           }
         ]}>
           <StatusBar barStyle="light-content"/>
-          <View style={styles.header}>
+          <View style={this.props.style.header}>
             <View>
               <Image
                 style={{
@@ -170,23 +133,23 @@ export default class AppIntroView extends Component {
                 source={require('../assets/2/3.png')}/>
             </View>
           </View>
-          <View style={styles.info}>
+          <View style={this.props.style.info}>
             <View level={10}>
-              <Text style={styles.title}>Title!</Text>
+              <Text style={this.props.style.title}>Title!</Text>
             </View>
             <View level={15}>
-              <Text style={styles.description}>description!</Text>
+              <Text style={this.props.style.description}>description!</Text>
             </View>
           </View>
         </View>
         <View
           style={[
-          styles.slide, {
+          this.props.style.slide, {
             backgroundColor: '#406E9F'
           }
         ]}>
           <StatusBar barStyle="light-content"/>
-          <View style={styles.header}>
+          <View style={this.props.style.header}>
             <View
               style={{
               position: 'absolute',
@@ -237,23 +200,23 @@ export default class AppIntroView extends Component {
                 source={require('../assets/3/2.png')}/>
             </View>
           </View>
-          <View style={styles.info}>
+          <View style={this.props.style.info}>
             <View level={10}>
-              <Text style={styles.title}>Title!</Text>
+              <Text style={this.props.style.title}>Title!</Text>
             </View>
             <View level={15}>
-              <Text style={styles.description}>description!</Text>
+              <Text style={this.props.style.description}>description!</Text>
             </View>
           </View>
         </View>
         <View
           style={[
-          styles.slide, {
+          this.props.style.slide, {
             backgroundColor: '#DB4302'
           }
         ]}>
           <StatusBar barStyle="light-content"/>
-          <View style={styles.header}>
+          <View style={this.props.style.header}>
             <View
               style={{
               position: 'absolute',
@@ -291,12 +254,12 @@ export default class AppIntroView extends Component {
                 source={require('../assets/4/3.png')}/>
             </View>
           </View>
-          <View style={styles.info}>
+          <View style={this.props.style.info}>
             <View level={10}>
-              <Text style={styles.title}>Title!</Text>
+              <Text style={this.props.style.title}>Title!</Text>
             </View>
             <View level={15}>
-              <Text style={styles.description}>description!</Text>
+              <Text style={this.props.style.description}>description!</Text>
             </View>
           </View>
         </View>

@@ -1,20 +1,19 @@
 import React from 'react';
-import queryString  from 'query-string';
+import queryString from 'query-string';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { connectStore, translate, connectStyle } from 'saasplat-native';
 
-@translate('core.Login')
-@connectStyle('core.Login')
+@translate('saas-plat-login.Login')
+@connectStyle('saas-plat-login.Login')
 @connectStore('userStore')
 export default class Login extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
+  state = {}
+
   componentDidMount() {
-    this.props.userStore.login(queryString.parse(location.search).token).then(() => {
-      this.props.history.replace('/portal');
-    }).catch((error) => {
+    this.props.userStore.login(queryString.parse(location.search).token).then(
+      () => {
+        this.props.history.replace('/portal');
+      }).catch((error) => {
       console.warn(error);
       this.setState({
         animating: false,
@@ -22,6 +21,7 @@ export default class Login extends React.Component {
       })
     });
   }
+
   render() {
     return (
       <View style={this.props.style.container}>

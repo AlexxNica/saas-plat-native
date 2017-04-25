@@ -8,8 +8,8 @@ const url = __DEV__ ?
 
 Registry.registerRootRoute(() => [{
   path: '/login',
+  auth: false,
   render: ({ history, location }) => {
-    debugger
     let redirect, changeAccountTxt = '';
     if (__DEV__) {
       redirect = 'http://localhost:8202/sso'
@@ -24,23 +24,27 @@ Registry.registerRootRoute(() => [{
   }
 }, {
   path: '/logout',
+  auth: false,
   render: () => {
     window.location.href = url + '/account/sso/logout';
     return null;
   }
 }, {
   path: '/register',
+  auth: false,
   render: () => {
     window.location.href = url + '/account/register';
     return null;
   }
 }, {
   path: '/getForgetPassword',
+  auth: false,
   render: () => {
     window.location.href = url + '/account/forgotpassword';
     return null;
   }
 }, {
   path: '/sso',
+  auth: false,
   component: Login
 }]);

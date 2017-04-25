@@ -6,7 +6,7 @@ export default class AppIntroView extends Component {
     return (
       <View>
         <Text>
-          welcome to web platform
+          welcome to saas-plat.com
         </Text>
       </View>
     );

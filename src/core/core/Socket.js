@@ -5,7 +5,7 @@ import {tx} from '../utils/internal';
 
 const socket = io(config.platform.address);
 
-const chatHandlers = [];
+let chatHandlers = [];
 
 socket.on('connect', function() {
   console.log(tx('即时通信服务已连接'));

@@ -11,7 +11,7 @@ import {Route, Actions} from './core/Router';
 import * as Theme from './core/Theme';
 import I18n from './core/I18n';
 import * as Store from './core/Store';
-import Socket from './core/Socket';
+import * as Socket from './core/Socket';
 
 // fx
 import CommandBus from './fx/CommandBus';

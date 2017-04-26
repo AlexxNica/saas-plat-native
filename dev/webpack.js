@@ -19,7 +19,7 @@ colors.setTheme({
   error: 'red'
 });
 
-module.exports = function() {
+module.exports.createBuilder = function() {
 
   var watcher;
   var platform = 'ios';
@@ -87,7 +87,7 @@ module.exports = function() {
       list = list.concat(config.bundles);
       var entry = getEntry(list);
       // console.log(list);
-      
+
       console.log(entry);
 
       // returns a Compiler instance

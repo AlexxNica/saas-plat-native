@@ -1,35 +1,65 @@
 var fs = require('fs');
 var path = require('path');
-var webpack = require('./webpack')();
+var webpack = require('./webpack');
 
 var needrepack;
 var isrepack;
 
 var arguments = process.argv.splice(2);
 
-if (arguments.indexOf('--android') > -1 ) {
-  webpack.setPlatform('android');
+var builders = [];
+if (arguments.indexOf('--android') > -1) {
+  var builder = webpack.createBuilder();
+  builder.setPlatform('android');
+  builders.push(builder);
 }
 if (arguments.indexOf('--ios') > -1) {
-  webpack.setPlatform('ios');
+  var builder = webpack.createBuilder();
+  builder.setPlatform('ios');
+  builders.push(builder);
 }
 if (arguments.indexOf('--web') > -1) {
-  webpack.setPlatform('web');
+  var builder = webpack.createBuilder();
+  builder.setPlatform('web');
+  builders.push(builder);
 }
 if (arguments.indexOf('--windows') > -1) {
-  webpack.setPlatform('windows');
+  var builder = webpack.createBuilder();
+  builder.setPlatform('windows');
+  builders.push(builder);
 }
 if (arguments.indexOf('--macos') > -1) {
-  webpack.setPlatform('macos');
+  var builder = webpack.createBuilder();
+  builder.setPlatform('macos');
+  builder.run();
+}
+
+function build() {
+  for(var i in builders){
+    builders[i].run();
+  }
+}
+
+var needCloses;
+function closebuild(cb){
+  needCloses = builders.length;
+  for(var i in builders){
+    builders[i].close(function(){
+      needCloses--;
+      if (needCloses<=0){
+        cb();
+      }
+    });
+  }
 }
 
 function repackTimer() {
   if (needrepack && !isrepack) {
     needrepack = false;
     isrepack = true;
-    webpack.close(function() {
+    closebuild(function() {
       if (!needrepack) {
-        webpack.run();
+        build();
       }
       isrepack = false;
     });
@@ -65,11 +95,12 @@ function watchdir(dir, watchchild) {
     }
   });
 }
+
 if (arguments.indexOf('--watch') > -1) {
   repackTimer();
+} else {
+  build();
 }
-
-webpack.run();
 
 // 有新bundle重新webpack打包watch var dirs = fs.readdirSync(config.BUNDLE_SRC); for
 // (var i in dirs) {   watchdir(path.join(config.BUNDLE_SRC, dirs[i]), true); }

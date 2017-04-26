@@ -7,6 +7,7 @@
     "startweb": "node dev/start.js --web",
     "build": "node dev/build.js --android --ios",
     "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
+    "buildsrc": "node --harmony dev/buildSrc.js --ios --android --web",
     "buildiossrc": "node --harmony dev/buildSrc.js --ios --watch",
     "buildandroidsrc": "node --harmony dev/buildSrc.js --android  --watch",
     "buildwebsrc": "node --harmony dev/buildSrc.js --web --watch",

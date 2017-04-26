@@ -12,7 +12,6 @@ import {
 import { autobind } from 'core-decorators';
 import AwesomeButton from 'react-native-awesome-button';
 import { connectStore, connectStyle, translate, Actions } from 'saasplat-native';
-import { login } from '../utils/login';
 
 @translate('saas-plat-login.PasswordLogin')
 @connectStyle('saas-plat-login.PasswordLogin')

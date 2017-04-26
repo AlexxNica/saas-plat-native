@@ -7,8 +7,30 @@ var root = path.dirname(__dirname);
 //var httpProxyMiddleware = require('http-proxy-middleware');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var args = process.argv.splice(2);
+
+io.on('connection', function(socket) {
+  console.log('socket connected ');
+  socket.on('message', function (data) {
+     console.log('received message ', data);
+  });
+  socket.on('disconnect', function () {
+      console.log('socket disconnected ');
+  });
+});
+
+io.of('/chat').on('connection', function(socket) {
+  console.log('chat socket connected ');
+  socket.on('message', function (data) {
+     console.log('received chat message ', data);
+  });
+  socket.on('disconnect', function () {
+      console.log('chat socket disconnected ');
+  });
+});
 
 if (args.indexOf('--web') > -1) {
   var config = require('../web/webpack.config.dev');

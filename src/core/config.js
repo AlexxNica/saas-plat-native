@@ -6,6 +6,7 @@ export default {
   version : '1.0.0',
   platform : {
     address: server,
+    chat: server + '/chat',
     connection: server + '/app/connection',
     bundle: server + '/bundle/file',
     map: server + '/bundle/map',

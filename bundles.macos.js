@@ -32,6 +32,10 @@ spdefine('react-router-Native', function (global, __require, module, exports) {
   module.exports = require('react-router-Native');
   module.exports.version = '4.1.1';
 });
+spdefine('socket.io-client', function (global, require, module, exports) {
+  module.exports = require('socket.io-client');
+  module.exports.version = '1.7.3';
+});
 spdefine('lodash', function (global, require, module, exports) {
   module.exports = require('lodash');
   module.exports.version = '4.17.4';

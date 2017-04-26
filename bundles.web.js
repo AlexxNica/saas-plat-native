@@ -102,8 +102,11 @@ spdefine('react-native-vector-icons/SimpleLineIcons', function (global, require,
 spdefine('react-native-vector-icons', function (global, require, module, exports) {
   module.exports = require('react-native-vector-icons');
   module.exports.version = '4.0.0';
+});socket.io-client
+spdefine('socket.io-client', function (global, require, module, exports) {
+  module.exports = require('socket.io-client');
+  module.exports.version = '1.7.3';
 });
-
 spdefine('immutable', function (global, __require, module, exports) {
   module.exports = require('immutable');
   module.exports.version = '3.8.1';

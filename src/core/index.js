@@ -11,6 +11,7 @@ import {Route, Actions} from './core/Router';
 import * as Theme from './core/Theme';
 import I18n from './core/I18n';
 import * as Store from './core/Store';
+import Socket from './core/Socket';
 
 // fx
 import CommandBus from './fx/CommandBus';
@@ -48,6 +49,7 @@ export default {
   Registry, // 注册模块
   Route, // 注册路由
   Actions, // 路由跳转
+  Socket,  // 即时通讯
 
   // fx
   CommandBus,

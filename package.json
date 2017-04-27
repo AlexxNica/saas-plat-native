@@ -59,7 +59,7 @@
     "react-native-vector-icons": "^4.0.0",
     "react-native-video": "^0.9.0",
     "react-native-web": "0.0.75",
-    "react-native-windows": "^0.40.0-rc.2",
+    "react-native-windows": "^0.43.0-rc.0",
     "react-native-zip-archive": "0.0.11",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",

@@ -12,6 +12,7 @@
     "buildandroidsrc": "node --harmony dev/buildSrc.js --android  --watch",
     "buildwebsrc": "node --harmony dev/buildSrc.js --web --watch",
     "storybook": "start-storybook -p 9001 -c web/.storybook",
+    "reset-cache": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",

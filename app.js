@@ -68,7 +68,7 @@ switch (Platform.OS) {
     break;
   case 'android':
   case 'ios':
-    lang = require('react-native-locale-detector');
+    lang = require('react-native-locale-detector').default;
     break;
   case 'windows':
     // todo
@@ -320,7 +320,7 @@ export default class extends React.Component {
 
   loadVersion(autoSync) {
     const me = this;
-    this.pushMessage(T('versionUploading'));
+    this.pushMessage(T('内部版本开始加载'));
     if (__DEV__ || global.devOptions.cacheDisable) {
       this.store.remove({ key: 'version' });
     }
@@ -367,7 +367,7 @@ export default class extends React.Component {
           };
         }
       }).catch(err => {
-        this.pushMessage(err);
+        this.pushMessage(T('开发者选项获取失败') + ', ' + (err.message || err));
       }).then(() => {
         if (global.devOptions.cacheDisable) {
           this.pushMessage(T('系统已经禁用缓存'));

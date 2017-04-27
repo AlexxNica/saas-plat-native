@@ -167,7 +167,6 @@ if (args.indexOf('--web') > -1) {
     res.write(md.fileSystem.readFileSync(__dirname + '/../web/www/index.html'));
     res.end();
   });
-
 }
 
 app.use(function(err, req, res, next) {

@@ -57,3 +57,5 @@ fastlane/screenshots
 /web/www/index.html
 
 /web/www/polyfill.min.js
+
+/windows/Saasplat/Saasplat.nuget.targets

@@ -138,8 +138,8 @@ spdefine('react-router', function (global, __require, module, exports) {
   module.exports = require('react-router');
   module.exports.version = '4.1.1';
 });
-spdefine('react-router-Native', function (global, __require, module, exports) {
-  module.exports = require('react-router-Native');
+spdefine('react-router-native', function (global, __require, module, exports) {
+  module.exports = require('react-router-native');
   module.exports.version = '4.1.1';
 });
 spdefine('react-native-storage', function (global, require, module, exports) {
@@ -197,10 +197,6 @@ spdefine('react-native-video', function (global, require, module, exports) {
 spdefine('react-native-zip-archive', function (global, require, module, exports) {
   module.exports = require('react-native-zip-archive');
   module.exports.version = '0.0.11';
-});
-spdefine('socket.io-client', function (global, require, module, exports) {
-  module.exports = require('socket.io-client');
-  module.exports.version = '1.7.3';
 });
 spdefine('slash', function (global, require, module, exports) {
   module.exports = require('slash');

@@ -115,10 +115,6 @@ spdefine('react-native', function (global, __require, module, exports) {
   module.exports = require('react-native-windows');
   module.exports.version = '0.43.0';
 });
-spdefine('socket.io-client', function (global, require, module, exports) {
-  module.exports = require('socket.io-client');
-  module.exports.version = '1.7.3';
-});
 spdefine('slash', function (global, require, module, exports) {
   module.exports = require('slash');
   module.exports.version = '1.0.0';

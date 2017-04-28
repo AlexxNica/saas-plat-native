@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node dev/start.js --android",
+    "start": "node dev/start.js --windows",
     "startweb": "node dev/start.js --web",
     "build": "node dev/build.js --android --ios --web --windows",
     "buildweb": "webpack --config web/webpack.config.js  --progress --colors",

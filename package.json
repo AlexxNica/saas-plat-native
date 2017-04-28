@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dev/start.js --android",
     "startweb": "node dev/start.js --web",
-    "build": "node dev/build.js --android --ios",
+    "build": "node dev/build.js --android --ios --web --windows",
     "buildweb": "webpack --config web/webpack.config.js  --progress --colors",
     "buildsrc": "node --harmony dev/buildSrc.js --ios --android --web",
     "buildiossrc": "node --harmony dev/buildSrc.js --ios --watch",

@@ -74,7 +74,7 @@ if (args.indexOf('--web') > -1) {
 
 }
 
-if (args.indexOf('--ios') > -1 || args.indexOf('--android') > -1 || args.indexOf('--windows') > -1) {
+if (args.indexOf('--ios') > -1 || args.indexOf('--android') > -1 || args.indexOf('--windows') > -1 || args.indexOf('--macos') > -1) {
   var nativecli = 'node ' + path.join(root, 'node_modules/react-native/local-cli/cli.js start');
   console.log(nativecli);
   var cli = exec(nativecli);

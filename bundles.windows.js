@@ -112,7 +112,7 @@ spdefine('react-native-zip-archive', function (global, require, module, exports)
   module.exports.version = '0.0.11';
 });
 spdefine('react-native', function (global, __require, module, exports) {
-  module.exports = require('react-native-windows');
+  module.exports = require('react-native');
   module.exports.version = '0.43.0';
 });
 spdefine('slash', function (global, require, module, exports) {

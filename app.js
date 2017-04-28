@@ -34,9 +34,11 @@ let deviceUUID;
 switch (Platform.OS) {
   case 'android':
   case 'ios':
+  case 'windows':
     const DeviceInfo = require('react-native-device-info');
-    deviceID = DeviceInfo.getDeviceId(); // iPhone7,2
+    deviceID = DeviceInfo.getDeviceId() || DeviceInfo.getSystemName()+DeviceInfo.getSystemVersion(); // iPhone7,2
     deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
+    lang = DeviceInfo.getDeviceLocale();
     break;
   case 'web':
     const browser = {};
@@ -51,32 +53,18 @@ switch (Platform.OS) {
       browser.name = 'unknown';
       browser.version = '';
     }
+    lang = navigator.language || navigator.browserLanguage;
     deviceID = browser.name + browser.version;
     deviceUUID = '$ip';
     break;
-  case 'windows':
-    // todo
   case 'macos':
     // todo
   default:
     console.error(T('不支持的平台设备'), Platform.OS);
 }
 
-switch (Platform.OS) {
-  case 'web':
-    lang = navigator.language || navigator.browserLanguage;
-    break;
-  case 'android':
-  case 'ios':
-    lang = require('react-native-locale-detector').default;
-    break;
-  case 'windows':
-    // todo
-  case 'macos':
-    // todo
-  default:
-    console.error(T('不支持的平台语言环境'), Platform.OS);
-}
+console.log(T('当前语言'), lang);
+console.log(T('当前设备'), deviceID);
 
 global.devOptions = {
   debugMode: false,
@@ -106,15 +94,6 @@ function invoke(script) {
     "try{__loadcode();}catch(err){global.lastGlobalError = err;}\n});";
   // chrome引擎new function比eval快一倍以上
   (new Function(scriptex))();
-  //eval(scriptex);
-
-  // spdefine('__app__', function(global, require, module,
-  // exports) {   try { const context = new vm.createContext({   options,
-  // devOptions,   require,  module,   exports,   __DEV__ }); const scriptExe =
-  // new vm.Script(script);  scriptExe.runInContext(context);   } catch (err) {
-  //  !devOptions.debugMode && console.log(err);     lastGlobalError =
-  // devOptions.debugMode       ? encodeURIComponent(err)       : T('内核程序执行失败');
-  // } });
 }
 
 // 加载平台组件
@@ -492,11 +471,10 @@ export default class extends React.Component {
     switch (Platform.OS) {
       case 'android':
       case 'ios':
+      case 'windows':
         return this.renderApp();
       case 'web':
         return this.renderWeb();
-      case 'windows':
-        // todo
       case 'macos':
         // todo
       default:

@@ -388,7 +388,7 @@ class Bundle {
         const devStr = __DEV__
           ? '&dev=true'
           : '';
-        const fetchUrl = `${bundleServer}?name=${itemConfig.name}${verStr}&platform=${Platform.OS}${devStr}`;
+        const fetchUrl = `${bundleServer}/${itemConfig.name}.${Platform.OS}-${verStr}.js`;
         console.log(`${tx('获取包')}'${itemConfig.name}'...`);
         fetch(fetchUrl).then((response) => {
           if (response.ok) {

@@ -146,7 +146,7 @@ export default class extends React.Component {
     }
     this.pushMessage(T('开始同步内核脚本...'));
     fetch(
-      `${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`
+      `${config.bundle}?${BASE_CORE}.${Platform.OS}-${id}.js`
     ).then((response) => {
       if (response.status === 200) {
         return response.text();
@@ -162,7 +162,7 @@ export default class extends React.Component {
     }).catch((error) => {
       if (global.devOptions.debugMode) {
         me.pushMessage(
-          `${config.bundle}?name=${BASE_CORE}&version=${id}&platform=${Platform.OS}&dev=${__DEV__}`
+          `${config.bundle}?${BASE_CORE}.${Platform.OS}-${id}.js`
         );
       }
       reject(error);

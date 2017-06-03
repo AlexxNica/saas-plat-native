@@ -20,7 +20,7 @@ function invoke(script) {
 
 class Bundle {
   installs = new Map(); // 全部安装项
-  loaded = {};  // 已经加载项
+  loaded = {}; // 已经加载项
   initMethods = [];
   preloads = {};
   dependencies = {
@@ -93,7 +93,10 @@ class Bundle {
     }
 
     for (const metadata of metadatas) {
-      this.installs.set(metadata.name, {...metadata, scope});
+      this.installs.set(metadata.name, {
+        ...metadata,
+        scope
+      });
     }
     this._build();
 
@@ -103,7 +106,7 @@ class Bundle {
     assert(scope);
     const deletes = [];
     this.installs.forEach((item, key) => {
-      if (item.scope === scope){
+      if (item.scope === scope) {
         deletes.push(key);
       }
     });
@@ -236,19 +239,13 @@ class Bundle {
           const store = item.Store();
           for (const aliasName in store) {
             let name;
-            if (store[aliasName].name !== '_default'){
+            if (store[aliasName].name !== '_default') {
               name = store[aliasName].name;
             }
-            if (!name){
+            if (!name) {
               name = aliasName;
             }
-            stores.push({
-              name: item.ns.concat(name).join('.'),
-              aliasName,
-              filter: item.filter,
-              getStoreHandler: item.getStoreHandler,
-              Class: store[aliasName]
-            });
+            stores.push({name: item.ns.concat(name).join('.'), aliasName, filter: item.filter, getStoreHandler: item.getStoreHandler, Class: store[aliasName]});
           }
           break;
         case Actions.REGISTER_ROUTE:
@@ -382,13 +379,10 @@ class Bundle {
       }
 
       function requestUrl(itemConfig) {
-        const verStr = itemConfig.version
-          ? `&version=${itemConfig.version}`
-          : '';
-        const devStr = __DEV__
-          ? '&dev=true'
-          : '';
-        const fetchUrl = `${bundleServer}/${itemConfig.name}.${Platform.OS}-${verStr}.js`;
+        // const devStr = __DEV__
+        //   ? '&dev=true'
+        //   : '';
+        const fetchUrl = `${bundleServer}?${itemConfig.name}.${Platform.OS}-${itemConfig.version}.js`;
         console.log(`${tx('获取包')}'${itemConfig.name}'...`);
         fetch(fetchUrl).then((response) => {
           if (response.ok) {

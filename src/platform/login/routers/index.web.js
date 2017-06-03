@@ -3,7 +3,7 @@ import { Registry } from 'saasplat-native';
 import Login from '../components/Login';
 
 const url = __DEV__ ?
-  'http://localhost:8202/usr' :
+  'http://localhost:8200/usr' :
   'http://usr.saas-plat.com'
 
 Registry.registerRootRoute(() => [{
@@ -12,7 +12,7 @@ Registry.registerRootRoute(() => [{
   render: ({ history, location }) => {
     let redirect, changeAccountTxt = '';
     if (__DEV__) {
-      redirect = 'http://localhost:8202/sso'
+      redirect = 'http://localhost:8200/sso'
     } else {
       redirect = 'http://app.saas-plat.com/sso'
     }

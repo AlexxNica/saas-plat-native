@@ -4,7 +4,7 @@ var path = require('path');
 exports.default = function() {
 
   var json2 = {
-    bundleServer: 'http://localhost:8202/api/v1/bundle/file',
+    bundleServer: 'http://localhost:8200/api/v1/bundle/file',
     routes: [],
     bundles: []
   };

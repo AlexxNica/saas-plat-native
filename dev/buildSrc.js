@@ -8,27 +8,27 @@ var isrepack;
 var arguments = process.argv.splice(2);
 
 var builders = [];
-if (arguments.indexOf('--android') > -1) {
+if (arguments.indexOf('--android') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('android');
   builders.push(builder);
 }
-if (arguments.indexOf('--ios') > -1) {
+if (arguments.indexOf('--ios') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('ios');
   builders.push(builder);
 }
-if (arguments.indexOf('--web') > -1) {
+if (arguments.indexOf('--web') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('web');
   builders.push(builder);
 }
-if (arguments.indexOf('--windows') > -1) {
+if (arguments.indexOf('--windows') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('windows');
   builders.push(builder);
 }
-if (arguments.indexOf('--macos') > -1) {
+if (arguments.indexOf('--macos') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('macos');
   builder.run();

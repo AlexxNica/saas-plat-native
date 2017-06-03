@@ -16,7 +16,7 @@ function getdeps(name, platform, version, dev, ext) {
   if (version == 'HEAD' || !version) {
     var ps = name.split('/');
     var filename = ps[ps.length - 1];
-    var p = [__dirname, 'bundles'];
+    var p = [process.cwd(), 'bundles'];
     var maxVer = [1,0,0];
     if (ps.length > 1) p = p.concat(ps.slice(0, ps.length - 1));
     //console.log(p);
@@ -33,7 +33,7 @@ function getdeps(name, platform, version, dev, ext) {
     //console.log(maxVer);
     version = maxVer.join('.');
   }
-  var file = path.join(__dirname, 'bundles', name + '.' + (platform || 'ios') + '-' + version + ext);
+  var file = path.join(process.cwd(), 'bundles', name + '.' + (platform || 'ios') + '-' + version + ext);
   if (!bundles.fs.existsSync(file)) {
     console.log('bundle ' + file + ' not found.');
     return '';

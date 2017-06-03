@@ -174,9 +174,9 @@ app.use(function(err, req, res, next) {
   res.status(500).send('Something broke!');
 });
 
-app.listen(8202, function(err) {
+app.listen(8200, function(err) {
   if (err) {
     return console.error(err);
   }
-  console.log('Listening at http://localhost:8202/');
+  console.log('Listening at http://localhost:8200/');
 });

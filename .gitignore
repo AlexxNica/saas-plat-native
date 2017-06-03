@@ -52,6 +52,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 /lib
+/bundles
+/dev/bundles
 
 /web/dist
 /web/www/index.html
@@ -59,3 +61,5 @@ fastlane/screenshots
 /web/www/polyfill.min.js
 
 /windows/Saasplat/Saasplat.nuget.targets
+/android/gradle/wrapper/gradle-2.4-all.zip
+/android/gradle/wrapper/http.js

@@ -15,7 +15,7 @@ module.exports = {
   },
   //入口文件输出配置
   output: {
-    publicPath: 'http://localhost:8202/dist',
+    publicPath: 'http://localhost:8200/dist',
     path: path.join(__dirname, 'www', 'dist'),
     filename: '[name].js'
   },

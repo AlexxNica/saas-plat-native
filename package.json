@@ -1,7 +1,8 @@
 {
   "name": "saas-plat-native",
   "version": "1.0.0",
-  "private": true,
+  "author": "saas-plat.com",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "node dev/start.js --windows",
     "startweb": "node dev/start.js --web",
@@ -16,7 +17,9 @@
     "install": "node dev/install.js",
     "publish": "saasplat publish -a -u -n -w src ",
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
-    "spdefine": "node --harmony dev/genSpDefines"
+    "spdefine": "node --harmony dev/genSpDefines",
+    "pub": "npm publish --registry http://registry.npmjs.org",
+    "prepublish": "npm run build"
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.2",

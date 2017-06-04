@@ -19,8 +19,7 @@
     "publish": "saasplat publish -a -u -n -w src ",
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "spdefine": "node --harmony dev/genSpDefines",
-    "pub": "npm publish --registry http://registry.npmjs.org",
-    "prepublish": "npm run build"
+    "pub": "npm publish --registry http://registry.npmjs.org"
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.2",

@@ -79,10 +79,7 @@ module.exports.createBuilder = function() {
       //  console.log(externals);
 
       var list = [];
-      if (process.cwd() === path.dirname(__dirname)) {
-        // 平台项目时编译平台的src
-        findEntry(list, path.join(__dirname, '../src'));
-      }
+      findEntry(list, path.join(__dirname, '../src'));
       list = list.concat(path.join(process.cwd(), 'src'));
       var entry = getEntry(list);
       // console.log(list); console.log(entry); returns a Compiler instance

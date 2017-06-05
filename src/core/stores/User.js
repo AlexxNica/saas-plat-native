@@ -69,10 +69,10 @@ export default class UserStore {
   }
 
   @action changeUser(user) {
-    assert(user, '用户不存在');
-    assert(user.id, '用户不存在');
-    assert(user.name, '用户不存在');
-    assert(user.token, '用户token不存在');
+    assert(user);
+    assert(user.id);
+    assert(user.name);
+    assert(user.token);
 
     console.log(tx('切换用户'));
     // 保持当前用户
@@ -102,18 +102,18 @@ export default class UserStore {
 
   @action saveHistoryList() {
     // 添加历史记录
-    console.log('保存登陆历史记录');
+    console.log(tx('保存登陆历史记录'));
     localStore.save({ key: 'historyList', rawData: this.historyList.toJS() });
   }
 
   // 恢复最后一次登录的用户状态
   @action loadLoginState(autoLogin = false) {
-    console.log('恢复最后一次登录的用户状态');
+    console.log(tx('恢复最后一次登录的用户状态'));
     let me = this;
     return new Promise((resolve, reject) => {
       localStore.load({ key: 'loginState', id: 'loginState' }).then((
         result) => {
-        console.log('恢复登录状态完成');
+        console.log(tx('恢复登录状态完成'));
         if (autoLogin) {
           if (me.user) {
             me.logout();
@@ -125,7 +125,7 @@ export default class UserStore {
       }).catch(err => {
         if (err && err.name !== 'NotFoundError' && err.name !==
           'ExpiredError') {
-          console.log('登录状态恢复失败');
+          console.log(tx('登录状态恢复失败'));
           console.warn(err);
           resolve({});
         } else {
@@ -136,7 +136,7 @@ export default class UserStore {
   }
 
   @action loadHistoryList(autoLoad = true) {
-    console.log('加载登录历史记录');
+    console.log(tx('加载登录历史记录'));
     let me = this;
     return new Promise(function(resolve, reject) {
       localStore.load({ key: 'historyList' }).then(result => {
@@ -148,7 +148,7 @@ export default class UserStore {
         }
         resolve(result || []);
       }).catch(err => {
-        if (err && err.name != 'NotFoundError' && err.name !=
+        if (err && err.name !== 'NotFoundError' && err.name !==
           'ExpiredError') {
           console.log(tx('加载登录历史记录失败'));
           console.warn(err);
@@ -167,7 +167,7 @@ export default class UserStore {
     const me = this;
     return new Promise(function(resolve, reject) {
       localStore.load({ key: 'useroptions', id: name }).then(result => {
-        console.log('用户选项加载完成');
+        console.log(tx('用户选项加载完成'));
         if (autoUpdate && me.user) {
           me.options = result;
         }
@@ -175,7 +175,7 @@ export default class UserStore {
       }).catch(err => {
         if (err && err.name !== 'NotFoundError' && err.name !==
           'ExpiredError') {
-          console.log('用户选项加载失败');
+          console.log(tx('用户选项加载失败'));
           console.warn(err);
           reject();
         } else {
@@ -198,8 +198,8 @@ export default class UserStore {
   }
 
   @action saveUserOptions() {
-    assert(this.user && this.user.name, '用户尚未登录无法保存');
-    console.log('保存用户选项', this.user.name);
+    assert(this.user && this.user.name);
+    console.log(tx('保存用户选项'), this.user.name);
     localStore.save({ key: 'useroptions', id: this.user.name, rawData: this.options });
   }
 
@@ -218,7 +218,7 @@ export default class UserStore {
     ns = ns || (RouterStore.getStore().currentBundle && RouterStore.getStore()
       .currentBundle.name);
     if (!ns) {
-      console.warn('当前模块不存在，权限无法判定');
+      console.warn(tx('当前模块不存在，权限无法判定'));
       return false;
     }
     let module = bundle.getBundle(ns);
@@ -279,7 +279,7 @@ export default class UserStore {
   }
 
   @action changeServer(serverName) {
-    assert(server, '切换服务器无效');
+    assert(server);
     if (!this.user || !this.user.servers.find(s => s.name == serverName)) {
       return false;
     }
@@ -295,7 +295,7 @@ export default class UserStore {
         return;
       }
       this.changeUser(this.loginState);
-      console.log('恢复登录完成');
+      console.log(tx('恢复登录完成'));
       resolve(this.user);
     });
   }

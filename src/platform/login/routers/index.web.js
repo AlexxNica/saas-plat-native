@@ -1,5 +1,6 @@
+import React from 'react';
 import queryString  from 'query-string';
-import { Registry } from 'saasplat-native';
+import { Registry, userStore } from 'saasplat-native';
 import Login from '../components/Login';
 
 const url = __DEV__ ?
@@ -10,6 +11,10 @@ Registry.registerRootRoute(() => [{
   path: '/login',
   auth: false,
   render: ({ history, location }) => {
+    if (userStore.loginState){
+      // 恢复登陆状态
+      return <Login history={history} location={location}/>;
+    }
     let redirect, changeAccountTxt = '';
     if (__DEV__) {
       redirect = 'http://localhost:8200/sso'

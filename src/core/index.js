@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 // utils
 import * as Asset from './utils/Asset';
 import Statistics from './utils/Statistics';
@@ -12,6 +14,7 @@ import * as Theme from './core/Theme';
 import I18n from './core/I18n';
 import * as Store from './core/Store';
 import * as Socket from './core/Socket';
+import Screen from './core/Screen';
 
 // fx
 import CommandBus from './fx/CommandBus';
@@ -50,6 +53,8 @@ export default {
   Route, // 注册路由
   Actions, // 路由跳转
   Socket,  // 即时通讯
+  Screen,
+  Platform,
 
   // fx
   CommandBus,

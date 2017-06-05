@@ -31,7 +31,7 @@ if (arguments.indexOf('--windows') > -1 || arguments.indexOf('--all') > -1) {
 if (arguments.indexOf('--macos') > -1 || arguments.indexOf('--all') > -1) {
   var builder = webpack.createBuilder();
   builder.setPlatform('macos');
-  builder.run();
+  builders.push(builder);
 }
 
 function build() {

@@ -1,9 +1,20 @@
-import { Registry } from 'saasplat-native';
+import { Registry, Screen } from 'saasplat-native';
 
-import Workspace from '../webcomponents/Workspace';
-import Console from '../webcomponents/Console';
+let size;
+const optsize = Screen.get('md', 'xs');
+if (optsize === 'xs') {
+  size = 'mobilecomponents'; // 手机版
+} else {
+  size = 'webcomponents'; // PC 版
+}
 
-Registry.registerRootRoute(() => [
-  { path: '/', exact:true, component: Console },
-  { path: '/:id', component: Workspace }
+Registry.registerRootRoute(() => [{
+    path: '/',
+    exact: true,
+    component: require('../' + size + '/Console').default
+  },
+  {
+    path: '/:id',
+    component: require('../' + size + '/Workspace').default
+  }
 ]);

@@ -1,26 +1,8 @@
-import { Platform, Dimensions } from 'react-native';
+import { Platform } from 'react-native';
 import config from '../config';
 import { fetchJson } from '../utils/helper';
 import device from '../core/Device';
-const { width } = Dimensions.get('window');
-
-const ScreenTypes = [
-  [
-    'xxs', 312
-  ], // 手表
-  [
-    'xs', 768
-  ], // 手机
-  ['sm': 992], // PAD
-  [
-    'md', 1200
-  ], // PC MAC
-  [
-    'lg', 999999
-  ], // TV LED
-];
-
-const screen = ScreenTypes.find(item => width < item[1]);
+import Screen from '../core/Screen';
 const deviceID = device.deviceID;
 
 export function connectPlatform() {
@@ -48,5 +30,5 @@ export function loginPlatUserToken(token) {
 }
 
 export function findServer(id) {
-  return fetchJson({ url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${screen}` });
+  return fetchJson({ url: `${config.platform.server}?id=${id}&did=${deviceID}&os=${Platform.OS}&v=${device.systemVersion}&s=${Screen.Size}` });
 }

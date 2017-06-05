@@ -11,7 +11,7 @@ export default class Workspace extends React.Component {
     return (
       <View >
         <Text >
-          web Workspace
+          web md
         </Text>
       </View>
     );

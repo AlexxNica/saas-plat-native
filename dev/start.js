@@ -72,6 +72,9 @@ if (args.indexOf('--web') > -1) {
     res.sendFile(path.join(__dirname, '../node_modules/babel-polyfill/dist/polyfill.min.js'));
   });
 
+  app.get('/dist/es6-promise.map', function(req, res) {
+    res.sendFile(path.join(__dirname, '../node_modules/es6-promise/dist/es6-promise.map'));
+  });
 }
 
 if (args.indexOf('--ios') > -1 || args.indexOf('--android') > -1 || args.indexOf('--windows') > -1 || args.indexOf('--macos') > -1) {

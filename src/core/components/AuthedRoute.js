@@ -2,43 +2,58 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UserStore from '../stores/User';
 import NoAuth from './NoAuth';
+import { translate } from '../core/I18n';
 
 export const connectAuth = (roles = []) => {
-  return Route => class AuthedRoute extends React.Component {
-    static contextTypes = {
-      router: PropTypes.shape({
-        history: PropTypes.object.isRequired,
-        route: PropTypes.object.isRequired,
-        staticContext: PropTypes.object
-      })
-    }
-
-    checkAuth(props) {
-      const userStore = UserStore.getStore();
-      if (userStore.user == null) {
-        this.context.router.history.push('/login');
+  return Route => translate('core.AuthedRoute')(class AuthedRoute extends React
+    .Component {
+      static contextTypes = {
+        router: PropTypes.shape({
+          history: PropTypes.object.isRequired,
+          route: PropTypes.object.isRequired,
+          staticContext: PropTypes.object
+        })
       }
-    }
 
-    componentWillMount() {
-      this.checkAuth(this.props);
-    }
+      state = {}
 
-    componentWillReceiveProps(nextProps) {
-      this.checkAuth(nextProps)
-    }
-
-    render() {
-      const props = this.props;
-      const userStore = UserStore.getStore();
-      if (userStore.user == null) {
-        return null;
+      checkAuth(props) {
+        const userStore = UserStore.getStore();
+        if (userStore.user == null) {
+          console.log(this.props.t('用户未登录，跳转登录...'));
+          this.setState({
+            noAuth: true
+          });
+          this.context.router.history.push('/login?redirect=' +
+            encodeURIComponent(location.pathname));
+          return;
+        }
+        if (!userStore.user.isInRole(roles)) {
+          console.log(this.props.t('用户权限验证失败'));
+          this.setState({
+            noAuth: true
+          });
+          return;
+        }
+        this.setState({
+          noAuth: false
+        });
       }
-      if (!userStore.user.isInRole(roles)) {
-        debugger;
-        return <Route component={NoAuth} />;
+
+      componentWillMount() {
+        this.checkAuth(this.props);
       }
-      return <Route {...props}/>;
-    }
-  };
+
+      componentWillReceiveProps(nextProps) {
+        this.checkAuth(nextProps)
+      }
+
+      render() {
+        const props = this.props;
+        if (this.state.noAuth) {
+          return <Route component={NoAuth} />;
+        }
+        return <Route {...props}/>;
+      }
+    });
 };

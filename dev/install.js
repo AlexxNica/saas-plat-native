@@ -37,7 +37,6 @@ function installPackage(dir, cb) {
 }
 
 var installPackages = [
-  '.',
   'dev/loaders/assets-loader',
   'dev/plugins/babel-relative-import',
   'src/core',

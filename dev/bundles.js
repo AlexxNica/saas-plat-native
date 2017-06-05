@@ -17,12 +17,13 @@ function getdeps(name, platform, version, dev, ext) {
     var ps = name.split('/');
     var filename = ps[ps.length - 1];
     var p = [process.cwd(), 'bundles'];
-    var maxVer = [1,0,0];
+    var maxVer = [1, 0, 0];
     if (ps.length > 1) p = p.concat(ps.slice(0, ps.length - 1));
     //console.log(p);
     var dirs = bundles.fs.readdirSync(p.join(path.sep));
     for (var i = 0; i < dirs.length; i++) {
-      if (dirs[i].startsWith(name + '.' + (platform || 'ios') + '-') && dirs[i].endsWith('.js')) {
+      if (dirs[i].startsWith(name + '.' + (platform || 'ios') + '-') && dirs[i]
+        .endsWith('.js')) {
         var verjs = dirs[i].substr((name + '.' + (platform || 'ios') + '-').length);
         var ver = verjs.substr(0, verjs.length - 3).split('.');
         if (!maxVer || bigThen(ver, maxVer)) {
@@ -33,7 +34,8 @@ function getdeps(name, platform, version, dev, ext) {
     //console.log(maxVer);
     version = maxVer.join('.');
   }
-  var file = path.join(process.cwd(), 'bundles', name + '.' + (platform || 'ios') + '-' + version + ext);
+  var file = path.join(process.cwd(), 'bundles', name + '.' + (platform ||
+    'ios') + '-' + version + ext);
   if (!bundles.fs.existsSync(file)) {
     console.log('bundle ' + file + ' not found.');
     return '';
@@ -48,10 +50,10 @@ function getdeps(name, platform, version, dev, ext) {
   return bundle;
 }
 
-exports.get = function (name, platform, version, dev) {
+exports.get = function(name, platform, version, dev) {
   return getdeps(name, platform, version, dev, '.js');
 };
 
-exports.map = function (name, platform, version, dev) {
+exports.map = function(name, platform, version, dev) {
   return getdeps(name, platform, version, dev, '.js.map');
 };

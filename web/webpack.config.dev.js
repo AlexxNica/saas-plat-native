@@ -9,7 +9,7 @@ module.exports = {
   //页面入口文件配置
   entry: {
     bundle: [
-      'webpack-hot-middleware/client',
+      //'webpack-hot-middleware/client',
       __dirname + '/../index.web.js'
     ]
   },
@@ -25,7 +25,8 @@ module.exports = {
       test: /\.js|\.jsx$/,
       exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
       loaders: [
-        'react-hot', 'babel?' + JSON.stringify({
+        //'react-hot',
+         'babel?' + JSON.stringify({
           //retainLines: true, 'compact':false,
           'presets': [
             'react',
@@ -68,7 +69,7 @@ module.exports = {
       template: __dirname + "/index.temp.html",
       filename: __dirname + '/www/index.html'
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    //new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(),

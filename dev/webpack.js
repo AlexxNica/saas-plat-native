@@ -53,19 +53,23 @@ module.exports.createBuilder = function() {
       var packagefilename = path.join(dir, packagefile);
       //console.log(packagefilename);
       if (fs.existsSync(packagefilename)) {
-        var packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
-        var mainfullfilename = path.join(dir, packagejson2.main || mainfile);
-        if (fs.existsSync(mainfullfilename)) {
-          entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
-            '1.0.0'] = mainfullfilename;
-        } else {
-          mainfullfilename = path.join(dir, 'src', mainfile);
+        try {
+          var packagejson2 = JSON.parse(fs.readFileSync(packagefilename));
+          var mainfullfilename = path.join(dir, packagejson2.main || mainfile);
           if (fs.existsSync(mainfullfilename)) {
             entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
               '1.0.0'] = mainfullfilename;
           } else {
-            console.warn('入口文件不存在', mainfullfilename);
+            mainfullfilename = path.join(dir, 'src', mainfile);
+            if (fs.existsSync(mainfullfilename)) {
+              entry[packagejson2.name + '.' + platform + '-' + packagejson2.version ||
+                '1.0.0'] = mainfullfilename;
+            } else {
+              console.warn('入口文件不存在', mainfullfilename);
+            }
           }
+        } catch (err) {
+          console.warn('包不错误', packagefilename);
         }
       } else {
         console.warn('包不存在', packagefilename);
@@ -95,7 +99,7 @@ module.exports.createBuilder = function() {
       list = list.concat((require('./apps').apps || []).map(item => path.isAbsolute(
         item) ? item : path.join(__dirname, item)));
       //findEntry(list, path.join(process.cwd(), 'node_modules'));
-      findEntry(list, path.join(__dirname, '../src'));
+      findEntry(list, path.join(__dirname, '../node_modules'));
       // console.log(list)
       list = list.map(item => path.normalize(item));
       var entry = getEntry(list);

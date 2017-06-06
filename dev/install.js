@@ -5,8 +5,8 @@ var npm = require('npm');
 
 function installPackage(dir, cb) {
   if (!dir) return;
-  dir = path.join(__dirname, '..', dir);
-  console.log(dir);
+  dir = path.resolve(path.join(__dirname, dir));
+  console.log('install ' + dir);
   process.chdir(dir);
   // console.log(execSync('npm', ['install']));
   npm.load({
@@ -37,17 +37,15 @@ function installPackage(dir, cb) {
 }
 
 var installPackages = [
-  'dev/loaders/assets-loader',
-  'dev/plugins/babel-relative-import',
-  'src/core',
-  'src/platform/host',
-  'src/platform/login',
-  'src/platform/portal'
+  './loaders/assets-loader',
+  './plugins/babel-relative-import',
 ];
+
+//installPackages = installPackages.concat(require('./apps').apps);
 
 function installAll(id) {
   installPackage(installPackages[id || 0], function(err) {
-    if (err){
+    if (err) {
       console.log(err);
       return;
     }

@@ -103,6 +103,10 @@ module.exports.createBuilder = function() {
       // console.log(list)
       list = list.map(item => path.normalize(item));
       var entry = getEntry(list);
+      var alias = {
+        "saasplat-native": "saas-plat-native-core"
+      };
+      platform === 'web' && alias['react-native'] = 'react-native-web' ;
       // console.log(list);
       // console.log(entry);
       // returns a Compiler instance
@@ -163,9 +167,7 @@ module.exports.createBuilder = function() {
             '.png',
             '.jpg'
           ],
-          alias: platform === 'web' ? {
-            'react-native': 'react-native-web'
-          } : undefined
+          alias: alias
         },
         plugins: [{
           apply: function(compiler) {

@@ -4,6 +4,7 @@
   "author": "saas-plat.com",
   "license": "GPL-3.0",
   "repository": "https://github.com/saas-plat/saas-plat-native",
+  "main": "src/core/index.js",
   "scripts": {
     "start": "node dev/start.js",
     "startweb": "node dev/start.js --web",

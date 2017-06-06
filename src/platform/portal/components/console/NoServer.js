@@ -1,16 +1,19 @@
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {
+  View,
+  Text,
+} from 'react-native';
+
 
 export default class NoServer extends React.Component {
 
   render() {
     return (
-      <View style={{
-        flex: 1
-      }}>
-        
+      <View >
+        <Text >
+          web NoServer
+        </Text>
       </View>
     );
   }
-
 }

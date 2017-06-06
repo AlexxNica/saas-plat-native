@@ -5,12 +5,13 @@ import {
 } from 'react-native';
 
 
-export default class Console extends React.Component {
+export default class Workspace extends React.Component {
+
   render() {
     return (
       <View >
         <Text >
-          Console
+          md
         </Text>
       </View>
     );

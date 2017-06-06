@@ -5,12 +5,13 @@ import {
 } from 'react-native';
 
 
-export default class Console extends React.Component {
+export default class ModuleList extends React.Component {
+
   render() {
     return (
       <View >
         <Text >
-          Console
+          web ModuleList
         </Text>
       </View>
     );

@@ -6,7 +6,6 @@ import {
 
 
 export default class Console extends React.Component {
-
   render() {
     return (
       <View >

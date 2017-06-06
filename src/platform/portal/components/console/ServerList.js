@@ -5,12 +5,13 @@ import {
 } from 'react-native';
 
 
-export default class Console extends React.Component {
+export default class ServerList extends React.Component {
+
   render() {
     return (
       <View >
         <Text >
-          Console
+          web ServerList
         </Text>
       </View>
     );

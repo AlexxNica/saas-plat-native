@@ -106,7 +106,7 @@ module.exports.createBuilder = function() {
       var alias = {
         "saasplat-native": "saas-plat-native-core"
       };
-      platform === 'web' && alias['react-native'] = 'react-native-web' ;
+      platform === 'web' && (alias['react-native'] = 'react-native-web' );
       // console.log(list);
       // console.log(entry);
       // returns a Compiler instance

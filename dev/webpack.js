@@ -108,7 +108,7 @@ module.exports.createBuilder = function() {
       };
       platform === 'web' && (alias['react-native'] = 'react-native-web' );
       // console.log(list);
-      // console.log(entry);
+     console.log(entry);
       // returns a Compiler instance
       var compiler = webpack({
         entry: entry,

@@ -299,7 +299,7 @@ export default class extends React.Component {
 
   loadVersion(autoSync) {
     const me = this;
-    this.pushMessage(T('内部版本开始加载'));
+    this.pushMessage(T('内核版本开始加载'));
     if (__DEV__ || global.devOptions.cacheDisable) {
       this.store.remove({key: 'version'});
     }

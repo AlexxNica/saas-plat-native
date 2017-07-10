@@ -499,9 +499,7 @@ export default class extends React.Component {
       <View style={styles.container}>
         <ActivityIndicator
           animating={this.state.loading}
-          style={{
-          height: 50
-        }}
+          style={{height: 50}}
           size='small'/>
         <TouchableOpacity onPress={this.onPressFeed}>
           <View style={{

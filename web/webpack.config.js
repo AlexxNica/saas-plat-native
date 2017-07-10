@@ -62,11 +62,21 @@ module.exports = {
     }]),
     new HtmlWebpackPlugin({
       template: __dirname + '/index.temp.html',
-      filename: __dirname + '/www/index.html'
+      filename: __dirname + '/www/index.html',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        collapseInlineTagWhitespace:true,
+        //conservativeCollapse: true,
+        preserveLineBreaks: true,
+        minifyCSS: true,
+        removeScriptTypeAttributes:true,
+        removeStyleLinkTypeAttributes:true
+      }
     }),
     new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),
-     new webpack.DefinePlugin({ '__DEV__': false, 'process.env.NODE_ENV': '"production"' }),
+    new webpack.DefinePlugin({ '__DEV__': false, 'process.env.NODE_ENV': '"production"' }),
     // new webpack.ProvidePlugin({ '__DEV__': false }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

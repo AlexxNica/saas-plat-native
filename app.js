@@ -230,7 +230,7 @@ export default class extends React.Component {
 
   startApp() {
     this.pushMessage(T('开始运行内核程序...'));
-    const sp = global.require('__app__');
+    const sp = global.require('saas-plat-native-core');
     if (global.lastGlobalError) {
       if (global.lastGlobalError && global.devOptions.debugMode) {
         this.pushMessage(global.lastGlobalError.message || global.lastGlobalError);
@@ -500,7 +500,7 @@ export default class extends React.Component {
 
   render() {
     if (this.state.code === 200) {
-      const sp = global.require('__app__');
+      const sp = global.require('saas-plat-native-core');
       const Component = sp.App;
       return <Component/>;
     }

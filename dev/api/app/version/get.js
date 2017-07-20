@@ -17,7 +17,8 @@ exports.default = function(request) {
   return {
     name: json3.name,
     version: 'HEAD', // 每次取最新版本
-    file: `http://localhost:8200/api/v1/bundle/file?core.${q.platform || 'web'}-HEAD.js`,
+    //file: `http://localhost:8200/api/v1/bundle/file?core.${q.platform || 'web'}-HEAD.js`,
+    file: 'https://npm-cdn.herokuapp.com/saas-plat-native-core@1.1.0/dist/saas-plat-native-core.web-1.1.0.js',
     description: json3.description
   };
 };

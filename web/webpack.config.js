@@ -5,10 +5,9 @@ var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
   //页面入口文件配置
   entry: {
-    bundle: [
+    app: [
       path.normalize(__dirname + '/../index.web.js')
     ]
   },
@@ -82,13 +81,21 @@ module.exports = {
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({ '__DEV__': false, 'process.env.NODE_ENV': '"production"' }),
     // new webpack.ProvidePlugin({ '__DEV__': false }),
+     new webpack.SourceMapDevToolPlugin({
+        test: [/\.js$/, /\.jsx$/],
+        exclude: 'vendor',
+        filename: "app.[hash:5].js.map",
+        append: "//# sourceMappingURL=[url]",
+        moduleFilenameTemplate: '[resource-path]',
+        fallbackModuleFilenameTemplate: '[resource-path]',
+    }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         //supresses warnings, usually from module minification
         warnings: false
       },
-      sourceMap: true,
-      mangle: true
+      //sourceMap: true,
+      //mangle: true
     })
   ]
 };

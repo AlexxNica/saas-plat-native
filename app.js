@@ -35,13 +35,15 @@ switch (Platform.OS) {
   case 'ios':
   case 'windows':
     const DeviceInfo = require('react-native-device-info');
-    deviceID = DeviceInfo.getDeviceId() || DeviceInfo.getSystemName() + DeviceInfo.getSystemVersion(); // iPhone7,2
+    deviceID = DeviceInfo.getDeviceId() || DeviceInfo.getSystemName() +
+      DeviceInfo.getSystemVersion(); // iPhone7,2
     deviceUUID = DeviceInfo.getUniqueID(); // FCDBD8EF-62FC-4ECB-B2F5-92C9E79AC7F9
     lang = DeviceInfo.getDeviceLocale();
     break;
   case 'web':
     const browser = {};
-    if (/(msie|rv|chrome|firefox|opera|netscape)\D+(\d[\d.]*)/.test(navigator.userAgent.toLowerCase())) {
+    if (/(msie|rv|chrome|firefox|opera|netscape)\D+(\d[\d.]*)/.test(navigator.userAgent
+        .toLowerCase())) {
       browser.name = RegExp.$1;
       browser.version = RegExp.$2;
     } else if (/version\D+(\d[\d.]*).*safari/.test(navigator.userAgent.toLowerCase())) {
@@ -86,9 +88,10 @@ if (lang) {
 }
 
 function invoke(script) {
-  let scriptex = "spdefine('__app__',function(global, require, module, exports){ function __loadco" +
-      "de(){" + script + "\n}" + // try调用func减少性能损失
-  "try{__loadcode();}catch(err){global.lastGlobalError = err;}\n});";
+  let scriptex =
+    "spdefine('__app__',function(global, require, module, exports){" +
+    "function __loadcode(){" + script + "\n}" + // try调用func减少性能损失
+    "try{__loadcode();}catch(err){global.lastGlobalError = err;}\n});";
   // chrome引擎new function比eval快一倍以上
   (new Function(scriptex))();
 }
@@ -112,7 +115,7 @@ export default class extends React.Component {
   }
 
   finished(code) {
-    this.setState({code: code, loading: false});
+    this.setState({ code: code, loading: false });
     // ios和android上有启动画面
     if (Platform.OS === 'android' || Platform.OS === 'ios') {
       // 成功是不隐藏的，等在platform加载完再隐藏
@@ -135,7 +138,7 @@ export default class extends React.Component {
     }
   }
 
-  syncFile({resolve, reject, id}) {
+  syncFile({ resolve, reject, id }) {
     const me = this;
     if (!global.isConnected) {
       reject(T('网络尚未连接'));
@@ -143,7 +146,7 @@ export default class extends React.Component {
     }
     this.pushMessage(T('开始同步内核脚本...'));
     // id = version
-    fetch(id).then((response) => {
+    fetch(id, { mode: "cors" }).then((response) => {
       if (response.status === 200) {
         return response.text();
       }
@@ -151,7 +154,7 @@ export default class extends React.Component {
     }).then(text => {
       me.pushMessage(T('内核脚本下载完成'));
       if (id !== 'HEAD') { // 每次加载最新版不保存
-        me.store.save({key: 'file', id, rawData: text});
+        me.store.save({ key: 'file', id, rawData: text });
         me.pushMessage(T('fileSaved'));
       }
       resolve(text);
@@ -163,15 +166,15 @@ export default class extends React.Component {
     });
   }
 
-  syncVersion({reject, resolve}) {
+  syncVersion({ reject, resolve }) {
     const me = this;
     if (!global.isConnected) {
       reject(T('netInfoCheckFailed'));
       return;
     }
-    let timeoutId = __DEV__
-      ? 1
-      : setTimeout(() => {
+    let timeoutId = __DEV__ ?
+      1 :
+      setTimeout(() => {
         if (!timeoutId) {
           return;
         }
@@ -179,7 +182,7 @@ export default class extends React.Component {
         reject(T('网络请求超时')); // reject on timeout
       }, 10000); // 10s超时
     this.pushMessage(T('开始同步内核程序版本...'));
-    const arg = querystring.stringify({platform: Platform.OS});
+    const arg = querystring.stringify({ platform: Platform.OS });
     const url = `${config.version}?${arg}`;
     fetch(url).then((response) => {
       if (!timeoutId) {
@@ -203,12 +206,12 @@ export default class extends React.Component {
       }
       if (json.errno) {
         reject(json.msg);
-      } else if (!json.file) {
-        reject(T('当前版本的文件不存在'));
+      } else if (!json.data.file) {
+        reject(T('当前版本文件不存在'));
       } else {
         me.pushMessage(T('内核程序版本同步完成'));
         if (json.data.version !== 'HEAD') { // HEAD是最新版就不要保存
-          me.store.save({key: 'version', rawData: json.data});
+          me.store.save({ key: 'version', rawData: json.data });
           me.pushMessage(T('内核最新版本已经保存，版本号:') + json.data.version);
         }
         resolve(json.data);
@@ -225,19 +228,7 @@ export default class extends React.Component {
     });
   }
 
-  loadScript(script) {
-    this.pushMessage(T('开始加载内核程序...'));
-    try {
-      invoke(script);
-      this.pushMessage(T('内核程序加载成功'));
-    } catch (err) {
-      if (err && global.devOptions.debugMode) {
-        this.pushMessage(err.message || err);
-      }
-      this.pushMessage(T('应用启动失败，稍后重试...'));
-      this.finished(500.1);
-      return;
-    }
+  startApp() {
     this.pushMessage(T('开始运行内核程序...'));
     const sp = global.require('__app__');
     if (global.lastGlobalError) {
@@ -246,7 +237,7 @@ export default class extends React.Component {
       }
       this.pushMessage(T('应用启动失败，稍后重试...'));
       this.finished(500.2);
-      return;
+      return false;
     }
     if (!sp || !sp.App) {
       if (global.devOptions.debugMode) {
@@ -254,62 +245,106 @@ export default class extends React.Component {
       }
       this.pushMessage(T('应用启动失败，稍后重试...'));
       this.finished(500.9);
-      return;
+      return false;
     }
     this.pushMessage(T('内核程序加载成功'));
     spdefine('saasplat-native', (global, require, module, exports) => {
-      module.exports = sp.__esModule
-        ? sp.default
-        : sp;
+      module.exports = sp.__esModule ?
+        sp.default :
+        sp;
     });
     this.pushMessage(T('环境准备已就绪'));
     this.finished(200);
     return true;
   }
 
+  loadWebScript(url) {
+    return new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      if (script.readyState) { // IE
+        script.onreadystatechange = function() {
+          if (script.readyState === 'loaded' || script.readyState ===
+            'complete') {
+            script.onreadystatechange = null;
+            resolve();
+          }
+        };
+      } else { // FF, Chrome, Opera, ...
+        script.onload = function() {
+          resolve();
+        };
+      }
+      script.src = url;
+      document.getElementsByTagName('body')[0].appendChild(script);
+    });
+  }
+
   loadFile(version, file) {
     const me = this;
-    this.pushMessage(T('开始读取内核脚本...'));
-    if (__DEV__ || global.devOptions.cacheDisable) {
-      this.store.remove({key: 'file', id: file});
+    me.pushMessage(T('开始加载内核程序...'));
+    if (Platform.OS === 'web') {
+      // web fetch 需要解决跨域请求的问题
+      // 缓存直接用浏览器
+      me.loadWebScript(file).then(() => {
+        me.pushMessage(T('内核程序加载成功'));
+        if (!me.startApp()) {
+          // 当前版本的文件无效，清楚缓存
+          me.store.remove({ key: 'file', id: file });
+        }
+      }).catch(err => {
+        //如果没有找到数据且没有同步方法，
+        if (err && global.devOptions.debugMode) {
+          //或者有其他异常，则在catch中返回
+          me.pushMessage(T('内核程序脚本加载失败') + ', ' + (err.message || err));
+        }
+        // 当前版本已过期删除
+        me.store.remove({ key: 'version' });
+        me.pushMessage(T('应用启动失败，稍后重试...'));
+        me.finished(500);
+      });
+    } else {
+      if (__DEV__ || global.devOptions.cacheDisable) {
+        me.store.remove({ key: 'file', id: file });
+      }
+      // 如果版本加载成功，开始加载代码
+      me.store.load({
+        key: 'file',
+        id: file,
+        syncInBackground: !(__DEV__ || global.devOptions.cacheDisable)
+      }).then(ret => {
+        invoke(ret);
+        me.pushMessage(T('内核程序加载成功'));
+        if (!me.startApp()) {
+          // 当前版本的文件无效，清楚缓存
+          me.store.remove({ key: 'file', id: file });
+        }
+      }).catch(err => {
+        //如果没有找到数据且没有同步方法，
+        if (err && global.devOptions.debugMode) {
+          //或者有其他异常，则在catch中返回
+          me.pushMessage(T('内核程序脚本加载失败') + ', ' + (err.message || err));
+        }
+        // 当前版本已过期删除
+        me.store.remove({ key: 'version' });
+        me.pushMessage(T('应用启动失败，稍后重试...'));
+        me.finished(500);
+      });
     }
-    // 如果版本加载成功，开始加载代码
-    this.store.load({
-      key: 'file',
-      id: file,
-      syncInBackground: !(__DEV__ || global.devOptions.cacheDisable)
-    }).then(ret => {
-      me.pushMessage(T('内核脚本读取成功'));
-      if (!me.loadScript(ret)) {
-        // 当前版本的文件无效，清楚缓存
-        me.store.remove({key: 'file', id: file});
-      }
-    }).catch(err => {
-      //如果没有找到数据且没有同步方法，
-      if (err && global.devOptions.debugMode) {
-        //或者有其他异常，则在catch中返回
-        me.pushMessage(T('内核程序脚本下载失败') + ', ' + (err.message || err));
-      }
-      // 当前版本已过期删除
-      me.store.remove({key: 'version'});
-      me.pushMessage(T('应用启动失败，稍后重试...'));
-      me.finished(500);
-    });
   }
 
   loadVersion(autoSync) {
     const me = this;
     this.pushMessage(T('内核版本开始加载'));
     if (__DEV__ || global.devOptions.cacheDisable) {
-      this.store.remove({key: 'version'});
+      this.store.remove({ key: 'version' });
     }
     // 版本默认每天检查一次，就算过期也是先返回老版本，下次打开才是新版
     this.store.load({
       key: 'version',
       autoSync,
-      syncInBackground: (__DEV__ || global.devOptions.cacheDisable)
-        ? false
-        : true
+      syncInBackground: (__DEV__ || global.devOptions.cacheDisable) ?
+        false : true
     }).then(ret => {
       me.pushMessage(T('内核版本读取完成，当前版本:') + ret.version);
       me.loadFile(ret.version, ret.file);
@@ -326,14 +361,14 @@ export default class extends React.Component {
 
   pushMessage(message) {
     console.log(message);
-    this.setState({messageList: this.state.messageList.concat(message)});
+    this.setState({ messageList: this.state.messageList.concat(message) });
   }
 
   loadDevOptions(callback) {
     if (global.isConnected) {
       // 联网从平台获取开发者选项
       this.pushMessage(T('获取开发者选项...'));
-      const arg = querystring.stringify({did: deviceID, uuid: deviceUUID});
+      const arg = querystring.stringify({ did: deviceID, uuid: deviceUUID });
       const url = `${config.dev}?${arg}`;
       fetch(url).then((response) => {
         return response.json();
@@ -378,7 +413,7 @@ export default class extends React.Component {
       this.pushMessage(T('网络连接成功'));
       // 如果网络连接，获取最新版本
       this.syncVersion({
-        resolve: function({version, file}) {
+        resolve: function({ version, file }) {
           me.loadFile(version, file);
         },
         reject: function(err) {
@@ -406,9 +441,8 @@ export default class extends React.Component {
     this.store = new Storage({
       size: 1, // 默认保存最近1个版本
       storageBackend: AsyncStorage,
-      defaultExpires: (__DEV__ || global.devOptions.cacheDisable)
-        ? 1
-        : null, // 永不过期
+      defaultExpires: (__DEV__ || global.devOptions.cacheDisable) ?
+        1 : null, // 永不过期
       autoSync: true,
       syncInBackground: !(__DEV__ || global.devOptions.cacheDisable),
       sync: {
@@ -432,7 +466,7 @@ export default class extends React.Component {
   }
 
   prepare() {
-    this.setState({code: 0, loading: true});
+    this.setState({ code: 0, loading: true });
     this.pushMessage(T('开始检查网络连接情况...'));
     NetInfo.isConnected.fetch().then((isConnected) => {
       //console.log('First, is ' + (isConnected ? 'online' : 'offline'));
@@ -441,9 +475,11 @@ export default class extends React.Component {
 
     function handleFirstConnectivityChange(isConnected) {
       //console.log('Then, is ' + (isConnected ? 'online' : 'offline'));
-      NetInfo.isConnected.removeEventListener('change', handleFirstConnectivityChange);
+      NetInfo.isConnected.removeEventListener('change',
+        handleFirstConnectivityChange);
     }
-    NetInfo.isConnected.addEventListener('change', handleFirstConnectivityChange);
+    NetInfo.isConnected.addEventListener('change',
+      handleFirstConnectivityChange);
   }
 
   componentDidMount() {
@@ -459,7 +495,7 @@ export default class extends React.Component {
   }
 
   clearMessageList() {
-    this.setState({messageList: []});
+    this.setState({ messageList: [] });
   }
 
   render() {
@@ -484,9 +520,9 @@ export default class extends React.Component {
   }
 
   renderWeb() {
-    const messageContent = this.state.messageList.length > 0
-      ? this.state.messageList[this.state.messageList.length - 1]
-      : '';
+    const messageContent = this.state.messageList.length > 0 ?
+      this.state.messageList[this.state.messageList.length - 1] :
+      '';
     let lastErrorText = null;
     if (lastGlobalError) {
       lastErrorText = (
@@ -519,9 +555,9 @@ export default class extends React.Component {
 
   renderApp() {
     if (!global.devOptions.debugMode) {
-      const messageContent = this.state.messageList.length > 0
-        ? this.state.messageList[this.state.messageList.length - 1]
-        : '';
+      const messageContent = this.state.messageList.length > 0 ?
+        this.state.messageList[this.state.messageList.length - 1] :
+        '';
       let lastErrorText = null;
       if (lastGlobalError) {
         lastErrorText = (

@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   //页面入口文件配置
   entry: {
-    bundle: [
+    app: [
       //'webpack-hot-middleware/client',
       __dirname + '/../index.web.js'
     ]

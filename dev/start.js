@@ -145,7 +145,7 @@ function api(request, response) {
         var data;
         try {
           //console.log(require.cache);
-          data = require(realPath).default();
+          data = require(realPath).default(request,response);
         } catch (err) {
           console.log(err.stack);
           console.log(err);

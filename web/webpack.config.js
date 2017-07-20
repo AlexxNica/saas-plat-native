@@ -5,6 +5,7 @@ var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  devtool: 'cheap-module-source-map',
   //页面入口文件配置
   entry: {
     bundle: [

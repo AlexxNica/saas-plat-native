@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
+var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -74,6 +74,9 @@ module.exports = {
         removeScriptTypeAttributes:true,
         removeStyleLinkTypeAttributes:true
       }
+    }),
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'async'
     }),
     new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),

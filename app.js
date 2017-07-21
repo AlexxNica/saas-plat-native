@@ -572,7 +572,8 @@ export default class extends React.Component {
             ? <ActivityIndicator
                 loading={true}
                 style={{
-                height: 50
+                height: 50,
+                width: 20
               }}
                 size='small'/>
             : <View style={{

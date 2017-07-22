@@ -126,15 +126,24 @@ export default class extends React.Component {
         if (dif > 2000) { // 至少显示2s，要不一闪而过体验不好
           // 恢复状态条
           StatusBar.setHidden(false);
-          require('@remobile/react-native-splashscreen').hide();
+          this.hideSplashScreen();
         } else {
           setTimeout(() => {
             // 恢复状态条
             StatusBar.setHidden(false);
-            require('@remobile/react-native-splashscreen').hide();
+            this.hideSplashScreen();
           }, dif);
         }
       }
+    }
+  }
+
+  hideSplashScreen() {
+    if (Platform.OS === 'web') {
+      const el = document.getElementById('sp-loading');
+      el.parentNode.removeChild(el);
+    } else {
+      require('@remobile/react-native-splashscreen').hide();
     }
   }
 
@@ -434,7 +443,7 @@ export default class extends React.Component {
       if (global.devOptions.debugMode) {
         // 恢复状态条
         StatusBar.setHidden(false);
-        require('@remobile/react-native-splashscreen').hide();
+        this.hideSplashScreen();
       }
     }
 
@@ -572,8 +581,7 @@ export default class extends React.Component {
             ? <ActivityIndicator
                 loading={true}
                 style={{
-                height: 50,
-                width: 20
+                height: 50
               }}
                 size='small'/>
             : <View style={{

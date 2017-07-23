@@ -1,5 +1,5 @@
 const server = __DEV__
-  ? 'http://localhost:8200/api/v1'
+  ? 'http://test.saas-plat.com:8200/api/v1'
   : 'https://api.saas-plat.com/v1';
 
 export default {

@@ -17,7 +17,6 @@ import {
 import Storage from 'react-native-storage';
 import config from './config';
 import spdefine from './spdefine';
-import querystring from 'querystring';
 import 'whatwg-fetch';
 
 const locales = {};
@@ -164,7 +163,7 @@ export default class extends React.Component {
       me.pushMessage(T('内核脚本下载完成'));
       if (id !== 'HEAD') { // 每次加载最新版不保存
         me.store.save({ key: 'file', id, rawData: text });
-        me.pushMessage(T('fileSaved'));
+        me.pushMessage(T('文件已保存'));
       }
       resolve(text);
     }).catch((error) => {
@@ -191,7 +190,7 @@ export default class extends React.Component {
         reject(T('网络请求超时')); // reject on timeout
       }, 10000); // 10s超时
     this.pushMessage(T('开始同步内核程序版本...'));
-    const arg = querystring.stringify({ platform: Platform.OS });
+    const arg = `platform=${Platform.OS}`;
     const url = `${config.version}?${arg}`;
     fetch(url).then((response) => {
       if (!timeoutId) {
@@ -377,7 +376,7 @@ export default class extends React.Component {
     if (global.isConnected) {
       // 联网从平台获取开发者选项
       this.pushMessage(T('获取开发者选项...'));
-      const arg = querystring.stringify({ did: deviceID, uuid: deviceUUID });
+      const arg = `did=${deviceID}&uuid=${deviceUUID}`;
       const url = `${config.dev}?${arg}`;
       fetch(url).then((response) => {
         return response.json();
@@ -402,6 +401,9 @@ export default class extends React.Component {
         }
       }).catch(err => {
         this.pushMessage(T('开发者选项获取失败') + ', ' + (err.message || err));
+        if (callback) {
+        callback();
+      }
       });
     } else {
       if (global.devOptions.cacheDisable) {

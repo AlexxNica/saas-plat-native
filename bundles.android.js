@@ -68,23 +68,23 @@ spdefine('react-i18next', function (global, require, module, exports) {
 });
 spdefine('react-native/Libraries/ReactNative/YellowBox', function (global, require, module, exports) {
   module.exports = require('react-native/Libraries/ReactNative/YellowBox');
-  module.exports.version = '0.40.0';
+  module.exports.version = '0.46.0';
 });
 spdefine('react-native/Libraries/EventEmitter/EventEmitter', function (global, require, module, exports) {
   module.exports = require('react-native/Libraries/EventEmitter/EventEmitter');
-  module.exports.version = '0.40.0';
+  module.exports.version = '0.46.0';
 });
 spdefine('react-native/Libraries/Utilities/stringifySafe', function (global, require, module, exports) {
   module.exports = require('react-native/Libraries/Utilities/stringifySafe');
-  module.exports.version = '0.40.0';
+  module.exports.version = '0.46.0';
 });
-spdefine('react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry', function (global, require, module, exports) {
-  module.exports = require('react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry');
-  module.exports.version = '0.40.0';
-});
+// spdefine('react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry', function (global, require, module, exports) {
+//   module.exports = require('react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry');
+//   module.exports.version = '0.46.0';
+// });
 spdefine('react-native', function (global, require, module, exports) {
   module.exports = require('react-native');
-  module.exports.version = '0.40.0';
+  module.exports.version = '0.46.0';
 });
 spdefine('react-native-blur', function (global, require, module, exports) {
   module.exports = require('react-native-blur');

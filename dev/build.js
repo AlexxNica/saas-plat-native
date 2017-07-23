@@ -11,7 +11,7 @@ if (arguments.indexOf('--android') > -1) {
     "--entry-file",
     "index.android.js",
     "--bundle-output",
-    "../android/app/src/main/assets/index.android.jsbundle",
+    "./android/app/src/main/assets/index.android.jsbundle",
     "--platform",
     "android",
     "--assets-dest",
@@ -32,7 +32,7 @@ if (arguments.indexOf('--ios') > -1) {
     "--platform",
     "ios",
     "--assets-dest",
-    "../ios/Saasplat/Images.xcassets/",
+    "./ios/Saasplat/Images.xcassets/",
     "--dev",
     false
   ]).stdout.toString());

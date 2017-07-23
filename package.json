@@ -6,9 +6,9 @@
   "repository": "https://github.com/saas-plat/saas-plat-native",
   "main": "index.js",
   "scripts": {
-    "dev": "node dev/start.js",
-    "dev-web": "node dev/start.js --web",
-    "dev-android": "node dev/start.js --android",
+    "start": "node dev/start.js",
+    "start-web": "node dev/start.js --web",
+    "start-android": "node dev/start.js --android",
     "run-android": "react-native run-android",
     "run-ios": "react-native run-ios",
     "clean-android": "cd android && gradlew clean",    

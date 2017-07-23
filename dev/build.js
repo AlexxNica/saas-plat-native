@@ -4,6 +4,7 @@ var spawnSync = require('child_process').spawnSync;
 var arguments = process.argv.splice(2);
 
 if (arguments.indexOf('--android') > -1) {
+// node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ../android/app/src/main/res/ --dev  false
   console.log('android->');
   console.log(spawnSync("node", [
     "node_modules/react-native/local-cli/cli.js",
@@ -17,7 +18,7 @@ if (arguments.indexOf('--android') > -1) {
     "--assets-dest",
     "../android/app/src/main/res/",
     "--dev",
-    false
+    "false"
   ]).stdout.toString());
 }
 if (arguments.indexOf('--ios') > -1) {
@@ -34,7 +35,7 @@ if (arguments.indexOf('--ios') > -1) {
     "--assets-dest",
     "./ios/Saasplat/Images.xcassets/",
     "--dev",
-    false
+    "false"
   ]).stdout.toString());
 }
 
@@ -56,7 +57,7 @@ if (arguments.indexOf('--windows') > -1) {
       "--assets-dest",
       "../windows/myapp/ReactAssets",
       "--dev",
-      false
+      "false"
     ]).stdout.toString());
 }
 

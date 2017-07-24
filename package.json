@@ -1,6 +1,6 @@
 {
   "name": "saas-plat-native",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "saas-plat.com",
   "license": "GPL-3.0",
   "repository": "https://github.com/saas-plat/saas-plat-native",
@@ -22,7 +22,6 @@
     "storybook": "start-storybook -p 9001 -c web/.storybook",
     "reset-cache": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "post-install": "node dev/install.js",
-    "publish": "saasplat publish -a -u -n -w src ",
     "configureJPush": "node node_modules/jpush-react-native/JPushConfiguration.js",
     "spdefine": "node --harmony dev/genSpDefines",
     "pub": "npm publish --registry http://registry.npmjs.org"

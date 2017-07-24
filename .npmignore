@@ -1,3 +1,15 @@
 node_modules/
 bundles/
 psd/
+web/www/dist
+web/www/index.html
+windows/ARM
+windows/x64
+windows/Debug
+windows/ipch
+windows/*.db
+android/.gradle
+android/build
+android/gradle.properties
+android/saas-plat.keystore
+android/app/build

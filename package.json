@@ -27,7 +27,6 @@
     "pub": "npm publish --registry http://registry.npmjs.org"
   },
   "dependencies": {
-    "@exponent/react-native-navigator": "^0.4.2",
     "@remobile/react-native-splashscreen": "github:saas-plat/react-native-splashscreen",
     "@shoutem/theme": "^0.8.9",
     "ant-mobile": "0.0.0",

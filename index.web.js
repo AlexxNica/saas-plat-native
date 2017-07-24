@@ -1,12 +1,10 @@
-import React from 'react';
-import { AppRegistry } from 'react-native'
-import App from './app';
-import './spdefine';
-import './bundles';
+import 'react';
+import { AppRegistry } from 'react-native';
+import { AppRegistry as AppLoader } from './main';
 
 global.__DEV__ = __DEV__;
 
-AppRegistry.registerComponent('App', () => App);
+AppRegistry.registerComponent('App', AppLoader.appLoader);
 AppRegistry.runApplication('App', {
   rootTag: document.getElementById('saas-plat')
 });

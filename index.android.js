@@ -1,5 +1,4 @@
-import {AppRegistry} from 'react-native';
-import App from './app';
-import './spdefine';
-import './bundles';
-AppRegistry.registerComponent('Saasplat', () => App);
+import 'react';
+import { AppRegistry } from 'react-native';
+import { AppRegistry as AppLoader } from './main';
+AppRegistry.registerComponent('Saasplat', AppLoader.appLoader);

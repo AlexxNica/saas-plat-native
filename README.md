@@ -2,6 +2,60 @@
 
 saas-plat.com运行平台，技术基于React Native提供跨终端的运行支持。
 
+## 使用
+
+···
+npm i --save saas-plat-native
+···
+
+安装需要模块：
+···
+npm i --save saas-plat-native-core saas-plat-native-login saas-plat-native-portal ...
+···
+
+新建一个index.js，
+```js
+import { AppRegistry } from 'saas-plat-native';
+import { App } from 'saas-plat-native-core';
+import 'saas-plat-native-login';
+import 'saas-plat-native-portal';
+
+AppRegistry.registerComponent(() => App);
+```
+
+编译五种版本到outputs文件夹
+
+```
+node node_modules/saas-plat-native/cli/index.js build index.js --output outputs --android --ios --web --windows --macos
+```
+
+参见示例项目:https://github.com/saas-plat/saas-plat-native-demo
+
+## 特定平台的配置:
+
+### IOS
+
+
+### Android
+
+- 在android需要生成一个证书文件，并配置gradle.properties
+    // 签名
+    MYAPP_RELEASE_STORE_FILE=xxxx
+    MYAPP_RELEASE_KEY_ALIAS=xxxx
+    MYAPP_RELEASE_STORE_PASSWORD=xxxx
+    MYAPP_RELEASE_KEY_PASSWORD=xxxx
+
+    //JPush 
+    JPUSH_APPKEY: xxxxxxx
+    JPUSH_APP_CHANNEL: xxxxxxx
+
+### Windows && MAC
+
+
+### Web
+
+
+
 ## 安装的模块
 ···
     "@exponent/react-native-navigator": "^0.4.2",
@@ -55,25 +109,3 @@ saas-plat.com运行平台，技术基于React Native提供跨终端的运行支�
     "socket.io-client": "^1.7.3",
     "whatwg-fetch": "^2.0.3"
 ···
-
-
-## IOS
-
-
-## Android
-
-- 在android需要生成一个证书文件，并配置gradle.properties
-    // 签名
-    MYAPP_RELEASE_STORE_FILE=xxxx
-    MYAPP_RELEASE_KEY_ALIAS=xxxx
-    MYAPP_RELEASE_STORE_PASSWORD=xxxx
-    MYAPP_RELEASE_KEY_PASSWORD=xxxx
-
-    //JPush 
-    JPUSH_APPKEY: xxxxxxx
-    JPUSH_APP_CHANNEL: xxxxxxx
-
-## Windows && MAC
-
-
-## Web

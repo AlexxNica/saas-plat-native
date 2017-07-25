@@ -9,7 +9,7 @@
     "run-android": "react-native run-android",
     "run-ios": "react-native run-ios",
     "clean-android": "cd android && gradlew clean",
-    "build-android": "cd android && gradlew assembleRelease",
+    "gradlew-android": "cd android && gradlew assembleRelease",    
     "storybook": "start-storybook -p 9001 -c web/.storybook",
     "reset-cache": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
     "postinstall": "node cli/postInstall.js",

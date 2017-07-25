@@ -1,6 +1,7 @@
-var program = require('commander');
 var path = require('path');
-var spawnSync = require('child_process').spawnSync;
+var childProcess = require('child_process');
+var spawnSync = childProcess.spawnSync;
+var execSync = childProcess.execSync;
 var fs = require('fs'),
   stat = fs.stat;
 
@@ -56,117 +57,113 @@ var exists = function(src, dst, callback) {
   });
 };
 
+var createFolder = function(to) { //文件写入
+    var sep = path.sep
+    var folders = to.split(sep);
+    var p = '';
+    while (folders.length) {
+        p += folders.shift() + sep;
+        if (!fs.existsSync(p)) {
+            fs.mkdirSync(p);
+        }
+    }
+};
+
 var rootPath = path.dirname(__dirname);
 
-program.version('1.0.0');
+module.exports = function(entry, {
+  output = 'outputs',
+  web,
+  android,
+  ios,
+  windows,
+  macos
+}) {
+  // 打包
+  if (web) {
+    console.log('编译web');
+    execSync('webpack --config '+ rootPath + '/web/webpack.config.js --progress --colors', {stdio:[0,1,2]});
+  }
 
-program.command('build [entry]')
-  .description('编译构建')
-  .option('-o, --output <string>', '输出目录')
-  .option('-w, --web', '构建web平台')
-  .option('-a, --android', '构建安卓平台')
-  .option('-i, --ios', '构建IOS平台')
-  .option('-w, --windows', '构建Windows 10平台')
-  .option('-m, --macos', '构建Mac平台')
-  .action(function(entry, {
-    output = 'outputs',
-    web,
-    android,
-    ios,
-    windows,
-    macos
-  }) {
-    // 打包
+  if (android) {
+    // node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ../android/app/src/main/res/ --dev  false
+    console.log('构建android包');
+    console.log(spawnSync('node', [
+      'node_modules/react-native/local-cli/cli.js',
+      'bundle',
+      '--entry-file',
+      entry,
+      '--bundle-output',
+      rootPath + '/android/app/src/main/assets/index.android.jsbundle',
+      '--platform',
+      'android',
+      '--assets-dest',
+      rootPath + '/android/app/src/main/res/',
+      '--dev',
+      'false'
+    ]).stdout.toString());
+
+    // cd android && gradlew assembleRelease
+    console.log('编译android apk');
+    if (process.platform === 'win32') {
+      console.log(execSync('cd ../android && gradlew assembleRelease').stdout.toString());
+    } else {
+      console.log(execSync('cd ../android && ./gradlew assembleRelease').stdout.toString());
+    }
+  }
+  if (ios) {
+    console.log('构建ios包');
+    console.log(spawnSync('node', [
+      'node_modules/react-native/local-cli/cli.js',
+      'bundle',
+      '--entry-file',
+      entry,
+      '--bundle-output',
+      rootPath + '/ios/main.jsbundle',
+      '--platform',
+      'ios',
+      '--assets-dest',
+      rootPath + '/ios/Saasplat/Images.xcassets/',
+      '--dev',
+      'false'
+    ]).stdout.toString());
+  }
+
+  if (windows) {
+    console.log('构建windows包');
+    console.log(spawnSync('node', [
+      'node_modules/react-native/local-cli/cli.js',
+      'bundle',
+      '--entry-file',
+      entry,
+      '--bundle-output',
+      rootPath +
+      '/windows/Saasplat/ReactAssets/index.windows.bundle',
+      '--platform',
+      'windows',
+      '--assets-dest',
+      rootPath + '/windows/Saasplat/ReactAssets',
+      '--dev',
+      'false'
+    ]).stdout.toString());
+  }
+
+  if (macos) {
+
+  }
+
+  // 复制目录
+  if (output) {
+    createFolder(output);
+
     if (web) {
-      console.log('编译web');
-      console.log(spawnSync('webpack', [
-        '--config',
-        rootPath + '/web/webpack.config.js',
-        '--progress',
-        '--colors'
-      ]).stdout.toString());
+      exists(path.join(rootPath, 'web/www'),
+        path.join(output, 'web'), copy);
     }
 
     if (android) {
-      // node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ../android/app/src/main/res/ --dev  false
-      console.log('构建android包');
-      console.log(spawnSync('node', [
-        'node_modules/react-native/local-cli/cli.js',
-        'bundle',
-        '--entry-file',
-        entry,
-        '--bundle-output',
-        rootPath +
-        '/android/app/src/main/assets/index.android.jsbundle',
-        '--platform',
-        'android',
-        '--assets-dest',
-        rootPath + '/android/app/src/main/res/',
-        '--dev',
-        'false'
-      ]).stdout.toString());
-
-      // cd android && gradlew assembleRelease
-      console.log('编译android apk');
-      if (process.platform === 'win32') {
-        console.log(spawnSync(__dirname + '/buildandroid.bat').stdout.toString());
-      } else {
-        console.log(spawnSync(__dirname + '/buildandroid').stdout.toString());
-      }
+      exists(path.join(rootPath, 'web/android/app/build/outputs/apk'),
+        path.join(output, 'android'), copy);
     }
-    if (ios) {
-      console.log('构建ios包');
-      console.log(spawnSync('node', [
-        'node_modules/react-native/local-cli/cli.js',
-        'bundle',
-        '--entry-file',
-        entry,
-        '--bundle-output',
-        rootPath + '/ios/main.jsbundle',
-        '--platform',
-        'ios',
-        '--assets-dest',
-        rootPath + '/ios/Saasplat/Images.xcassets/',
-        '--dev',
-        'false'
-      ]).stdout.toString());
-    }
-
-    if (windows) {
-      console.log('构建windows包');
-      console.log(spawnSync('node', [
-        'node_modules/react-native/local-cli/cli.js',
-        'bundle',
-        '--entry-file',
-        entry,
-        '--bundle-output',
-        rootPath +
-        '/windows/Saasplat/ReactAssets/index.windows.bundle',
-        '--platform',
-        'windows',
-        '--assets-dest',
-        rootPath + '/windows/Saasplat/ReactAssets',
-        '--dev',
-        'false'
-      ]).stdout.toString());
-    }
-
-    if (macos) {
-
-    }
-
-    // 复制目录
-    if (outputs) {
-      if (web) {
-        exists(path.join(rootPath, 'web/www'),
-          path.join(outputs, 'web'), copy);
-      }
-
-      if (android) {
-        exists(path.join(rootPath, 'web/android/app/build/outputs/apk'),
-          path.join(outputs, 'android'), copy);
-      }
-    }
-  });
-
-program.parse(process.argv); //开始解析用户输入的命令
+  }
+}

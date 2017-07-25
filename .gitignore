@@ -64,3 +64,4 @@ fastlane/screenshots
 /android/gradle/wrapper/gradle-2.4-all.zip
 /android/gradle/wrapper/http.js
 /outputs
+/demo.js

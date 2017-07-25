@@ -58,15 +58,15 @@ var exists = function(src, dst, callback) {
 };
 
 var createFolder = function(to) { //文件写入
-    var sep = path.sep
-    var folders = to.split(sep);
-    var p = '';
-    while (folders.length) {
-        p += folders.shift() + sep;
-        if (!fs.existsSync(p)) {
-            fs.mkdirSync(p);
-        }
+  var sep = path.sep
+  var folders = to.split(sep);
+  var p = '';
+  while (folders.length) {
+    p += folders.shift() + sep;
+    if (!fs.existsSync(p)) {
+      fs.mkdirSync(p);
     }
+  }
 };
 
 var rootPath = path.dirname(__dirname);
@@ -82,13 +82,14 @@ module.exports = function(entry, {
   // 打包
   if (web) {
     console.log('编译web');
-    execSync('webpack --config '+ rootPath + '/web/webpack.config.js --progress --colors', {stdio:[0,1,2]});
+    execSync('webpack --config ' + rootPath +
+      '/web/webpack.config.js --progress --colors', { stdio: [0, 1, 2] });
   }
 
   if (android) {
     // node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output ./android/app/src/main/assets/index.android.jsbundle --platform android --assets-dest ../android/app/src/main/res/ --dev  false
     console.log('构建android包');
-    console.log(spawnSync('node', [
+    spawnSync('node', [
       'node_modules/react-native/local-cli/cli.js',
       'bundle',
       '--entry-file',
@@ -101,19 +102,23 @@ module.exports = function(entry, {
       rootPath + '/android/app/src/main/res/',
       '--dev',
       'false'
-    ]).stdout.toString());
+    ], { stdio: [0, 1, 2] });
 
     // cd android && gradlew assembleRelease
     console.log('编译android apk');
     if (process.platform === 'win32') {
-      console.log(execSync('cd ../android && gradlew assembleRelease').stdout.toString());
+      execSync('cd "' + rootPath + '/android" && gradlew assembleRelease', { stdio: [
+          0, 1, 2
+        ] });
     } else {
-      console.log(execSync('cd ../android && ./gradlew assembleRelease').stdout.toString());
+      execSync('cd "' + rootPath + '/android" && ./gradlew assembleRelease', { stdio: [
+          0, 1, 2
+        ] });
     }
   }
   if (ios) {
     console.log('构建ios包');
-    console.log(spawnSync('node', [
+    spawnSync('node', [
       'node_modules/react-native/local-cli/cli.js',
       'bundle',
       '--entry-file',
@@ -126,12 +131,12 @@ module.exports = function(entry, {
       rootPath + '/ios/Saasplat/Images.xcassets/',
       '--dev',
       'false'
-    ]).stdout.toString());
+    ], { stdio: [0, 1, 2] });
   }
 
   if (windows) {
     console.log('构建windows包');
-    console.log(spawnSync('node', [
+    spawnSync('node', [
       'node_modules/react-native/local-cli/cli.js',
       'bundle',
       '--entry-file',
@@ -145,7 +150,7 @@ module.exports = function(entry, {
       rootPath + '/windows/Saasplat/ReactAssets',
       '--dev',
       'false'
-    ]).stdout.toString());
+    ], { stdio: [0, 1, 2] });
   }
 
   if (macos) {
@@ -162,7 +167,7 @@ module.exports = function(entry, {
     }
 
     if (android) {
-      exists(path.join(rootPath, 'web/android/app/build/outputs/apk'),
+      exists(path.join(rootPath, 'android/app/build/outputs/apk'),
         path.join(output, 'android'), copy);
     }
   }

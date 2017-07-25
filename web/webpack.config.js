@@ -6,11 +6,11 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   //页面入口文件配置
-  entry: {
-    app: [
-      path.normalize(__dirname + '/../index.web.js')
-    ]
-  },
+  // entry: {
+  //   app: [
+  //     path.normalize(process.argv[process.argv.length - 1])  // 默认规则，最后一个参数是entry
+  //   ]
+  // },
   //入口文件输出配置
   output: {
     //publicPath: '/dist',
@@ -21,7 +21,7 @@ module.exports = {
     //加载器配置
     loaders: [{
       test: /\.js|\.jsx$/,
-      exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
+      //exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
       loaders: ['babel-loader?' + JSON.stringify({
         'compact': false,
         'presets': [
@@ -37,11 +37,15 @@ module.exports = {
           //'transform-runtime',
           'transform-decorators-legacy'
         ]
-      })]
+      })],
+      include: path.resolve(__dirname,
+        (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
+        "../node_modules")
     }, {
       test: /\.ttf$/,
       loader: "url-loader", // or directly file-loader
       include: path.resolve(__dirname,
+        (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         "../node_modules/react-native-vector-icons"),
     }]
   },
@@ -57,6 +61,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([{
       from: path.join(__dirname,
+        (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         '../node_modules/babel-polyfill/dist/polyfill.min.js'),
       to: path.join(__dirname, 'www', 'dist')
     }]),
@@ -66,12 +71,12 @@ module.exports = {
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        collapseInlineTagWhitespace:true,
+        collapseInlineTagWhitespace: true,
         //conservativeCollapse: true,
         preserveLineBreaks: true,
         minifyCSS: true,
-        removeScriptTypeAttributes:true,
-        removeStyleLinkTypeAttributes:true
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true
       }
     }),
     new ScriptExtHtmlWebpackPlugin({
@@ -81,13 +86,13 @@ module.exports = {
     //new ChunkModuleIDPlugin(), new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({ '__DEV__': false, 'process.env.NODE_ENV': '"production"' }),
     // new webpack.ProvidePlugin({ '__DEV__': false }),
-     new webpack.SourceMapDevToolPlugin({
-        test: [/\.js$/, /\.jsx$/],
-        exclude: 'vendor',
-        filename: "app.[hash:5].js.map",
-        append: "//# sourceMappingURL=[url]",
-        moduleFilenameTemplate: '[resource-path]',
-        fallbackModuleFilenameTemplate: '[resource-path]',
+    new webpack.SourceMapDevToolPlugin({
+      test: [/\.js$/, /\.jsx$/],
+      exclude: 'vendor',
+      filename: "[name].[hash:5].js.map",
+      append: "//# sourceMappingURL=[url]",
+      moduleFilenameTemplate: '[resource-path]',
+      fallbackModuleFilenameTemplate: '[resource-path]',
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {

@@ -83,7 +83,10 @@ module.exports = function(entry, {
   if (web) {
     console.log('编译web');
     execSync('webpack --config ' + rootPath +
-      '/web/webpack.config.js --progress --colors', { stdio: [0, 1, 2] });
+      '/web/webpack.config.js --progress --colors ' +
+      (path.isAbsolute(entry) ? entry : path.join(process.cwd(), entry)), {
+        stdio: [0, 1, 2]
+      });
   }
 
   if (android) {
@@ -107,13 +110,17 @@ module.exports = function(entry, {
     // cd android && gradlew assembleRelease
     console.log('编译android apk');
     if (process.platform === 'win32') {
-      execSync('cd "' + rootPath + '/android" && gradlew assembleRelease', { stdio: [
+      execSync('cd "' + rootPath + '/android" && gradlew assembleRelease', {
+        stdio: [
           0, 1, 2
-        ] });
+        ]
+      });
     } else {
-      execSync('cd "' + rootPath + '/android" && ./gradlew assembleRelease', { stdio: [
+      execSync('cd "' + rootPath + '/android" && ./gradlew assembleRelease', {
+        stdio: [
           0, 1, 2
-        ] });
+        ]
+      });
     }
   }
   if (ios) {

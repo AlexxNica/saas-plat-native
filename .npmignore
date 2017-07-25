@@ -1,6 +1,7 @@
 node_modules/
 bundles/
 psd/
+outpus/
 web/www/dist
 web/www/index.html
 windows/ARM
@@ -13,3 +14,9 @@ android/build
 android/gradle.properties
 android/saas-plat.keystore
 android/app/build
+.eslintrc
+.gitattributes
+.jsbeautifyrc
+.npmignore
+config.js
+demo.js

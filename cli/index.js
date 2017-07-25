@@ -13,9 +13,13 @@ program.command('build [entry]')
   .option('-m, --macos', '构建Mac平台')
   .action(require('./build'));
 
-program.command('configKeystore')
-  .description('编译构建')
+program.command('configKeyStore')
+  .description('配置KeyStore')
   .option('-c, --config <string>', '配置文件')
+  .option('-f, --file <string>', '文件路径')
+  .option('-a, --alias <string>', '别名')
+  .option('-p, --storePassword <string>', 'store密码')
+  .option('-k, --keyPassword <string>', 'key密码')
   .action(require('./configKeystore'));
 
 program.parse(process.argv); //开始解析用户输入的命令

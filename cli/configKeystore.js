@@ -10,16 +10,13 @@ var fs = require('fs');
 // MYAPP_RELEASE_STORE_PASSWORD=xxxx
 // MYAPP_RELEASE_KEY_PASSWORD=xxxxxxxxx
 
-// //JPush
-const DEFAULT_JPUSH_APPKEY = 'af7af7aef587a913d6bbee06';
-const DEFAULT_JPUSH_APP_CHANNEL = 'DEFAULT';
 
 // keystore
 // keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
 
 var rootPath = path.dirname(__dirname);
 
-module.exports = ({ config }) => {
+module.exports = ({ config, file, alias, storePassword, keyPassword }) => {
   if (!fs.existsSync(config)) {
     console.log('config 文件不存在');
     return;
@@ -46,19 +43,14 @@ module.exports = ({ config }) => {
   }
 
   props = props.replace(/^(MYAPP_RELEASE_STORE_FILE\s*=\s*)(.*)$/m, '$1' +
-    json.file);
+   file ||  json.file);
   props = props.replace(/^(MYAPP_RELEASE_KEY_ALIAS\s*=\s*)(.*)$/m, '$1' +
-    json.alias);
+   alias ||  json.alias);
   props = props.replace(/^(MYAPP_RELEASE_STORE_PASSWORD\s*=\s*)(.*)$/m, '$1' +
-    json.storePassword);
+   storePassword ||  json.storePassword);
   props = props.replace(/^(MYAPP_RELEASE_KEY_PASSWORD\s*=\s*)(.*)$/m, '$1' +
-    json.keyPassword);
+   keyPassword ||  json.keyPassword);
 
-  props = props.replace(/^(JPUSH_APPKEY\s*=\s*)(.*)$/m, '$1' + json.jpushKey ||
-    DEFAULT_JPUSH_APPKEY);
-  props = props.replace(/^(JPUSH_APP_CHANNEL\s*=\s*)(.*)$/m, '$1' + json.jpushChannel ||
-    DEFAULT_JPUSH_APP_CHANNEL);
-    
   //console.log(props)
 
   fs.writeFileSync(propsFile, props);

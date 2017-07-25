@@ -4,14 +4,14 @@ saas-plat.com运行平台，技术基于React Native提供跨终端的运行支�
 
 ## 使用
 
-···
+```
 npm i --save saas-plat-native
-···
+```
 
 安装需要模块：
-···
+```
 npm i --save saas-plat-native-core saas-plat-native-login saas-plat-native-portal ...
-···
+```
 
 新建一个index.js，
 ```js

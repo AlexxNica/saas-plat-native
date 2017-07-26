@@ -52,11 +52,21 @@ getPackageJson('./../..', function(f, s) {
     var json = JSON.parse(rf);
     var searchKey = rf.match(/\n.*\"scripts\"\: \{\n/);
 
+      // start
+    if (!(/start/.test(rf))) {
+      if (searchKey != null) {
+        rf = rf.replace(searchKey[0], searchKey[0] +
+          '    \"start\"\: \"node node_modules\/saas-plat-native\/cli\/index\.js start --entry index.js  --web \"\,\n'
+        );
+        fs.writeFileSync(f, rf, 'utf-8');
+      }
+    }
+
     // 生成build命令，构建android、ios、web、windows、macos
     if (!(/build/.test(rf))) {
       if (searchKey != null) {
         rf = rf.replace(searchKey[0], searchKey[0] +
-          '    \"build\"\: \"node node_modules\/saas-plat-native\/cli\/index\.js build index.js --output outputs --web --android --ios --windows --macos\"\,\n'
+          '    \"build\"\: \"node node_modules\/saas-plat-native\/cli\/index\.js build --entry index.js --output outputs --web --android --ios --windows --macos\"\,\n'
         );
         fs.writeFileSync(f, rf, 'utf-8');
       }

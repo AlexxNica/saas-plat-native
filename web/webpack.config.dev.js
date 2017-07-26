@@ -1,21 +1,20 @@
 var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ChunkModuleIDPlugin = require('./ChunkModuleIDPlugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
   //页面入口文件配置
   entry: {
-    app: [
-      //'webpack-hot-middleware/client',
-      __dirname + '/../index.web.js'
-    ]
+    // app: [
+    //   //'webpack-hot-middleware/client',
+    //   __dirname + '/../index.web.js'
+    // ]
   },
   //入口文件输出配置
   output: {
-    publicPath: 'http://localhost:8200/dist',
+    publicPath: 'http://localhost:8800/dist',
     path: path.join(__dirname, 'www', 'dist'),
     filename: '[name].js'
   },
@@ -46,6 +45,7 @@ module.exports = {
       test: /\.ttf$/,
       loader: "url-loader", // or directly file-loader
       include: path.resolve(__dirname,
+        (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         "../node_modules/react-native-vector-icons"),
     }]
   },
@@ -62,6 +62,7 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([{
       from: path.join(__dirname,
+        (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         '../node_modules/babel-polyfill/dist/polyfill.min.js'),
       to: path.join(__dirname, 'www', 'dist')
     }]),

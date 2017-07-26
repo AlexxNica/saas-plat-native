@@ -3,8 +3,19 @@ var program = require('commander');
 
 program.version('1.0.0');
 
-program.command('build [entry]')
+program.command('start')
+  .description('启动调试')
+  .option('--entry', '入口文件')
+  .option('-w, --web', '构建web平台')
+  .option('-a, --android', '构建安卓平台')
+  .option('-i, --ios', '构建IOS平台')
+  .option('-w, --windows', '构建Windows 10平台')
+  .option('-m, --macos', '构建Mac平台')
+  .action(require('./start'));
+
+program.command('build')
   .description('编译构建')
+  .option('--entry', '入口文件')
   .option('-o, --output <string>', '输出目录')
   .option('-w, --web', '构建web平台')
   .option('-a, --android', '构建安卓平台')

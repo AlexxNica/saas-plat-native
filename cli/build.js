@@ -71,7 +71,8 @@ var createFolder = function(to) { //文件写入
 
 var rootPath = path.dirname(__dirname);
 
-module.exports = function(entry, {
+module.exports = function({
+  entry = 'index.js',
   output = 'outputs',
   web,
   android,

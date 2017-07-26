@@ -22,7 +22,7 @@ module.exports = {
     //加载器配置
     loaders: [{
       test: /\.js|\.jsx$/,
-      exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
+      //exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
       loaders: [
         //'react-hot',
          'babel?' + JSON.stringify({

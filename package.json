@@ -4,7 +4,7 @@
   "author": "saas-plat.com",
   "license": "GPL-3.0",
   "repository": "https://github.com/saas-plat/saas-plat-native",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "run-android": "react-native run-android",
     "run-ios": "react-native run-ios",

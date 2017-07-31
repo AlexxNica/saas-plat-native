@@ -1,51 +1,71 @@
-'use strict';
+var path = require('path');
+var autoprefixer = require('autoprefixer');
+var pxtorem = require('postcss-pxtorem');
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+const platform = 'web';
 
-var _path = require('path');
-
-var _path2 = _interopRequireDefault(_path);
-
-var _webpack = require('webpack');
-
-var _webpack2 = _interopRequireDefault(_webpack);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var managerEntry = process.env.DEV_BUILD ? _path2.default.resolve(__dirname, '../../src/client/manager') : _path2.default.resolve(__dirname, '../manager');
-
-var config = {
-  devtool: '#cheap-module-eval-source-map',
-  entry: {
-    manager: [managerEntry],
-    preview: [_path2.default.resolve(__dirname, './error_enhancements'), 'webpack-hot-middleware/client']
-  },
-  output: {
-    path: _path2.default.join(__dirname, 'dist'),
-    filename: '[name].bundle.js',
-    publicPath: '/static/'
-  },
-  plugins: [new _webpack2.default.optimize.OccurenceOrderPlugin(), new _webpack2.default.HotModuleReplacementPlugin()],
-  module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel',
-      query: { presets: ['react', 'es2015', 'stage-2'] },
-      exclude: [_path2.default.resolve('./node_modules'), _path2.default.resolve(__dirname, 'node_modules')],
-      include: [_path2.default.resolve('./'), __dirname, _path2.default.resolve(__dirname, '../../src')]
-    },{
-      test: /\.(gif|jpe?g|png|svg)$/,
-      loader: 'url-loader',
-      query: { name: '[name].[hash:16].[ext]' }
-    }]
-  },
-  resolve: {
-    alias: {
-      'react-native': 'react-native-web'
-    }
-  }
+// Export a function. Accept the base config as the only param.
+module.exports = function(storybookBaseConfig, configType) {
+  // storybookBaseConfig.module.rules[0].exclude = [
+  //   /node_modules\/(?!react-native-vector-icons|saas-plat-native-core)/,
+  //   /\.less$/
+  // ];
+  storybookBaseConfig.module.rules.push({
+    test: /\.less|\.css$/,
+    use: [
+      require.resolve('style-loader'),
+      require.resolve('css-loader'),
+      {
+        loader: require.resolve('postcss-loader'),
+        options: {
+          ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+          plugins: () => [
+            autoprefixer({
+              browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4'],
+            }),
+            pxtorem({ rootValue: 100, propWhiteList: [] })
+          ],
+        },
+      },
+      {
+        loader: require.resolve('less-loader'),
+        options: {
+          modifyVars: { "@primary-color": "#1d4ba4" },
+        },
+      },
+    ],
+  });
+  storybookBaseConfig.module.rules.push({
+    test: /\.(svg)$/i,
+    loader: 'svg-sprite-loader',
+    include: [
+      require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. svg files of antd-mobile
+      // path.resolve(__dirname, 'src/my-project-svg-foler'),  // folder of svg files in your project
+    ]
+  });
+  storybookBaseConfig.module.rules.push({
+    test: /\.(eot?|woff?|woff2?|ttf?|svg?|png?|jpg?|gif?)/,
+    loader: 'url-loader?limit=8192&name=[name].[ext]',
+    include: path.resolve(__dirname, "../node_modules/react-native-vector-icons")
+  });
+  storybookBaseConfig.node = {
+    fs: 'empty'
+  };
+  storybookBaseConfig.resolve.alias = {
+    'saasplat-native': 'saas-plat-native-core',
+    'react-native': 'react-native-web'
+  };
+  storybookBaseConfig.resolve.extensions = [
+    '.' + platform + '.js',
+    '.js',
+    '.css',
+    '.less',
+    '.png',
+    '.svg'
+  ];
+  storybookBaseConfig.plugins[0].definitions['__DEV__'] = true;
+  // console.log(storybookBaseConfig.plugins)
+  // console.log(JSON.stringify(storybookBaseConfig,null,2)) Return the altered
+  // config
+  return storybookBaseConfig;
 };
-
-module.exports = config;

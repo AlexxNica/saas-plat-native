@@ -18,5 +18,5 @@ android/app/build
 .gitattributes
 .jsbeautifyrc
 .npmignore
-config.js
+/config.js
 demo.js

@@ -13,6 +13,12 @@ program.command('start')
   .option('-m, --macos', '构建Mac平台')
   .action(require('./start'));
 
+program.command('storybook')
+  .description('启动storybook')
+  .option('-p <string>', '端口')
+  .option('-c <string>', '配置目录')
+  .action(require('./storybook'));
+
 program.command('build')
   .description('编译构建')
   .option('--entry <string>', '入口文件')

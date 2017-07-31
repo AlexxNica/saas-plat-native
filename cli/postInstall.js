@@ -72,6 +72,16 @@ getPackageJson('./../..', function(f, s) {
       }
     }
 
+    // start-storybook -p 9900 -c node_modules/saas-plat-native/web/.storybook
+    if (!(/storybook/.test(rf))) {
+      if (searchKey != null) {
+        rf = rf.replace(searchKey[0], searchKey[0] +
+          '    \"storybook\"\: \"start-storybook -p 9900 -c .storybook\"\,\n'
+        );
+        fs.writeFileSync(f, rf, 'utf-8');
+      }
+    }
+
     // 生成keystore配置命令
     if (!(/configKeystore/.test(rf))) {
       if (searchKey != null) {
@@ -107,7 +117,7 @@ function isFile(path) {
 }
 
 function exists(path) {
-  return fs.existsSync(path) || path.existsSync(path);
+  return fs.existsSync(path);
 }
 
 function isDir(path) {

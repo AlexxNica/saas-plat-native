@@ -66,7 +66,7 @@ getPackageJson('./../..', function(f, s) {
     if (!(/build/.test(rf))) {
       if (searchKey != null) {
         rf = rf.replace(searchKey[0], searchKey[0] +
-          '    \"build\"\: \"node node_modules\/saas-plat-native\/cli\/index\.js build --entry index.js --output outputs --web --android --ios --windows --macos\"\,\n'
+          '    \"build\"\: \"node node_modules\/saas-plat-native\/cli\/index\.js build --entry index.js --output dist --web --android --ios --windows --macos\"\,\n'
         );
         fs.writeFileSync(f, rf, 'utf-8');
       }

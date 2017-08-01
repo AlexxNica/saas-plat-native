@@ -7,17 +7,13 @@ program.command('start')
   .description('启动调试')
   .option('--entry <string>', '入口文件')
   .option('-w, --web', '构建web平台')
+  .option('-p, --port', 'web端口')
+  .option('-m, --mock', '是否启用api的模拟，不依赖后端服务')
   .option('-a, --android', '构建安卓平台')
   .option('-i, --ios', '构建IOS平台')
   .option('-w, --windows', '构建Windows 10平台')
   .option('-m, --macos', '构建Mac平台')
   .action(require('./start'));
-
-program.command('storybook')
-  .description('启动storybook')
-  .option('-p <string>', '端口')
-  .option('-c <string>', '配置目录')
-  .action(require('./storybook'));
 
 program.command('build')
   .description('编译构建')

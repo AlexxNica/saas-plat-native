@@ -6,15 +6,20 @@ module.exports = function(args) {
   var root = path.dirname(__dirname);
   //var httpProxyMiddleware = require('http-proxy-middleware');
   var app = express();
+  var port = args.port || 8200;
 
   if (args.web) {
     var config = require('../web/webpack.config.dev');
+    config.entry = config.entry || {};
     config.entry.main = path.isAbsolute(args.entry||'')
       ? args.entry
       : path.join(process.cwd(), args.entry || 'index.js');
+    config.output.publicPath = 'http://localhost:'+port+'/dist';
     var webpack = require('webpack');
+    config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': args.mock || true }));
     var compiler = webpack(config);
     console.log('webpack-dev-middleware with webpack.config.dev')
+    compiler.apply(new webpack.ProgressPlugin(require('./webpack-progress-bar-handler')()));
     var md = require('webpack-dev-middleware')(compiler, {
       publicPath: config.output.publicPath,
       noInfo: true,
@@ -27,6 +32,7 @@ module.exports = function(args) {
         colors: true
       }
     });
+
     app.use(md);
 
     app.use(require('webpack-hot-middleware')(compiler));
@@ -75,10 +81,10 @@ module.exports = function(args) {
     res.status(500).send('Something broke!');
   });
 
-  app.listen(8800, function(err) {
+  app.listen(port, function(err) {
     if (err) {
       return console.error(err);
     }
-    console.log('Listening at http://localhost:8800/');
+    console.log('Listening at http://localhost:'+port+'/');
   });
 };

@@ -1,2 +1,2 @@
-import {AppRegistry} from './index';
-export {AppRegistry}
+require('./index');
+module.exports = require('./src');

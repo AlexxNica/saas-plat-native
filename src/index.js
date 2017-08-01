@@ -7,6 +7,8 @@ import Statistics from './utils/Statistics';
 import LocalStore from './utils/LocalStore';
 
 // core
+import PlatformApis from './apis/PlatformApis';
+import ServerApis from './apis/ServerApis';
 import Bundle from './core/Bundle';
 import Registry from './core/Registry';
 import * as Theme from './core/Theme';
@@ -39,6 +41,8 @@ module.exports = {
   ServerStore,
 
   // core
+  Platform: PlatformApis,
+  Server: ServerApis,
   Bundle,
   I18n,
   Theme,

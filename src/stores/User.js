@@ -1,6 +1,6 @@
 import assert from 'assert';
 import sha1 from 'crypto-js/sha1';
-import { observable, action } from 'mobx';
+import { observable, action, autorun } from 'mobx';
 
 import ServerStore from './Server';
 import RouterStore from './Router';
@@ -15,6 +15,7 @@ import { tx } from '../utils/internal';
 import { registerStore } from '../core/Store';
 
 import * as apis from '../apis/PlatformApis';
+import * as serverApis from '../apis/ServerApis';
 
 @registerStore('userStore')
 export default class UserStore {
@@ -22,6 +23,13 @@ export default class UserStore {
   @observable user;
   @observable historyList = new HistroyModel();
   @observable options = {};
+
+  constructor() {
+    autorun(() => {
+      apis.authorization(UserStore.getStore().getToken());
+      serverApis.authorization(UserStore.getStore().getToken());
+    });
+  }
 
   getToken() {
     return this.user && this.user.token && this.user.token.data;
@@ -44,7 +52,7 @@ export default class UserStore {
       if (token) {
         statistics.log({ how: 'sso' });
         try {
-          const user = await apis.loginPlatUserToken(token);
+          const user = await apis.loginToken(token);
           this.changeUser(user);
           console.log(tx('登录完成'));
           resolve(user);
@@ -56,7 +64,7 @@ export default class UserStore {
         var encUsername = encodeURIComponent(username) || '';
         var passwordHash = sha1(password).toString();
         try {
-          const user = await apis.loginPlatUser(encUsername, passwordHash);
+          const user = await apis.login(encUsername, passwordHash);
           this.changeUser(user);
           console.log(tx('登录完成'));
           resolve(user);

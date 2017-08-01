@@ -20,3 +20,4 @@ android/app/build
 .npmignore
 /config.js
 demo.js
+npm-debug.log

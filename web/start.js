@@ -36,6 +36,7 @@ config.entry = {
     __dirname + '/../index.web.js'
   ]
 };
+config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': true }));
 var compiler = webpack(config);
 console.log('webpack-dev-middleware with webpack.config.dev')
 var md = require('webpack-dev-middleware')(compiler, {

@@ -94,7 +94,7 @@ export default class PlatformLoading extends React.Component {
     return new Promise(async(resolve, reject) => {
       console.log(me.props.t('开始连接平台网络...'));
       try {
-        const platformConfig = await apis.connectPlatform(Tenant.id) || {};
+        const platformConfig = await apis.connect(Tenant.id) || {};
         // Bundle.removeMetadata('platform');
         // Bundle.addMetadata('platform', platformConfig.bundles);
         Router.init(platformConfig.routes);

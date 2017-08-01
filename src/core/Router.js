@@ -19,6 +19,14 @@ class Router {
     }
   }
 
+  push(url){
+    if (this.history){
+      this.history.push(url);
+    }else{
+      console.warn('history not created');
+    }
+  }
+
   // getBundle(path) {
   //   assert(path, tx('无法查找空路径的路由'));
   //   const ps = path.split('/').filter(item => item);

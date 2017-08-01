@@ -16,7 +16,7 @@ import I18n from './core/I18n';
 import * as Store from './core/Store';
 import * as Socket from './core/Socket';
 import Screen from './core/Screen';
-import Tenant from './core/Tenant';
+import System from './core/System';
 
 // fx
 import CommandBus from './fx/CommandBus';
@@ -41,7 +41,7 @@ module.exports = {
   ServerStore,
 
   // core
-  Platform: PlatformApis,
+  SaasPlat: PlatformApis,
   Server: ServerApis,
   Bundle,
   I18n,
@@ -51,7 +51,7 @@ module.exports = {
   Socket, // 即时通讯
   Screen,
   Platform,
-  Tenant,
+  System,
 
   // fx
   CommandBus,

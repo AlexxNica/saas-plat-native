@@ -1,6 +1,5 @@
 import assert from 'assert';
-import {LoadContextManager} from './Context';
-import {tx} from '../utils/internal';
+import { LoadContextManager } from './Context'; 
 
 LoadContextManager.createContext();
 
@@ -32,26 +31,42 @@ export default class {
       name = 'default';
     }
 
-    assert(name, '路由名称未定义');
-    assert(path, '路由地址未定义');
+    assert(name);
+    assert(path);
     assert(typeof route === 'function');
 
     // let tRoute = route; if (typeof route === 'function') {   route = route(); }
     //
     // checkRoute(route);
 
-    const ctx = LoadContextManager.getCurrentContext();
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
+    }
     ctx.registerRoute(ns, path, name, route, afterBuild); // 注册原始的route，route会根据state变化时动态计算
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static removeRoute(name, path) {
-    assert(name, '路由名称未定义');
+    assert(name);
     if (!path) {
       path = 'portal';
     }
 
-    const ctx = LoadContextManager.getCurrentContext();
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
+    }
     ctx.removeRoute(path, name);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   // name 参数可以是 string 但是必须提供route 可以是 route        可以是 function
@@ -82,20 +97,32 @@ export default class {
       theme = name;
       name = 'default';
     }
-    assert(name, tx('ThemeNameNull'));
+    assert(name);
     assert(theme && typeof theme === 'function');
-    const ctx = LoadContextManager.getCurrentContext();
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
+    }
     ctx.registerTheme(ns, name, theme);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static removeTheme(name, ns) {
-    assert(name, tx('ThemeNameNull'));
-    if (!ns) {
-      const ctx = LoadContextManager.getCurrentContext();
-      ns = ctx.getCurrentBundleName();
+    assert(name);
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
     }
-    const ctx = LoadContextManager.getCurrentContext();
     ctx.unregisterTheme(name, ns);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static registerLocales(lang, ns, locales) {
@@ -111,20 +138,33 @@ export default class {
       ns = arguments[0];
       lang = 'zh-CN';
     }
-    assert(locales, tx('LocalesNull'));
+    assert(locales);
     assert(locales && typeof locales === 'function');
-    const ctx = LoadContextManager.getCurrentContext();
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
+    }
     ctx.registerLocales(ns, lang, locales);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static removeLocales(name, ns) {
-    assert(name, tx('LocalesNameNull'));
-    if (!ns) {
-      const ctx = LoadContextManager.getCurrentContext();
-      ns = ctx.getCurrentBundleName();
+    assert(name);
+
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
     }
-    const ctx = LoadContextManager.getCurrentContext();
     ctx.unregisterLocales(name, ns);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static registerStore(ns, name, Store, filter, getStoreHandler) {
@@ -135,17 +175,29 @@ export default class {
     }
     assert(name);
     assert(Store && typeof Store === 'function');
-    const ctx = LoadContextManager.getCurrentContext();
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
+    }
     ctx.registerStore(ns, name, Store, filter, getStoreHandler);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 
   static removeStore(name, ns) {
-    assert(name, tx('StoreNameNull'));
-    if (!ns) {
-      const ctx = LoadContextManager.getCurrentContext();
-      ns = ctx.getCurrentBundleName();
+    assert(name);
+    let ctx = LoadContextManager.getCurrentContext();
+    const createCtx = ctx === null;
+    if (createCtx) {
+      ctx = LoadContextManager.createContext();
     }
-    const ctx = LoadContextManager.getCurrentContext();
     ctx.unregisterStore(name, ns);
+    if (createCtx) {
+      ctx.complateLoad();
+      LoadContextManager.destroyCurrentContext();
+    }
   }
 }

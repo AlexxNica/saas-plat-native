@@ -142,7 +142,7 @@ class LoadContextManager {
 
   static getCurrentContext() {
     if (!this.currentContext) {
-      console.warn(tx('包加载上下文不存在'));
+      //console.warn(tx('包加载上下文不存在'));
       return null;
     }
     return this.currentContext;

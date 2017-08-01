@@ -6,7 +6,6 @@ import './core/Error'; // 导入全局异常处理
 import i18n from './core/I18n';
 import Router from './core/Router';
 import * as Push from './core/Push';
-import { LoadContextManager } from './core/Context';
 
 import Theme from './stores/Theme';
 import I18nStore from './stores/I18n';
@@ -32,7 +31,6 @@ i18n.init({
 export default class App extends React.Component {
   constructor(){
     super();
-    LoadContextManager.getCurrentContext().complateLoad();
   }
 
   componentDidMount() {

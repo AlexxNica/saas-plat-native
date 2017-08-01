@@ -6,15 +6,15 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   devtool: 'cheap-module-source-map',
   //页面入口文件配置
-  entry: {
-    // app: [
-    //   //'webpack-hot-middleware/client',
-    //   __dirname + '/../index.web.js'
-    // ]
-  },
+  // entry: {
+  //   main: [
+  //     //'webpack-hot-middleware/client',
+  //     __dirname + '/../index.web.js'
+  //   ]
+  // },
   //入口文件输出配置
   output: {
-    publicPath: 'http://localhost:8800/dist',
+    publicPath: 'http://localhost:8200/dist',
     path: path.join(__dirname, 'www', 'dist'),
     filename: '[name].js'
   },

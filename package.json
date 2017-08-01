@@ -1,13 +1,14 @@
 {
   "name": "saas-plat-native",
-  "version": "1.1.8",
+  "version": "1.1.10",
   "author": "saas-plat.com",
   "license": "GPL-3.0",
   "repository": "https://github.com/saas-plat/saas-plat-native",
   "main": "main.js",
   "scripts": {
-    "run-android": "react-native run-android",
-    "run-ios": "react-native run-ios",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "web": "node ./web/start.js",
     "clean-android": "cd android && gradlew clean",
     "gradlew-android": "cd android && gradlew assembleRelease",
     "storybook": "start-storybook -p 9001 -c web/.storybook",
@@ -17,6 +18,7 @@
     "pub": "npm publish --registry http://registry.npmjs.org"
   },
   "dependencies": {
+    "crypto-js": "^3.1.6",
     "@remobile/react-native-splashscreen": "github:saas-plat/react-native-splashscreen",
     "@shoutem/theme": "^0.8.9",
     "ant-mobile": "0.0.0",

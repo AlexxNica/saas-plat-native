@@ -1,13 +1,11 @@
 import 'react';
-import { AppRegistry as AppLoader } from 'react-native';
+import { AppRegistry } from 'react-native';
+import App from './src/App';
 
 global.__DEV__ = __DEV__;
+module.exports = require('./src');
 
-export class AppRegistry {
-  static registerComponent(appLoader) {
-    AppLoader.registerComponent('App', appLoader);
-    AppLoader.runApplication('App', {
-      rootTag: document.getElementById('saas-plat')
-    });
-  }
-}
+AppRegistry.registerComponent('App', () => App);
+AppRegistry.runApplication('App', {
+  rootTag: document.getElementById('saas-plat')
+});

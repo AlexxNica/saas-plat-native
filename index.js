@@ -1,8 +1,5 @@
 import 'react';
-import { AppRegistry as AppLoader } from 'react-native';
-
-export class AppRegistry {
-  static registerComponent(appLoader) {
-    AppLoader.registerComponent('Saasplat', appLoader);
-  }
-}
+import { AppRegistry } from 'react-native';
+import App from './src/App';
+module.exports = require('./src');
+AppRegistry.registerComponent('App', () => App);

@@ -71,19 +71,19 @@ export default class {
 
   // name 参数可以是 string 但是必须提供route 可以是 route        可以是 function
   static registerRootRoute(name, ns, route, afterBuild) {
-    if (arguments.length === 3) {
+    if (arguments.length === 2 || arguments.length === 3) {
       afterBuild = arguments[2];
       route = arguments[1];
       ns = arguments[0];
       name = 'default';
     }
-    if (arguments.length === 2 || arguments.length === 1) {
+    if (arguments.length === 1) {
       afterBuild = arguments[1];
       route = arguments[0];
       ns = '';
       name = 'default';
     }
-    this.registerRoute(name, '/', route, afterBuild);
+    this.registerRoute(name, '/', ns, route, afterBuild);
   }
 
   static registerTheme(name, ns, theme) {

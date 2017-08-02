@@ -25,14 +25,14 @@ export default class SystemStore {
     const me = this;
     return new Promise((resolve, reject) => {
       localStore.load({key: 'systemOptions'}).then(result => {
-        console.log(tx('SystemOptionLoaded'));
+        console.log(tx('系统选项已加载'));
         if (autoLoad) {
           me.options = result;
         }
         resolve(result);
       }).catch(err => {
         if (err && err.name !== 'NotFoundError' && err.name !== 'ExpiredError') {
-          console.log(tx('SystemOptionLoadFail'));
+          console.log(tx('系统选项加载失败'));
           console.warn(err);
           reject();
         } else {

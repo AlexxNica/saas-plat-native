@@ -20,6 +20,21 @@ export function authorization(token) {
 //     return Promise.reject(error);
 // });
 
+// Add a response interceptor
+instance.interceptors.response.use((response) => {
+    if (response.status === 200){
+      if (response.data.errno === 0){
+        return response.data.data;
+      }else{
+        return Promise.reject(new Error(response.data.errno, response.data.errmsg));
+      }
+    }
+    return null;
+  }, (error) => {
+    // Do something with response error
+    return Promise.reject(error);
+  });
+
 if (__DEV__ && __MOCK__) {
   require('./mock/PlatformMock').mock(instance);
 }

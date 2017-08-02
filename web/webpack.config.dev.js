@@ -29,10 +29,10 @@ module.exports = {
           //retainLines: true, 'compact':false,
           'presets': [
             'react',
-            //'es2015',
+            'es2015',
             'es2017',
-            // 'stage-0',
-            // 'stage-1',
+             'stage-0',
+             'stage-1',
             // 'stage-2',
             // 'stage-3'
           ],

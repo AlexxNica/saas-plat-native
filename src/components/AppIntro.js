@@ -12,7 +12,6 @@ import { connectStyle } from '../core/Theme';
 export default class AppIntroView extends Component {
   handleDone() {
     this.props.systemStore.setSystemOption({appVersion: this.props.systemStore.config.version});
-    assert(this.props.onDone); // onDone必须有值
     this.props.history.replace('/login');
   }
 

@@ -22,7 +22,7 @@ export default class MessageView extends React.Component {
   }
 
   getTipMsg() {
-    let tipMsg = (this.props.msg || tx('迷路了吗？')) + tx('，返回上一页。');
+    let tipMsg = (this.props.msg || tx('迷路了吗？返回上一页。');
     switch (this.props.code) {
       case 'ModuleNotExists':
         tipMsg = tx('导航页面不存在啦~~~戳我返回上一页。');

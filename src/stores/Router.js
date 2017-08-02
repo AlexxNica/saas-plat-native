@@ -15,7 +15,7 @@ export default class RouterStore {
         ...p,
         ns: item.ns,
         //version: item.version,
-        path: item.parent + trimEnd(fixStart(p.path, '/'), '/')
+        path: trimEnd(fixStart(p.path, '/'), '/')  // item.parent + trimEnd(fixStart(p.path, '/'), '/')
       })));
     });
     return routes;

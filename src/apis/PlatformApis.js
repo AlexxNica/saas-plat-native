@@ -22,18 +22,18 @@ export function authorization(token) {
 
 // Add a response interceptor
 instance.interceptors.response.use((response) => {
-    if (response.status === 200){
-      if (response.data.errno === 0){
-        return response.data.data;
-      }else{
-        return Promise.reject(new Error(response.data.errno, response.data.errmsg));
-      }
+  if (response.status === 200) {
+    if (response.data.errno === 0) {
+      return response.data.data;
+    } else {
+      return Promise.reject(new Error(response.data.errno, response.data.errmsg));
     }
-    return null;
-  }, (error) => {
-    // Do something with response error
-    return Promise.reject(error);
-  });
+  }
+  return null;
+}, (error) => {
+  // Do something with response error
+  return Promise.reject(error);
+});
 
 if (__DEV__ && __MOCK__) {
   require('./mock/PlatformMock').mock(instance);
@@ -83,6 +83,21 @@ export function findServer(id) {
         os: Platform.OS,
         v: device.systemVersion,
         s: Screen.Size
+      }
+    }
+  );
+}
+
+export function loadModules() {
+  return instance.get(config.platform.module);
+}
+
+export function loadView(mId, vId) {
+  return instance.get(
+    config.platform.view, {
+      params: {
+        mId,
+        vId
       }
     }
   );

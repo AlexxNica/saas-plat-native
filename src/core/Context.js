@@ -58,14 +58,14 @@ class LoadContext {
   //   });
   // }
 
-  registerStore(name, Store, filter, getStoreHandler) {
+  registerStore(ns, name, Store, filter, getStoreHandler) {
     this._actions.push({
       action: REGISTER_STORE,
       name,
       Store,
       filter,
       getStoreHandler,
-      ns: this._currentNS
+      ns
     });
   }
 

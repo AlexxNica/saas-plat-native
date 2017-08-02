@@ -8,7 +8,7 @@ import * as apis from '../apis/PlatformApis';
 import {connectStyle} from '../core/Theme';
 import {translate} from '../core/I18n';
 import {connectStore} from '../core/Store';
-import Tenant from '../core/Tenant';
+import Startup from '../core/Startup';
 
 import {observer} from '../utils/helper';
 
@@ -94,7 +94,7 @@ export default class PlatformLoading extends React.Component {
     return new Promise(async(resolve, reject) => {
       console.log(me.props.t('开始连接平台网络...'));
       try {
-        const platformConfig = await apis.connect(Tenant.id) || {};
+        const platformConfig = await apis.connect(Startup.id) || {};
         // Bundle.removeMetadata('platform');
         // Bundle.addMetadata('platform', platformConfig.bundles);
         Router.init(platformConfig.routes);

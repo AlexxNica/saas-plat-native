@@ -9,7 +9,7 @@ export default class System {
     return enterpriseId;
   }
 
-  static start(id) {
+  static start({id}) {
     if (!id) {
       throw new Error(501, tx('企业ID不能为空'));
     }

@@ -36,9 +36,10 @@ config.entry = {
     __dirname + '/../index.web.js'
   ]
 };
-config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': true }));
+config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': true , '__TEST__': true}));
 var compiler = webpack(config);
-console.log('webpack-dev-middleware with webpack.config.dev')
+console.log('webpack-dev-middleware with webpack.config.dev');
+compiler.apply(new webpack.ProgressPlugin(require('../cli/webpack-progress-bar-handler')()));
 var md = require('webpack-dev-middleware')(compiler, {
   publicPath: config.output.publicPath,
   noInfo: true,

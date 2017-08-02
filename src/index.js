@@ -1,4 +1,6 @@
 import { Platform } from 'react-native';
+import { useStrict } from 'mobx';
+useStrict(true);
 
 // utils
 import * as helper from './utils/helper';
@@ -16,7 +18,7 @@ import I18n from './core/I18n';
 import * as Store from './core/Store';
 import * as Socket from './core/Socket';
 import Screen from './core/Screen';
-import System from './core/System';
+import Startup from './core/Startup';
 
 // fx
 import CommandBus from './fx/CommandBus';
@@ -51,7 +53,7 @@ module.exports = {
   Socket, // 即时通讯
   Screen,
   Platform,
-  System,
+  Startup,
 
   // fx
   CommandBus,

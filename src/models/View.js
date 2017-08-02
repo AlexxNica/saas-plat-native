@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import { observable, action } from 'mobx';
 
 export default class View {
   store;
@@ -18,10 +18,6 @@ export default class View {
     this.text = text;
     this.url = url;
     this.config = config;
-  }
-
-  @action open(options) {
-    this.store.openModule(this.mId, this.name, options);
   }
 
   toJS() {

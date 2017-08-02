@@ -31,6 +31,7 @@ export default class {
       name = 'default';
     }
 
+    assert(ns);
     assert(name);
     assert(path);
     assert(typeof route === 'function');
@@ -77,12 +78,7 @@ export default class {
       ns = arguments[0];
       name = 'default';
     }
-    if (arguments.length === 1) {
-      afterBuild = arguments[1];
-      route = arguments[0];
-      ns = '';
-      name = 'default';
-    }
+ 
     this.registerRoute(name, '/', ns, route, afterBuild);
   }
 
@@ -92,11 +88,8 @@ export default class {
       theme = arguments[1];
       name = 'default';
     }
-    if (arguments.length === 1) {
-      ns = '';
-      theme = name;
-      name = 'default';
-    }
+ 
+    assert(ns);
     assert(name);
     assert(theme && typeof theme === 'function');
     let ctx = LoadContextManager.getCurrentContext();
@@ -112,6 +105,7 @@ export default class {
   }
 
   static removeTheme(name, ns) {
+    assert(ns);
     assert(name);
     let ctx = LoadContextManager.getCurrentContext();
     const createCtx = ctx === null;
@@ -126,18 +120,14 @@ export default class {
   }
 
   static registerLocales(lang, ns, locales) {
-    if (arguments.length === 1) {
-      // 默认是简体中文
-      locales = arguments[0];
-      ns = '';
-      lang = 'zh-CN';
-    }
+ 
     if (arguments.length === 2) {
       // 默认是简体中文
       locales = arguments[1];
       ns = arguments[0];
       lang = 'zh-CN';
     }
+    assert(ns);
     assert(locales);
     assert(locales && typeof locales === 'function');
     let ctx = LoadContextManager.getCurrentContext();
@@ -153,6 +143,7 @@ export default class {
   }
 
   static removeLocales(name, ns) {
+    assert(ns);
     assert(name);
 
     let ctx = LoadContextManager.getCurrentContext();
@@ -168,12 +159,12 @@ export default class {
   }
 
   static registerStore(ns, name, Store, filter, getStoreHandler) {
-    if (arguments.length === 1) {
+    if (arguments.length === 2) {
       Store = name;
-      ns = '';
       name = 'default';
     }
     assert(name);
+    assert(ns);
     assert(Store && typeof Store === 'function');
     let ctx = LoadContextManager.getCurrentContext();
     const createCtx = ctx === null;
@@ -188,6 +179,7 @@ export default class {
   }
 
   static removeStore(name, ns) {
+    assert(ns);
     assert(name);
     let ctx = LoadContextManager.getCurrentContext();
     const createCtx = ctx === null;

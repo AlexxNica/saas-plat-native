@@ -1,4 +1,4 @@
-import {observable, action, computed} from 'mobx';
+import { observable, action, computed } from 'mobx';
 import View from './View';
 
 export default class Module {
@@ -6,8 +6,10 @@ export default class Module {
   id;
 
   @observable name;
+  @observable icon;
   @observable text;
-  @observable views;
+  @observable views = [];
+  @observable order;
 
   // 模块的url就是第一个view的url
   @computed get url() {
@@ -17,21 +19,30 @@ export default class Module {
     return null;
   }
 
-  constructor(store, id, name, text, views) {
+  @action async loadView(vId, refresh) {
+    await this.store.loadView(this.id, vId, refresh);
+  }
+
+  @action addView(model) {
+    this.views.push(model);
+  }
+
+  @action removeView(vId) {
+    const view = this.views.find(it => it.id === vId);
+    if (!view) {
+      return;
+    }
+    this.views.splice(this.views.indexOf(view), 1);
+  }
+
+  constructor(store, id, name, text, icon, order, views = []) {
     this.store = store;
     this.id = id;
     this.text = text;
+    this.icon = icon;
     this.name = name;
-    this.views = views || [];
-  }
-
-  // 打开模块页面
-  @action open(viewName, options) {
-    if (arguments.length === 1 && typeof viewName === 'object'){
-      options = viewName;
-      viewName = null;
-    }
-    this.store.openModule(this.name, viewName, options);
+    this.order = order;
+    this.views.push(views);
   }
 
   toJS() {
@@ -39,12 +50,16 @@ export default class Module {
       id: this.id,
       name: this.name,
       text: this.text,
+      icon: this.icon,
       url: this.url,
+      order: this.order,
       views: this.views.map(v => v.toJS)
     };
   }
 
   static fromJS(store, object) {
-    return new Module(store, object.id, object.name, object.text, (object.views || []).map(v => View.fromJS(this, this.name, v)));
+    return new Module(store, object.id, object.name, object.text, object.icon,
+      object.order,
+      (object.views || []).map(v => View.fromJS(store, object.name, v)));
   }
 }

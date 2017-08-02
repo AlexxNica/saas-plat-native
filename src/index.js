@@ -32,6 +32,7 @@ import I18nStore from './stores/I18n';
 import RouterStore from './stores/Router';
 import MessageStore from './stores/Message';
 import ServerStore from './stores/Server';
+import ModuleStore from './stores/Module';
 
 module.exports = {
   UserStore, // 用户参数
@@ -41,6 +42,7 @@ module.exports = {
   RouterStore, // 路由
   MessageStore, // 消息服务
   ServerStore,
+  ModuleStore,
 
   // core
   SaasPlat: PlatformApis,

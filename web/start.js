@@ -27,7 +27,7 @@ io.of('/chat').on('connection', function(socket) {
   });
 });
 var config = require('../web/webpack.config.dev');
-require('./ant-mobile.config')(config);
+require('./antd.config')(config);
 var webpack = require('webpack');
 config.entry = {
   main: [//'webpack-hot-middleware/client',

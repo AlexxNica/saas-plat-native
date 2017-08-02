@@ -15,7 +15,7 @@ import {observer} from '../utils/helper';
 // 平台组件加载等待
 @translate('core.PlatformLoading')
 @connectStyle('core.PlatformLoading')
-@connectStore(['userStore', 'systemStore'])
+@connectStore(['userStore', 'systemStore', 'moduleStore'])
 @observer
 export default class PlatformLoading extends React.Component {
 
@@ -139,6 +139,7 @@ export default class PlatformLoading extends React.Component {
     this.connect(). // 连接获取平台基本配置信息
     then(() => this.props.systemStore.loadSystemOptions()). // 先加载系统选项，启动过程可能需要判断
     then(() => this.props.userStore.loadHistory()). // 加载登录历史
+    then(() => this.props.moduleStore.loadModules()). // 加载功能模块
     then(() => this.startupSystem.bind(this)()); // 启动系统
   }
 

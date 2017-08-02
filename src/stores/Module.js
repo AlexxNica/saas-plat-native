@@ -18,7 +18,7 @@ export default class ModuleStore {
     }
     const data = await apis.loadModules();
     runInAction(() => {
-      this.modules = data.map(it => ModuleModel.fromJS(it));
+      this.modules = data.map(it => ModuleModel.fromJS(this, it));
     });
   }
 

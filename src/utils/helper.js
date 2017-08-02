@@ -9,8 +9,7 @@ import I18nStore from '../stores/I18n';
 import RouterStore from '../stores/Router';
 import MessageStore from '../stores/Message';
 import ServerStore from '../stores/Server';
-import storage from './LocalStore';
-import * as internal from './internal';
+import ModuleStore from '../stores/Module';
 
 import * as theme from '../core/Theme';
 import * as i18n from '../core/I18n';
@@ -25,6 +24,7 @@ export const i18nStore = I18nStore.getStore(); // 多语言
 export const routerStore = RouterStore.getStore(); // 路由
 export const messageStore = MessageStore.getStore(); // 消息服务
 export const serverStore = ServerStore.getStore(); // 服务器
+export const moduleStore = ModuleStore.getStore();
 
 // *************** local && theme ******************
 

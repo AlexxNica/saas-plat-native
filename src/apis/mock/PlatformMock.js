@@ -53,9 +53,9 @@ export function mock(axios) {
 
   mock.onGet(config.platform.module).reply(200, Mock.mock({
     errno: 0,
-    'data|1-10': [{
+    'data|10': [{
       id: Mock.Random.integer(1000, 10000),
-      'name': Mock.Random.word(5),
+      name: Mock.Random.word(),
       icon: null,
       text: Mock.Random.cparagraph(1, 3),
       'order|+1': 1

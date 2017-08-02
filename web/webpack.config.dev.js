@@ -20,12 +20,11 @@ module.exports = {
   },
   module: {
     //加载器配置
-    loaders: [{
+    rules: [{
       test: /\.js|\.jsx$/,
       //exclude: /node_modules[\\|\/](?!react-native|@shoutem\\theme|@remobile\\react-native)/,
-      loaders: [
-        //'react-hot',
-         'babel?' + JSON.stringify({
+      loader:  'babel-loader',
+      options: {
           //retainLines: true, 'compact':false,
           'presets': [
             'react',
@@ -39,8 +38,7 @@ module.exports = {
           'plugins': [ //'transform-runtime',
             'transform-decorators-legacy'
           ]
-        })
-      ]
+        }
     }, {
       test: /\.ttf$/,
       loader: "url-loader", // or directly file-loader
@@ -52,7 +50,7 @@ module.exports = {
   //其它解决方案配置
   resolve: {
     extensions: [
-      '', '.web.js', '.js'
+       '.web.js', '.js'
     ],
     alias: {
       'react-native': 'react-native-web'
@@ -71,8 +69,8 @@ module.exports = {
       filename: __dirname + '/www/index.html'
     }),
     //new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new webpack.optimize.DedupePlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    //new webpack.optimize.DedupePlugin(),
     //new ChunkModuleIDPlugin(),
     new webpack.DefinePlugin({ '__DEV__': true }),
     //new webpack.ProvidePlugin({'__DEV__': 'true'})

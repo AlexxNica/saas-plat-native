@@ -93,7 +93,7 @@ getPackageJson('./../..', function(f, s) {
 
       var keystoreFile = spath.join(spath.dirname(f), 'keystore.json');
       if (!exists(keystoreFile)) {
-        fs.writeFileSync(f, JSON.stringfiy({
+        fs.writeFileSync(f, JSON.stringify({
           file: json.name + '.keystore',
           alias: json.name,
           storePassword: '',

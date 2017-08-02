@@ -1,4 +1,3 @@
-var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
@@ -27,16 +26,24 @@ io.of('/chat').on('connection', function(socket) {
     console.log('chat socket disconnected ');
   });
 });
-
 var config = require('../web/webpack.config.dev');
+require('./ant-mobile.config')(config);
 var webpack = require('webpack');
 config.entry = {
-  main: [
-    //'webpack-hot-middleware/client',
-    __dirname + '/../index.web.js'
-  ]
+  main: [//'webpack-hot-middleware/client',
+    __dirname + '/../demo.js']
 };
-config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': true , '__TEST__': true}));
+// 这里需要加载当前项目包，要不测试时引用的第三方模块依赖加载有误
+var dependencies = JSON.parse(fs.readFileSync( __dirname +'/../package.json')).dependencies;
+for (var i in dependencies) {
+  config.resolve.alias[i] = __dirname + '/../node_modules/'+i;
+}
+// 当前就是saas-plat-native
+config.resolve.alias['react-native'] = __dirname + '/../node_modules/react-native-web';
+config.resolve.alias['saas-plat-native'] = __dirname + '/../src';
+//console.log(config.resolve.alias)
+// 定义模拟数据，和调试状态
+config.plugins.push(new webpack.DefinePlugin({'__MOCK__': true, '__TEST__': true}));
 var compiler = webpack(config);
 console.log('webpack-dev-middleware with webpack.config.dev');
 compiler.apply(new webpack.ProgressPlugin(require('../cli/webpack-progress-bar-handler')()));
@@ -67,13 +74,11 @@ app.get('/favicon_32.ico', function(req, res) {
 });
 
 app.get('/dist/polyfill.min.js', function(req, res) {
-  res.sendFile(path.join(__dirname,
-    '../node_modules/babel-polyfill/dist/polyfill.min.js'));
+  res.sendFile(path.join(__dirname, '../node_modules/babel-polyfill/dist/polyfill.min.js'));
 });
 
 app.get('/dist/es6-promise.map', function(req, res) {
-  res.sendFile(path.join(__dirname,
-    '../node_modules/es6-promise/dist/es6-promise.map'));
+  res.sendFile(path.join(__dirname, '../node_modules/es6-promise/dist/es6-promise.map'));
 });
 
 app.get('/*', function(req, res) {

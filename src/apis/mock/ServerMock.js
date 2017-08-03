@@ -7,6 +7,11 @@ export function mock(axios) {
   // This sets the mock adapter on the default instance
   var mock = new MockAdapter(axios);
 
+  axios.interceptors.request.use(config => {
+    console.log(config.method+' '+config.url);
+    return config;
+  });
+
   mock.onGet(config.server.connection).reply(200, {
     errno: 0,
     data: {}

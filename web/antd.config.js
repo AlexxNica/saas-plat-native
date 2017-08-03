@@ -4,14 +4,15 @@ var pxtorem = require('postcss-pxtorem');
 module.exports = function(config) {
   config.resolve.extensions.push('.less');
   config.resolve.extensions.push('.svg');
+  config.resolve.extensions.push('.json');
   config.module.rules[0].options.plugins.push([
-    require.resolve('babel-plugin-import'), {
-      libraryName: 'antd-mobile',
-      style: true
-    }, {
-      libraryName: 'antd',
-      style: true
-    }
+    require.resolve('babel-plugin-import'), [{
+          libraryName: 'antd-mobile',
+          style: true
+        }, {
+          libraryName: 'antd',
+          style: true
+        }]
   ]);
   config.module.rules.push({
     test: /\.less|\.css$/,
@@ -52,5 +53,9 @@ module.exports = function(config) {
       require.resolve('antd-mobile').replace(/warn\.js$/, ''), // 1. svg files of antd-mobile
       // path.resolve(__dirname, 'src/my-project-svg-foler'),  // folder of svg files in your project
     ]
+  });
+  config.module.rules.push( {
+    test: /\.json$/,
+    loader: 'json-loader'
   });
 };

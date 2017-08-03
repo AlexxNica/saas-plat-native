@@ -52,7 +52,7 @@ var md = require('webpack-dev-middleware')(compiler, {
   noInfo: true,
   historyApiFallback: true,
   watchOptions: {
-    aggregateTimeout: 100,
+    aggregateTimeout: 1000,
     poll: 2000
   },
   stats: {

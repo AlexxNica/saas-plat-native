@@ -9,16 +9,18 @@ import * as apis from '../apis/PlatformApis';
 
 @registerStore('moduleStore')
 export default class ModuleStore {
-  @observable modules;
+  @observable modules = [];
+  @observable moduleLoaded = false;
 
   // 加载用户模块数
   @action async loadModules(refresh = false) {
-    if (this.modules && !refresh) {
+    if (this.moduleLoaded && !refresh) {
       return;
     }
     const data = await apis.loadModules();
     runInAction(() => {
-      this.modules = data.map(it => ModuleModel.fromJS(this, it));
+      this.modules.replace(data.map(it => ModuleModel.fromJS(this, it)));
+      this.moduleLoaded = true;
     });
   }
 

@@ -52,8 +52,8 @@ var md = require('webpack-dev-middleware')(compiler, {
   noInfo: true,
   historyApiFallback: true,
   watchOptions: {
-    aggregateTimeout: 1000,
-    poll: 2000
+    aggregateTimeout: 100,
+    poll: 3000
   },
   stats: {
     colors: true
@@ -75,6 +75,10 @@ app.get('/favicon_32.ico', function(req, res) {
 
 app.get('/dist/polyfill.min.js', function(req, res) {
   res.sendFile(path.join(__dirname, '../node_modules/babel-polyfill/dist/polyfill.min.js'));
+});
+
+app.get('/dist/viewport.min.js', function(req, res) {
+  res.sendFile(__dirname + '/www/dist/viewport.min.js');
 });
 
 app.get('/dist/es6-promise.map', function(req, res) {

@@ -10,13 +10,11 @@ export default class Module {
   @observable text;
   @observable views = [];
   @observable order;
+  @observable url;
+  @observable defaultViewMode;
 
-  // 模块的url就是第一个view的url
-  @computed get url() {
-    if (this.views.length > 0) {
-      return this.views[0].url;
-    }
-    return null;
+  @computed get defaultView() {
+    return this.views.find(v => v.mode === this.defaultViewMode);
   }
 
   @action async loadView(vId, refresh) {
@@ -35,13 +33,15 @@ export default class Module {
     this.views.splice(this.views.indexOf(view), 1);
   }
 
-  constructor(store, id, name, text, icon, order, views = []) {
+  constructor(store, id, url, name, text, icon, order, defaultView = 'viewMode', views = []) {
     this.store = store;
     this.id = id;
+    this.url = url;
     this.text = text;
     this.icon = icon;
     this.name = name;
     this.order = order;
+    this.defaultViewMode = defaultView;
     this.views.push(views);
   }
 
@@ -53,13 +53,15 @@ export default class Module {
       icon: this.icon,
       url: this.url,
       order: this.order,
+      defaultView: this.defaultViewMode,
       views: this.views.map(v => v.toJS)
     };
   }
 
   static fromJS(store, object) {
-    return new Module(store, object.id, object.name, object.text, object.icon,
-      object.order,
+    return new Module(store, object.id, object.url, object.name, object.text,
+      object.icon,
+      object.order, object.defaultView,
       (object.views || []).map(v => View.fromJS(store, object.name, v)));
   }
 }

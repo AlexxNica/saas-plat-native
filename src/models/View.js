@@ -5,18 +5,18 @@ export default class View {
   id;
   mId;
 
-  @observable url;
+  @observable mode;
   @observable text;
   @observable name;
   @observable config;
 
-  constructor(store, mId, id, name, text, url, config) {
+  constructor(store, mId, id, name, text, mode, config) {
     this.store = store;
     this.mId = mId;
     this.id = id;
     this.name = name;
     this.text = text;
-    this.url = url;
+    this.mode = mode;
     this.config = config;
   }
 
@@ -26,7 +26,7 @@ export default class View {
       id: this.id,
       name: this.name,
       text: this.text,
-      url: this.url,
+      mode: this.mode,
     };
   }
 
@@ -35,9 +35,9 @@ export default class View {
       id,
       name,
       text,
-      url,
+      mode,
       ...config
     } = object;
-    return new View(store, mId, id, name, text, url, config);
+    return new View(store, mId, id, name, text, mode, config);
   }
 }

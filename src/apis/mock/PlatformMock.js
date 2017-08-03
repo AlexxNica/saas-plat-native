@@ -62,6 +62,8 @@ export function mock(axios) {
       id: Mock.Random.integer(1000, 10000),
       name: Mock.Random.word(),
       icon: null,
+      url: '/'+Mock.Random.word(),
+      defaultView: 'viewMode',
       text: Mock.Random.cparagraph(1, 3),
       'order|+1': 1
     }]

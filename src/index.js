@@ -34,6 +34,10 @@ import MessageStore from './stores/Message';
 import ServerStore from './stores/Server';
 import ModuleStore from './stores/Module';
 
+// components
+import Icon from './components/icon';
+
+
 module.exports = {
   UserStore, // 用户参数
   SystemStore, // 系统参数
@@ -43,6 +47,9 @@ module.exports = {
   MessageStore, // 消息服务
   ServerStore,
   ModuleStore,
+
+  // components
+  Icon,
 
   // core
   SaasPlat: PlatformApis,

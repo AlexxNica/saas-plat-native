@@ -7,10 +7,6 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   //页面入口文件配置
   // entry: {
-  //   main: [
-  //     //'webpack-hot-middleware/client',
-  //     __dirname + '/../index.web.js'
-  //   ]
   // },
   //入口文件输出配置
   output: {
@@ -62,9 +58,6 @@ module.exports = {
       from: path.join(__dirname,
         (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         '../node_modules/babel-polyfill/dist/polyfill.min.js'),
-      to: path.join(__dirname, 'www', 'dist')
-    }, {
-      from: path.join(__dirname, 'viewport.min.js'),
       to: path.join(__dirname, 'www', 'dist')
     }]),
     new HtmlWebpackPlugin({

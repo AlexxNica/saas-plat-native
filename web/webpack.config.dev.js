@@ -59,6 +59,9 @@ module.exports = {
         (process.cwd() !== path.dirname(__dirname) ? '../../' : '') +
         '../node_modules/babel-polyfill/dist/polyfill.min.js'),
       to: path.join(__dirname, 'www', 'dist')
+    }, {
+      from: path.join(__dirname, 'viewport.js'),
+      to: path.join(__dirname, 'www', 'dist', 'viewport.min.js')
     }]),
     new HtmlWebpackPlugin({
       template: __dirname + "/index.temp.html",

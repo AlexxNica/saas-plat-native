@@ -15,6 +15,13 @@ module.exports = function(args) {
       ? args.entry
       : path.join(process.cwd(), args.entry || 'index.js');
     config.output.publicPath = 'http://localhost:'+port+'/dist';
+    var list = ['xxs', 'xs', 'sm', 'md', 'lg'];
+    for (var s in list) {
+      if (args.indexOf('--' + s)) {
+        config.resolve.extensions.splice(0, 0, '.web.' + s + '.js', s + '.web.js', '.' + s + '.js');
+        continue;
+      }
+    }
     var webpack = require('webpack');
     config.plugins.push(new webpack.DefinePlugin({ '__MOCK__': args.mock || true }));
     var compiler = webpack(config);

@@ -14,6 +14,8 @@ export const REGISTER_STORE = 'REGISTER_STORE';
 export const UNREGISTER_STORE = 'UNREGISTER_STORE';
 export const REGISTER_INITMETHOD = 'REGISTER_INITMETHOD';
 export const UNREGISTER_INITMETHOD = 'UNREGISTER_INITMETHOD';
+export const REGISTER_ACTIONS = 'REGISTER_ACTIONS';
+export const UNREGISTER_ACTIONS = 'UNREGISTER_ACTIONS';
 
 class LoadContext {
   constructor() {
@@ -41,7 +43,7 @@ class LoadContext {
   // }
 
   // // 移除包内所有注册信息
-  // removeBundleRegisters() {
+  // unregisterBundleRegisters() {
   //   this._actions.push({action: UNREGISTER_BUNDLE, ns: this._currentNS});
   // }
 
@@ -101,7 +103,7 @@ class LoadContext {
     });
   }
 
-  // removeRoute(path, name) {
+  // unregisterRoute(path, name) {
   //   this._actions.push({action: UNREGISTER_ROUTE, ns: this._currentNS, path, name});
   // }
 
@@ -110,8 +112,24 @@ class LoadContext {
   //     name, handler });
   // }
 
-  // removeModuleInit(name) {
+  // unregisterModuleInit(name) {
   //   this._actions.push({action: UNREGISTER_INITMETHOD, ns: this._currentNS, name});
+  // }
+
+  registerActions(token, module, actions){
+      this._actions.push({
+        action: REGISTER_ACTIONS,
+        token,
+        module,
+        actions
+      });
+  }
+
+  // unregisterActions(token){
+  //     this._actions.push({
+  //       action: UNREGISTER_ACTIONS,
+  //       token,
+  //     });
   // }
 
   complateLoad() {

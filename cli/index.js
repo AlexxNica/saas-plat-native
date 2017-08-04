@@ -24,6 +24,11 @@ program.command('build')
   .option('-i, --ios', '构建IOS平台')
   .option('-w, --windows', '构建Windows 10平台')
   .option('-m, --macos', '构建Mac平台')
+  .option('--xxs', 'xxs版本')
+  .option('--xs', 'xs版本')
+  .option('--sm', 'sm版本')
+  .option('--md', 'md版本')
+  .option('--lg', 'lg版本')
   .action(require('./build'));
 
 program.command('configKeyStore')

@@ -8,7 +8,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "web": "node ./web/start.js",
+    "web": "node ./web/start.js --xs",
     "clean-android": "cd android && gradlew clean",
     "gradlew-android": "cd android && gradlew assembleRelease",
     "storybook": "start-storybook -p 9001 -c web/.storybook",
@@ -106,7 +106,9 @@
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
     "style-loader": "^0.18.2",
+    "svg-sprite-loader": "^3.1.0",
     "url-loader": "^0.5.7",
+    "uuid": "^3.1.0",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.18.0",

@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 //var httpProxyMiddleware = require('http-proxy-middleware');
-
+var args = process.argv.slice(2);
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -33,16 +33,23 @@ config.entry = {
   main: [//'webpack-hot-middleware/client',
     __dirname + '/../demo.js']
 };
+// 调试只支持两种尺寸
+var list = [ 'xs', 'sm'];
+for (var s in list) {
+  if (args.indexOf('--' + s)) {
+    config.resolve.extensions.splice(0, 0, '.web.' + s + '.js', s + '.web.js', '.' + s + '.js');
+    continue;
+  }
+}
 // 这里需要加载当前项目包，要不测试时引用的第三方模块依赖加载有误
-var dependencies = JSON.parse(fs.readFileSync( __dirname +'/../package.json')).dependencies;
+var dependencies = JSON.parse(fs.readFileSync(__dirname + '/../package.json')).dependencies;
 for (var i in dependencies) {
-  config.resolve.alias[i] = __dirname + '/../node_modules/'+i;
+  config.resolve.alias[i] = __dirname + '/../node_modules/' + i;
 }
 // 当前就是saas-plat-native
 config.resolve.alias['react-native'] = __dirname + '/../node_modules/react-native-web';
 config.resolve.alias['saas-plat-native'] = __dirname + '/../src';
-//console.log(config.resolve.alias)
-// 定义模拟数据，和调试状态
+//console.log(config.resolve.alias) 定义模拟数据，和调试状态
 config.plugins.push(new webpack.DefinePlugin({'__MOCK__': true, '__TEST__': true}));
 var compiler = webpack(config);
 console.log('webpack-dev-middleware with webpack.config.dev');

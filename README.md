@@ -29,6 +29,21 @@ AppRegistry.registerComponent(() => App);
 node node_modules/saas-plat-native/cli/index.js build index.js --output outputs --android --ios --web --windows --macos
 ```
 
+支持五种屏幕尺寸
+
+```
+lg >= 1200;
+md >= 992;
+sm >= 768;   (建议)
+xs <= 758;   (建议)
+xxs <= 312;
+```
+
+生成xs手机版和>sm版web应用
+```
+node node_modules/saas-plat-native/cli/index.js build index.js --output outputs  --web --xs --sm
+```
+
 参见示例项目:https://github.com/saas-plat/saas-plat-native-demo
 
 ## 特定平台的配置:
@@ -45,7 +60,7 @@ node node_modules/saas-plat-native/cli/index.js build index.js --output outputs 
     MYAPP_RELEASE_STORE_PASSWORD=xxxx
     MYAPP_RELEASE_KEY_PASSWORD=xxxx
 
-    //JPush 
+    //JPush
     JPUSH_APPKEY: xxxxxxx
     JPUSH_APP_CHANNEL: xxxxxxx
 

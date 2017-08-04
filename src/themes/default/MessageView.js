@@ -10,7 +10,6 @@ export default {
     backgroundColor: '#fff'
   },
   'error' : {
-    fontSize: 16,
     textAlign: 'center',
     marginBottom: 10,
     color: '#222'

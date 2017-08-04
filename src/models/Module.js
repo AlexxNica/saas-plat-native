@@ -1,5 +1,46 @@
 import { observable, action, computed } from 'mobx';
-import View from './View';
+
+export class View {
+  store;
+  id;
+  mId;
+
+  @observable mode;
+  @observable text;
+  @observable name;
+  @observable config;
+
+  constructor(store, mId, id, name, text, mode, config) {
+    this.store = store;
+    this.mId = mId;
+    this.id = id;
+    this.name = name;
+    this.text = text;
+    this.mode = mode;
+    this.config = config;
+  }
+
+  toJS() {
+    return {
+      ...this.config,
+      id: this.id,
+      name: this.name,
+      text: this.text,
+      mode: this.mode,
+    };
+  }
+
+  static fromJS(store, mId, object) {
+    const {
+      id,
+      name,
+      text,
+      mode,
+      ...config
+    } = object;
+    return new View(store, mId, id, name, text, mode, config);
+  }
+}
 
 export default class Module {
   store;
@@ -42,7 +83,7 @@ export default class Module {
     this.name = name;
     this.order = order;
     this.defaultViewMode = defaultView;
-    this.views.push(views);
+    this.views.replace(views);
   }
 
   toJS() {
@@ -54,14 +95,13 @@ export default class Module {
       url: this.url,
       order: this.order,
       defaultView: this.defaultViewMode,
-      views: this.views.map(v => v.toJS)
+      views: this.views.map(v => v.toJS())
     };
   }
 
   static fromJS(store, object) {
     return new Module(store, object.id, object.url, object.name, object.text,
-      object.icon,
-      object.order, object.defaultView,
+      object.icon, object.order, object.defaultView,
       (object.views || []).map(v => View.fromJS(store, object.name, v)));
   }
 }

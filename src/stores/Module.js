@@ -1,26 +1,40 @@
-import { observable, action, runInAction } from 'mobx';
+import { observable, action, runInAction, reaction } from 'mobx';
 import assert from 'assert';
 import { registerStore } from '../core/Store';
+import Screen from '../core/Screen';
 
-import ModuleModel from '../models/Module';
-import ViewModel from '../models/View';
+import localStore from '../utils/LocalStore';
+
+import ModuleModel, { View as ViewModel } from '../models/Module';
 
 import * as apis from '../apis/PlatformApis';
 
 @registerStore('moduleStore')
 export default class ModuleStore {
   @observable modules = [];
-  @observable moduleLoaded = false;
+  @observable loaded = false;
 
   // 加载用户模块数
   @action async loadModules(refresh = false) {
-    if (this.moduleLoaded && !refresh) {
+    if (this.loaded && !refresh) {
       return;
     }
-    const data = await apis.loadModules();
+    let data;
+    if (refresh) {
+      data = await apis.loadModules();
+    } else {
+      try {
+        data = await localStore.load({ key: 'userModules' + Screen.size });
+      } catch(err) {
+        // no cache
+        data = await apis.loadModules();
+      }
+    }
+    //data = await apis.loadModules();
     runInAction(() => {
-      this.modules.replace(data.map(it => ModuleModel.fromJS(this, it)));
-      this.moduleLoaded = true;
+      this.modules.replace((data || []).map(it => ModuleModel.fromJS(this,
+        it)));
+      this.loaded = true;
     });
   }
 
@@ -59,9 +73,22 @@ export default class ModuleStore {
     this.modules.splice(this.modules.indexOf(exists), 1);
   }
 
-  static getStore() {
+  subscribeLocalstorageToStore() {
+    reaction(
+      () => this.modules.map(it => it.toJS()),
+      json => localStore.save({
+        key: 'userModules' + Screen.size,
+        rawData: json
+      })
+    );
+  }
+
+  static getStore(cachable = true) {
     if (!this._instance) {
       this._instance = new ModuleStore();
+      if (cachable) {
+        this._instance.subscribeLocalstorageToStore();
+      }
     }
     return this._instance;
   }

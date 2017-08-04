@@ -12,14 +12,6 @@ export function authorization(token) {
   instance.defaults.headers.common['Authorization'] = token;
 }
 
-// instance.interceptors.request.use( (config)=> {
-//
-//   return config;
-// },   (error) =>{
-//     // Do something with request error
-//     return Promise.reject(error);
-// });
-
 // Add a response interceptor
 instance.interceptors.response.use((response) => {
   if (response.status === 200) {
@@ -89,7 +81,11 @@ export function findServer(id) {
 }
 
 export function loadModules() {
-  return instance.get(config.platform.module);
+  return instance.get(config.platform.module, {
+    params: {
+      s: Screen.Size
+    }
+  });
 }
 
 export function loadView(mId, vId) {

@@ -1,5 +1,4 @@
 import {
-  Platform,
   AsyncStorage
 }
 from 'react-native';

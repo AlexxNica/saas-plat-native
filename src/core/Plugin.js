@@ -1,4 +1,5 @@
 import PubSub from 'pubsub-js';
+import {tx} from '../utils/internal';
 
 export default class Plugin {
   module;
@@ -20,5 +21,10 @@ export default class Plugin {
       PubSub.unsubscribe(token);
     });
     this.tokens.length = 0;
+  }
+
+  static publish(msg, data) {
+    console.log(tx('发布事件'), msg);
+    PubSub.publish(msg, data);
   }
 }

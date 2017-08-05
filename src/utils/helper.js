@@ -15,6 +15,9 @@ import ViewStore from '../stores/View';
 import * as theme from '../core/Theme';
 import * as i18n from '../core/I18n';
 import * as Store from '../core/Store';
+import Plugin from '../core/Plugin';
+
+export const publish = Plugin.publish;  // 发布业务事件
 
 // ************** stores *********************
 

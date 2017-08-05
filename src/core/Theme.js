@@ -23,7 +23,7 @@ function connectTheme(themeName, styles, WrappedComponent) {
         const currentTheme = ThemeStore.getStore().currentTheme;
         let themeStyle;
         if (themeName) {
-          const bundleName = WrappedComponent.__module;
+          const bundleName = WrappedComponent.$packageName;
           if (!currentTheme[themeName]) {
             // 自动补全命名空间
             if (bundleName) {
@@ -60,12 +60,12 @@ function connectTheme(themeName, styles, WrappedComponent) {
         }}>{props.children}</WrappedComponent>;
       };
     }
-    ThemeComponent.__module = WrappedComponent.__module;
+    ThemeComponent.$packageName = WrappedComponent.$packageName;
     return ThemeComponent;
   }
   const ThemeComponent = themes.connectStyle(themeName, styles)(WrappedComponent);
-  ThemeComponent.__module = WrappedComponent.__module;
-  ThemeComponent.__version = WrappedComponent.__version;
+  ThemeComponent.$packageName = WrappedComponent.$packageName;
+  ThemeComponent.$packageVersion = WrappedComponent.$packageVersion;
   return ThemeComponent;
 }
 

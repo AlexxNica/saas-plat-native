@@ -1,5 +1,4 @@
 import {observable, action, runInAction, reaction, computed} from 'mobx';
-import assert from 'assert';
 import {registerStore} from '../core/Store';
 import Screen from '../core/Screen';
 
@@ -43,25 +42,7 @@ export default class ModuleStore {
     });
   }
 
-  // 加载模块视图定义
-  @action async loadViews(mId, refresh = false) {
-    assert(mId);
-    const module = this.modules.find(it => it.id === mId);
-    if (!module) {
-      return false;
-    }
-    const hasLoaded = module.views && module.views.length;
-    if (!refresh && hasLoaded) {
-      return true;
-    }
-    const data = await apis.loadViews(module.id) || [];
-    runInAction(() => {
-      data.forEach(it => {
-        module.addView(ViewModel.fromJS(this, module.id, it));
-      });
-    });
-    return true;
-  }
+
 
   @action addModule(data) {
     if (!this.modules) {

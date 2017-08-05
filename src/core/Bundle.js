@@ -230,7 +230,7 @@ class Bundle {
         case Actions.REGISTER_STORE:
           const store = item.Store();
           for (const aliasName in store) {
-            let name;
+            let name = item.name;
             if (store[aliasName].name !== '_default') {
               name = store[aliasName].name;
             }
@@ -238,7 +238,7 @@ class Bundle {
               name = aliasName;
             }
             stores.push({
-              name: item.ns + '.' + item.name,
+              name: item.ns + '.' + name,
               aliasName,
               filter: item.filter,
               getStoreHandler: item.getStoreHandler,

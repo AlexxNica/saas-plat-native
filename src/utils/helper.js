@@ -36,7 +36,7 @@ export const connectStore = Store.connectStore;
 
 export const autobind = decorators.autobind;
 
-export const connect = (ns, local, theme, store, obser = true, atob = true) => {
+export const connect = (local, theme, store, obser = true, atob = true) => {
   let storeObj;
   if (typeof store === 'string') {
     storeObj = { appStore: store };

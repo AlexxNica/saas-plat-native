@@ -1,7 +1,7 @@
 import assert from 'assert';
 import React from 'react';
 
-import hook, { HookTypes } from './Hook';
+import hook, {HookTypes} from './Hook';
 
 const storeList = [];
 
@@ -46,8 +46,7 @@ export function getStoreProps(matchNames, props, aliasNames) {
       }
     }
     if (Store) {
-      hookProps[aliasName || store.aliasName || store.storeNames.join('_')] =
-        getStore(Store, store.getStoreHandler);
+      hookProps[aliasName || store.aliasName || store.storeNames.join('_')] = getStore(Store, store.getStoreHandler);
     }
   }
   hooks.forEach(hook => {
@@ -79,13 +78,23 @@ export function connectStore(matchName) {
           aliasNames.length += 1;
         }
         // 自动补全命名空间
-        if (WarpComponent.__module) {
-          matchNames.push(WarpComponent.__module.split('.').concat(
-            matchName.split('.')));
+        if (WarpComponent.$packageName) {
+          matchNames.push(WarpComponent.$packageName.split('.').concat(matchName.split('.')));
           aliasNames.length += 1;
         }
+        // 添加一个默认平台的命名空间
+        matchNames.push(['saas-plat-native'].concat(matchName.split('.')));
+        aliasNames.length += 1;
       } else if (Array.isArray(matchName)) {
         matchNames = matchNames.concat(matchName.map(name => name.split('.')));
+        aliasNames.length += matchName.length;
+        // 自动补全命名空间
+        if (WarpComponent.$packageName) {
+          matchNames = matchNames.concat(matchName.map(name => WarpComponent.$packageName.split('.').concat(name.split('.'))));
+          aliasNames.length += matchName.length;
+        }
+        // 添加一个默认平台的命名空间
+        matchNames = matchNames.concat(matchName.map(name => ['saas-plat-native'].concat(name.split('.'))));
         aliasNames.length += matchName.length;
       } else if (typeof matchName === 'object') {
         for (const aliasName in matchName) {
@@ -95,34 +104,52 @@ export function connectStore(matchName) {
             aliasNames.push(aliasName);
           }
           // 自动补全命名空间
-          if (WarpComponent.__module) {
-            matchNames.push(WarpComponent.__module.split('.').concat(
-              ClassName.split('.')));
+          if (WarpComponent.$packageName) {
+            matchNames.push(WarpComponent.$packageName.split('.').concat(ClassName.split('.')));
             aliasNames.push(aliasName);
           }
+          // 添加一个默认平台的命名空间
+          matchNames.push(['saas-plat-native'].concat(ClassName.split('.')));
+          aliasNames.push(aliasName);
         }
       }
       const storeProps = getStoreProps(matchNames, props, aliasNames);
       return (
         <WarpComponent {...storeProps} {...props}>
-        {props.children}
-      </WarpComponent>
+          {props.children}
+        </WarpComponent>
       );
     };
-    StoreBindComponent.__module = WarpComponent.__module;
-    StoreBindComponent.__version = WarpComponent.__version;
+    StoreBindComponent.$packageName = WarpComponent.$packageName;
+    StoreBindComponent.$packageVersion = WarpComponent.$packageVersion;
     return StoreBindComponent;
   };
 }
 
 export function registerStore(storeName, aliasName, filter, getStoreHandler) {
-  assert(storeName);
+  if (arguments.length === 1) {
+    // 如果只有一个参数，默认是别名，类名有.name获取
+    aliasName = arguments[0];
+  }
+  //assert(storeName);
   assert(!filter || typeof filter === 'function');
   assert(!getStoreHandler || typeof getStoreHandler === 'function');
 
   return Store => {
+    if (!storeName && Store.name !== '_default') {
+      storeName = (Store.$packageName
+        ? (Store.$packageName + '.')
+        : '') + Store.name;
+    }
+    if (!storeName) {
+      storeName = aliasName;
+    }
+    if (!aliasName){
+      // 默认别名首字母小写
+      aliasName = storeName[0].toLocaleLowerCase() + storeName.substr(1);
+    }
     storeList.push({
-      aliasName: aliasName || storeName,
+      aliasName: aliasName,
       storeNames: storeName.split('.'),
       Store,
       filter,
@@ -144,8 +171,7 @@ export function match(appNames, matchNames) {
   let matchIndex = 0;
   // **前匹配
   for (let i = 0; i < appNames.length && matchIndex < matchNames.length; i++) {
-    if (appNames[i] !== matchNames[i] && matchNames[matchIndex] !== '*' &&
-      matchNames[matchIndex] !== '**') {
+    if (appNames[i] !== matchNames[i] && matchNames[matchIndex] !== '*' && matchNames[matchIndex] !== '**') {
       return false;
     }
     if (matchNames[matchIndex] !== '**') {
@@ -153,10 +179,8 @@ export function match(appNames, matchNames) {
     }
   }
   // 匹配**后匹配
-  for (let i = appNames.length, matchIndex = matchNames.length; i > 0 &&
-    matchIndex > 0; i--) {
-    if (appNames[i] !== matchNames[i] && matchNames[matchIndex] !== '*' &&
-      matchNames[matchIndex] !== '**') {
+  for (let i = appNames.length, matchIndex = matchNames.length; i > 0 && matchIndex > 0; i--) {
+    if (appNames[i] !== matchNames[i] && matchNames[matchIndex] !== '*' && matchNames[matchIndex] !== '**') {
       return false;
     }
     if (matchNames[matchIndex] !== '**') {

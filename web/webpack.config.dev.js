@@ -32,7 +32,8 @@ module.exports = {
             // 'stage-3'
           ],
           'plugins': [ //'transform-runtime',
-            'transform-decorators-legacy'
+            'transform-decorators-legacy',
+            'transform-package'
           ]
         }
     }, {

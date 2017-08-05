@@ -88,10 +88,11 @@ export function loadModules() {
   });
 }
 
-export function loadViews(mId) {
+export function loadView(name, mId) {
   return instance.get(
     config.platform.view, {
       params: {
+        name,
         mId,
         s: Screen.Size
       }

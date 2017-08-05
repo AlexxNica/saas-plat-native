@@ -16,16 +16,14 @@ export default class {
   // ctx.unregisterModuleInitHandler(name);     console.log('模块初始化函数删除完成');   }
   // catch (err) {     console.log('模块初始化函数删除失败');     console.warn(err);   } }
 
-  static registerRoute(name, path, ns, route, afterBuild) {
-    if (arguments.length === 3) {
-      afterBuild = arguments[2];
+  static registerRoute(name, path, ns, route) {
+    if (arguments.length === 2) {
       route = arguments[1];
       ns = arguments[0];
-      path = 'portal';
+      path = '/portal';
       name = 'default';
     }
-    if (arguments.length === 4) {
-      afterBuild = arguments[3];
+    if (arguments.length === 3) {
       route = arguments[2];
       ns = arguments[1];
       path = arguments[0];
@@ -46,7 +44,7 @@ export default class {
     if (createCtx) {
       ctx = LoadContextManager.createContext();
     }
-    ctx.registerRoute(ns, path, name, route, afterBuild); // 注册原始的route，route会根据state变化时动态计算
+    ctx.registerRoute(ns, path, name, route); // 注册原始的route，route会根据state变化时动态计算
     if (createCtx) {
       ctx.complateLoad();
       LoadContextManager.destroyCurrentContext();
@@ -72,15 +70,14 @@ export default class {
   // }
 
   // name 参数可以是 string 但是必须提供route 可以是 route        可以是 function
-  static registerRootRoute(name, ns, route, afterBuild) {
+  static registerRootRoute(name, ns, route) {
     if (arguments.length === 2 || arguments.length === 3) {
-      afterBuild = arguments[2];
       route = arguments[1];
       ns = arguments[0];
       name = 'default';
     }
 
-    this.registerRoute(name, '/', ns, route, afterBuild);
+    this.registerRoute(name, '/', ns, route);
   }
 
   static registerTheme(name, ns, theme) {

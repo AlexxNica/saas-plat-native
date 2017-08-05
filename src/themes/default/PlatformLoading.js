@@ -6,7 +6,6 @@ export default {
     backgroundColor: '#fff'
   },
   success : {
-    fontSize: 16,
     textAlign: 'center',
     marginBottom: 120,
     color: '#111'

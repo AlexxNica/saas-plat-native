@@ -33,7 +33,7 @@ import RouterStore from './stores/Router';
 import MessageStore from './stores/Message';
 import ServerStore from './stores/Server';
 import ModuleStore from './stores/Module';
-
+import ViewStore from './stores/View';
 
 module.exports = {
   UserStore, // 用户参数

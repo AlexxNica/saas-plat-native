@@ -136,9 +136,9 @@ export function translate(ns) {
         if (this.translatedComponent) {
           TranslatedComponent = this.translatedComponent;
         } else {
-          if (WarppedComponent.__module && !ns.find(item => item.startsWith(
-              `${WarppedComponent.__module}.`))) {
-            ns = ns.map(item => `${WarppedComponent.__module}.${item}`);
+          if (WarppedComponent.$packageName && !ns.find(item => item.startsWith(
+              `${WarppedComponent.$packageName}.`))) {
+            ns = ns.map(item => `${WarppedComponent.$packageName}.${item}`);
           }
           assert(ns.length > 0);
           // StoreBackend为同步加载，所以直接wait即可
@@ -150,8 +150,8 @@ export function translate(ns) {
         return <TranslatedComponent {...props}/>;
       }
     };
-    TranslateComponent.__module = WarppedComponent.__module;
-    TranslateComponent.__version = WarppedComponent.__version;
+    TranslateComponent.$packageName = WarppedComponent.$packageName;
+    TranslateComponent.$packageVersion = WarppedComponent.$packageVersion;
     return TranslateComponent;
   }
 }

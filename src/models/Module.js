@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import {observable, action, computed} from 'mobx';
 
 export class View {
   store;
@@ -26,7 +26,7 @@ export class View {
       id: this.id,
       name: this.name,
       text: this.text,
-      mode: this.mode,
+      mode: this.mode
     };
   }
 
@@ -52,14 +52,15 @@ export default class Module {
   @observable views = [];
   @observable order;
   @observable url;
+  @observable isDefault;
   @observable defaultViewMode;
 
   @computed get defaultView() {
     return this.views.find(v => v.mode === this.defaultViewMode);
   }
 
-  @action async loadView(vId, refresh) {
-    await this.store.loadView(this.id, vId, refresh);
+  @action async loadViews(refresh) {
+    await this.store.loadViews(this.id, refresh);
   }
 
   @action addView(model) {
@@ -74,7 +75,7 @@ export default class Module {
     this.views.splice(this.views.indexOf(view), 1);
   }
 
-  constructor(store, id, url, name, text, icon, order, defaultView = 'viewMode', views = []) {
+  constructor(store, id, url, name, text, icon, order, isDefault, defaultView = 'viewMode', views = []) {
     this.store = store;
     this.id = id;
     this.url = url;
@@ -82,6 +83,7 @@ export default class Module {
     this.icon = icon;
     this.name = name;
     this.order = order;
+    this.isDefault = isDefault;
     this.defaultViewMode = defaultView;
     this.views.replace(views);
   }
@@ -94,14 +96,13 @@ export default class Module {
       icon: this.icon,
       url: this.url,
       order: this.order,
+      isDefault: this.isDefault,
       defaultView: this.defaultViewMode,
       views: this.views.map(v => v.toJS())
     };
   }
 
   static fromJS(store, object) {
-    return new Module(store, object.id, object.url, object.name, object.text,
-      object.icon, object.order, object.defaultView,
-      (object.views || []).map(v => View.fromJS(store, object.name, v)));
+    return new Module(store, object.id, object.url, object.name, object.text, object.icon, object.order, object.isDefault, object.defaultView, (object.views || []).map(v => View.fromJS(store, object.name, v)));
   }
 }

@@ -52,7 +52,7 @@ export function login(encUsername, passwordHash) {
     config.platform.account, {
       params: {
         name: encUsername,
-        passwordHash: passwordHash
+        passwordHash
       }
     }
   );
@@ -88,12 +88,12 @@ export function loadModules() {
   });
 }
 
-export function loadView(mId, vId) {
+export function loadViews(mId) {
   return instance.get(
     config.platform.view, {
       params: {
         mId,
-        vId
+        s: Screen.Size
       }
     }
   );

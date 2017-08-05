@@ -76,7 +76,8 @@ export const observer = Platform.OS === 'web' ?
 let RouterInternal,
   RouteInternal,
   SwitchInternal,
-  LinkInternal;
+  LinkInternal,
+  RedirectInternal;
 switch (Platform.OS) {
   case 'android':
   case 'ios':
@@ -88,6 +89,7 @@ switch (Platform.OS) {
       RouteInternal = NativeRouter.Route;
       SwitchInternal = NativeRouter.Switch;
       LinkInternal = NativeRouter.Link;
+      RedirectInternal = NativeRouter.Redirect;
       break;
     }
   case 'web':
@@ -97,6 +99,7 @@ switch (Platform.OS) {
       RouteInternal = BrowserRouter.Route;
       SwitchInternal = BrowserRouter.Switch;
       LinkInternal = BrowserRouter.Link;
+      RedirectInternal = BrowserRouter.Redirect;
       break;
     }
   default:
@@ -108,6 +111,7 @@ export const Router = RouterInternal;
 export const Route = RouteInternal;
 export const Switch = SwitchInternal;
 export const Link = LinkInternal;
+export const Redirect = RedirectInternal;
 
 // // ********************** fetch utils ******************************
 //

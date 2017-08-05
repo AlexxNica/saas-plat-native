@@ -49,6 +49,7 @@ for (var i in dependencies) {
 // 当前就是saas-plat-native
 config.resolve.alias['react-native'] = __dirname + '/../node_modules/react-native-web';
 config.resolve.alias['saas-plat-native'] = __dirname + '/../src';
+config.resolve.alias['saas-plat-ui'] = __dirname + '/../../saas-plat-ui';
 //console.log(config.resolve.alias) 定义模拟数据，和调试状态
 config.plugins.push(new webpack.DefinePlugin({'__MOCK__': true, '__TEST__': true}));
 var compiler = webpack(config);

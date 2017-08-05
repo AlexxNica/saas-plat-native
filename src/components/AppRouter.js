@@ -15,7 +15,7 @@ import MessageView from './MessageView';
 import AppIntro from './AppIntro';
 import { connectAuth } from './AuthedRoute';
 
-@connectStore(['routerStore'])
+@connectStore(['RouterStore'])
 @observer
 export default class AppRouter extends React.Component {
   constructor(props) {

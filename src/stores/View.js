@@ -11,7 +11,7 @@ import * as apis from '../apis/PlatformApis';
 
 @registerStore('viewStore')
 export default class ViewStore {
-  @observable views = [];
+  @observable items = [];
 
   // 加载模块视图定义，mId是过滤权限用
   @action async loadView(name, mId, refresh = false) {
@@ -37,14 +37,19 @@ export default class ViewStore {
     return true;
   }
 
+  @action addView(view) {
+    const exists = this.items.find(it => it.id === view.id);
+    if (exists) {
+      this.items.splice(this.items.indexOf(exists), 1, view);
+    } else {
+      this.items.push(view);
+    }
+  }
+
   subscribeLocalstorageToStore() {
-    reaction(() => this.views.map(it => it.toJS()), json => {
+    reaction(() => this.items.map(it => it.toJS()), json => {
       json.forEach(it => {
-        localStore.save({
-          key: 'userViews' + Screen.size,
-          id: it.mId + '.' + it.name,
-          rawData: json
-        });
+        localStore.save({key: 'userOrders', id: it.id, rawData: json});
       });
     });
   }

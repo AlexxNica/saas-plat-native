@@ -72,13 +72,16 @@ export function mock(axios) {
     ]
   }));
 
-  mock.onGet(config.platform.view).reply(200, config => Mock.mock({
-    errno: 0,
-    'data': {
-      id: Mock.Random.integer(1000, 10000),
-      mId: config.params.mId,
-      name: Mock.Random.word(5),
-      text: Mock.Random.cparagraph(1, 3)
-    }
-  }));
+  mock.onGet(config.platform.view).reply(config => [
+    200,
+    Mock.mock({
+      errno: 0,
+      'data': {
+        id: Mock.Random.integer(1000, 10000),
+        mId: config.params.mId,
+        name: config.params.name,
+        text: Mock.Random.cparagraph(1, 3)
+      }
+    })
+  ]);
 }

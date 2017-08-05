@@ -10,6 +10,7 @@ import RouterStore from '../stores/Router';
 import MessageStore from '../stores/Message';
 import ServerStore from '../stores/Server';
 import ModuleStore from '../stores/Module';
+import ViewStore from '../stores/View';
 
 import * as theme from '../core/Theme';
 import * as i18n from '../core/I18n';
@@ -25,6 +26,7 @@ export const routerStore = RouterStore.getStore(); // 路由
 export const messageStore = MessageStore.getStore(); // 消息服务
 export const serverStore = ServerStore.getStore(); // 服务器
 export const moduleStore = ModuleStore.getStore();
+export const viewStore = ViewStore.getStore();
 
 // *************** local && theme ******************
 

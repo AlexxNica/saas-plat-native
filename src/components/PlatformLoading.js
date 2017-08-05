@@ -15,7 +15,7 @@ import {observer} from '../utils/helper';
 // 平台组件加载等待
 @translate('core.PlatformLoading')
 @connectStyle('core.PlatformLoading')
-@connectStore(['userStore', 'systemStore', 'moduleStore'])
+@connectStore(['UserStore', 'SystemStore', 'ModuleStore'])
 @observer
 export default class PlatformLoading extends React.Component {
 

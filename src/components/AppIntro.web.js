@@ -7,7 +7,7 @@ import { connectStyle } from '../core/Theme';
 import {translate} from '../core/I18n';
 
 @translate('core.AppIntro')
-@connectStore(['systemStore'])
+@connectStore(['SystemStore'])
 @connectStyle('core.AppIntro')
 @autobind
 export default class AppIntroView extends Component {

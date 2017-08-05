@@ -44,6 +44,7 @@ module.exports = {
   MessageStore, // 消息服务
   ServerStore,
   ModuleStore,
+  ViewStore,
 
   // core
   SaasPlat: PlatformApis,

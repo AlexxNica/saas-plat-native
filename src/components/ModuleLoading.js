@@ -11,7 +11,7 @@ import { connectStore } from '../core/Store';
 // 模块加载等待
 @translate('core.ModuleLoading')
 @connectStyle('core.ModuleLoading')
-@connectStore(['systemStore'])
+@connectStore(['SystemStore'])
 @autobind
 export default class ModuleLoading extends React.Component {
 

@@ -96,6 +96,8 @@ export function connectStore(matchName) {
         // 添加一个默认平台的命名空间
         matchNames = matchNames.concat(matchName.map(name => ['saas-plat-native'].concat(name.split('.'))));
         aliasNames.length += matchName.length;
+        // console.log(matchNames)
+        // console.log(storeList)
       } else if (typeof matchName === 'object') {
         for (const aliasName in matchName) {
           const ClassName = matchName[aliasName];
@@ -130,6 +132,7 @@ export function registerStore(storeName, aliasName, filter, getStoreHandler) {
   if (arguments.length === 1) {
     // 如果只有一个参数，默认是别名，类名有.name获取
     aliasName = arguments[0];
+    storeName = null;
   }
   //assert(storeName);
   assert(!filter || typeof filter === 'function');

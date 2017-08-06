@@ -18,6 +18,7 @@ import * as Store from '../core/Store';
 import Plugin from '../core/Plugin';
 
 export const publish = Plugin.publish;  // 发布业务事件
+export const publishSync = Plugin.publishSync;
 
 // ************** stores *********************
 
@@ -112,7 +113,7 @@ switch (Platform.OS) {
     break;
 }
 
-export const Router = RouterInternal;
+export const RouterComponent = RouterInternal;
 export const Route = RouteInternal;
 export const Switch = SwitchInternal;
 export const Link = LinkInternal;

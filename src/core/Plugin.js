@@ -27,4 +27,9 @@ export default class Plugin {
     console.log(tx('发布事件'), msg);
     PubSub.publish(msg, data);
   }
+
+  static publishSync(msg, data){
+    console.log(tx('发布同步事件'), msg);
+    PubSub.publish(msg, data);
+  }
 }

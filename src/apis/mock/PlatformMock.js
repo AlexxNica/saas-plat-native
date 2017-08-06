@@ -2,29 +2,48 @@ import MockAdapter from 'axios-mock-adapter';
 import Mock from 'mockjs';
 import config from '../../config';
 
+const mores = [];
+let mockAdapter;
+
 export function mock(axios) {
 
   // This sets the mock adapter on the default instance
-  var mock = new MockAdapter(axios);
+  var mockAdapter = new MockAdapter(axios);
 
   axios.interceptors.request.use(config => {
     console.log(config.method + ' ' + config.url);
     return config;
   });
 
-  mock.onGet(config.platform.connection).reply(200, {
+  mockAdapter.onGet(config.platform.connection).reply(200, {
+    errno: 0,
+    data: {
+      // 返回服务器地址
+      server: 'https://server.saas-plat.com/testserver1',
+      // 各个模块注册的路由表
+      routemap: [
+        {
+          ns: 'saas-plat-native-login',
+          path: ''
+        }, {
+          ns: 'saas-plat-native-portal',
+          path: ''
+        }, {
+          ns: 'saas-plat-erp-purchase-order-native',
+          path: 'purchase/order'
+        }
+      ]
+    }
+  });
+
+  mockAdapter.onGet(config.platform.assets).reply(200, {
     errno: 0,
     data: {}
   });
 
-  mock.onGet(config.platform.assets).reply(200, {
-    errno: 0,
-    data: {}
-  });
+  mockAdapter.onPost(config.platform.log).reply(200, {errno: 0});
 
-  mock.onPost(config.platform.log).reply(200, {errno: 0});
-
-  mock.onGet(config.platform.account).reply(200, {
+  mockAdapter.onGet(config.platform.account).reply(200, {
     errno: 0,
     data: {
       "id": 11001,
@@ -52,19 +71,19 @@ export function mock(axios) {
     }
   });
 
-  mock.onGet(config.platform.server).reply(200, {
+  mockAdapter.onGet(config.platform.server).reply(200, {
     errno: 0,
     data: {}
   });
 
-  mock.onGet(config.platform.module).reply(200, Mock.mock({
+  mockAdapter.onGet(config.platform.module).reply(200, Mock.mock({
     errno: 0,
     'data|10': [
       {
         id: Mock.Random.integer(1000, 10000),
         name: Mock.Random.word(),
         icon: 'https://www.saas-plat.com/img/favicon.png',
-        url: '/purchase/order',
+        url: '/saas-plat-erp-purchase-order-native',
         defaultView: 'viewMode',
         text: Mock.Random.cparagraph(1, 3),
         'order|+1': 1
@@ -72,7 +91,7 @@ export function mock(axios) {
     ]
   }));
 
-  mock.onGet(config.platform.view).reply(config => [
+  mockAdapter.onGet(config.platform.view).reply(config => [
     200,
     Mock.mock({
       errno: 0,
@@ -84,4 +103,14 @@ export function mock(axios) {
       }
     })
   ]);
+
+  mores.forEach(fn => fn(mockAdapter, config));
+}
+
+export function addMock(callback) {
+  if (mockAdapter) {
+    callback(mockAdapter, config);
+  } else {
+    mores.push(callback);
+  }
 }

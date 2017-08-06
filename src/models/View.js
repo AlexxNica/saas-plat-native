@@ -1,4 +1,4 @@
-import {observable, action, computed} from 'mobx';
+import {observable, action, computed, toJS as deepToJS} from 'mobx';
 
 export default class View {
   store;
@@ -15,17 +15,17 @@ export default class View {
     this.id = id;
     this.name = name;
     this.text = text;
-    this.config = config;
+    this.config = observable.map(config);
   }
 
   toJS() {
     return {
-      ...this.config,
+      ...deepToJS(this.config),
       id: this.id,
       name: this.name,
       text: this.text
     };
-  }
+  } 
 
   static fromJS(store,   object) {
     const {

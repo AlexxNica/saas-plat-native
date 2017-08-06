@@ -1,6 +1,5 @@
 import { Platform } from 'react-native';
 import { useStrict } from 'mobx';
-useStrict(true);
 
 // utils
 import * as helper from './utils/helper';
@@ -9,10 +8,11 @@ import Statistics from './utils/Statistics';
 import LocalStore from './utils/LocalStore';
 
 // core
-import PlatformApis from './apis/PlatformApis';
-import ServerApis from './apis/ServerApis';
+import * as PlatformApis from './apis/PlatformApis';
+import * as ServerApis from './apis/ServerApis';
 import Bundle from './core/Bundle';
 import Registry from './core/Registry';
+import Router from './core/Router';
 import * as Theme from './core/Theme';
 import I18n from './core/I18n';
 import * as Store from './core/Store';
@@ -35,6 +35,8 @@ import ServerStore from './stores/Server';
 import ModuleStore from './stores/Module';
 import ViewStore from './stores/View';
 
+useStrict(true);
+
 module.exports = {
   UserStore, // 用户参数
   SystemStore, // 系统参数
@@ -50,6 +52,7 @@ module.exports = {
   SaasPlat: PlatformApis,
   Server: ServerApis,
   Bundle,
+  Router,
   I18n,
   Theme,
   Store,

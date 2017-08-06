@@ -6,54 +6,51 @@ class Router {
   history;
 
   init(routes) {
-    if (routes && routes.length > 0){
+    if (routes && routes.length > 0) {
       this.routemap = this.routemap.concat(routes);
     }
   }
 
-  goBack(){
-    if (this.history){
+  goBack() {
+    if (this.history) {
       this.history.goBack();
-    }else{
+    } else {
       console.warn('history not created');
     }
   }
 
-  push(url){
-    if (this.history){
-      this.history.push(url);
-    }else{
+  mapTo(url) {
+    return '/' + url.split('/').filter(it => it).map(it => this.getPath(it)).filter(it => it).join('/');
+  }
+
+  push(url) {
+    const mapurl = this.mapTo(url);
+    if (this.history) {
+      this.history.push(mapurl);
+    } else {
       console.warn('history not created');
     }
   }
 
-  replace(url){
-    if (this.history){
-      this.history.replace(url);
-    }else{
+  replace(url) {
+    const mapurl = this.mapTo(url);
+    if (this.history) {
+      this.history.replace(mapurl);
+    } else {
       console.warn('history not created');
     }
   }
 
-  // getBundle(path) {
-  //   assert(path, tx('无法查找空路径的路由'));
-  //   const ps = path.split('/').filter(item => item);
-  //   if (ps.length > 0) {
-  //     // 只支持第一级包路由解释
-  //     const item = this.routemap.find(item => item.path === ps[0]);
-  //     if (!item){
-  //       return null;
-  //     }
-  //     return item.ns;
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  // getBundle(path) {   assert(path, tx('无法查找空路径的路由'));   const ps =
+  // path.split('/').filter(item => item);   if (ps.length > 0) {     //
+  // 只支持第一级包路由解释     const item = this.routemap.find(item => item.path === ps[0]);
+  //     if (!item){       return null;     }     return item.ns;   } else {
+  // return null;   } }
 
-  getPath(ns){
+  getPath(ns) {
     assert(ns, tx('无法获取无效包的路由'));
     const item = this.routemap.find(item => item.ns === ns);
-    if (!item){
+    if (!item) {
       // 如果没有申请路由，就是包命名空间
       return ns;
     }

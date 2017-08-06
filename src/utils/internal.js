@@ -12,17 +12,15 @@ export const tx = (key) => {
   return i18n.tx('core.common', key);
 };
 
-export function trimEnd(txt, trimTxt) {
-  assert(txt);
-  assert(trimTxt);
+export function trimEnd(txt = '', trimTxt = '/') {
   if (txt.endsWith(trimTxt)) {
     return txt.substr(0, txt.length - 1);
   }
   return txt;
 }
 
-export function fixStart(txt, fixTxt) {
-  assert(txt);
-  assert(fixTxt);
-  return txt.startsWith(fixTxt) ? txt : `${fixTxt}${txt}`;
+export function fixStart(txt = '', fixTxt = '/') {
+  return txt.startsWith(fixTxt)
+    ? txt
+    : `${fixTxt}${txt}`;
 }

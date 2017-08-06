@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import AppRouter from './AppRouter';
-import { Router, Route } from '../utils/helper';
+import { RouterComponent as Router, Route } from '../utils/helper';
 
 export default function ViewPort(props) {
   if (!Router) {

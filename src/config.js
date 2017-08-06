@@ -9,11 +9,12 @@ export default {
     statistics: '/app/log',
     account: '/usr/account',
     server: '/server/connection',
-    msg: '/msg',
+    socketio: '/socketio'
   },
   server: {
-    query: 'core/query',
-    command: 'core/command',
-    connection: 'core/connection'
+    query: '/core/query',
+    command: '/core/command',
+    connection: '/core/connection',
+    socketio: '/core/socketio'
   }
 };

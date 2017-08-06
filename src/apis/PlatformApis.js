@@ -100,4 +100,4 @@ export function loadView(name, mId) {
   );
 }
 
-export default instance;
+export const Apis = instance;

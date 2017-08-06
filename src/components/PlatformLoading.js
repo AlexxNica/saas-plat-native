@@ -4,6 +4,7 @@ import {autobind} from 'core-decorators';
 import Spinner from './Spinner';
 import Bundle from '../core/Bundle';
 import Router from '../core/Router';
+import * as Server from '../apis/ServerApis';
 import * as apis from '../apis/PlatformApis';
 import {connectStyle} from '../core/Theme';
 import {translate} from '../core/I18n';
@@ -97,7 +98,8 @@ export default class PlatformLoading extends React.Component {
         const platformConfig = await apis.connect(Startup.id) || {};
         // Bundle.removeMetadata('platform');
         // Bundle.addMetadata('platform', platformConfig.bundles);
-        Router.init(platformConfig.routes);
+        Router.init(platformConfig.routemap);
+        Server.connect(platformConfig.server);
         me.props.systemStore.debug(platformConfig.device && platformConfig.device.debug);
         console.log(me.props.t('连接平台完成'));
         resolve(platformConfig);

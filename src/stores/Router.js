@@ -13,9 +13,8 @@ export default class RouterStore {
     (this.bundleRoutes.get(path) || []).forEach(item => {
       routes = routes.concat((item.route).map(p => ({
         ...p,
-        ns: item.ns,
-        //version: item.version,
-        path: trimEnd(fixStart(p.path, '/'), '/')  // item.parent + trimEnd(fixStart(p.path, '/'), '/')
+        //ns: item.ns, version: item.version,
+        path: trimEnd(fixStart(Router.getPath(item.ns), '/'), '/') + trimEnd(fixStart(p.path, '/'), '/') // item.parent + trimEnd(fixStart(p.path, '/'), '/')
       })));
     });
     return routes;
@@ -25,10 +24,10 @@ export default class RouterStore {
     assert(ns);
     this.bundleRoutes.forEach((items, path) => {
       const removes = items.filter(item => item.ns === ns && (!name || name === item.name));
-      for (const item of removes) {
+      removes.forEach((item) => {
         items.splice(items.indexOf(item), 1);
         console.log(tx('路由已被移除'), path, ns, name);
-      }
+      });
     });
   }
 
@@ -64,7 +63,7 @@ export default class RouterStore {
     }
     items.push({
       ns,
-      parent: trimEnd(Router.getPath(ns) || '', '/'),
+      //parent: trimEnd(Router.getPath(ns) || '', '/'),
       name,
       route,
       handler

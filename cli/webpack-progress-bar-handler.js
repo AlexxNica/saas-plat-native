@@ -29,7 +29,7 @@ module.exports = function (options) {
             options.arrowHead = options.arrowBody;
             message += "\n";
         }
-        output(options.label   + (percentage * 100).toFixed(2) + '%  ' + message);
+        output(options.label   + (percentage * 100).toFixed(0) + '%  ' + message);
     };
     if (options.throttle > 0) {
         handler = throttle(handler, options.throttle);

@@ -1,8 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
+import { SocketIO, Server } from 'mock-socket';
 import config from '../../config';
 
 const mores = [];
+const moreSockets = [];
+
 let mockAdapter;
+let mockServer;
 
 export function mock(axios) {
 
@@ -25,7 +29,7 @@ export function mock(axios) {
     data: {}
   });
 
-  mockAdapter.onPost(config.server.command).reply(200, {errno: 0});
+  mockAdapter.onPost(config.server.command).reply(200, { errno: 0 });
 
   mockAdapter.onGet(config.server.query).reply(200, {
     errno: 0,
@@ -35,10 +39,27 @@ export function mock(axios) {
   mores.forEach(fn => fn(mockAdapter, config));
 }
 
+export function mockSocket(url) {
+  mockServer = new Server(url);
+  // mockServer.on('connection', server => {
+  //   mockServer.emit('chat-message', 'test message 1');
+  //   mockServer.emit('chat-message', 'test message 2');
+  // });
+  return SocketIO;
+}
+
 export function addMock(callback) {
   if (mockAdapter) {
     callback(mockAdapter, config);
   } else {
     mores.push(callback);
+  }
+}
+
+export function addMockSocket(callback) {
+  if (mockServer) {
+    callback(mockServer, config);
+  } else {
+    moreSockets.push(callback);
   }
 }

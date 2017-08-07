@@ -101,6 +101,7 @@ export default class PlatformLoading extends React.Component {
         Router.init(platformConfig.routemap);
         Server.connect(platformConfig.server);
         me.props.systemStore.debug(platformConfig.device && platformConfig.device.debug);
+        apis.openSocket();
         console.log(me.props.t('连接平台完成'));
         resolve(platformConfig);
       } catch (err) {

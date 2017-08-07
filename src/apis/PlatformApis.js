@@ -1,12 +1,16 @@
 import { Platform } from 'react-native';
 import axios from 'axios';
+import io from 'socket.io-client';
 import config from '../config';
 import device from '../core/Device';
 import Screen from '../core/Screen';
+import { tx } from '../utils/internal';
 
 const instance = axios.create({
   baseURL: config.platform.baseURL
 });
+
+const socketHandlers = [];
 
 export function authorization(token) {
   instance.defaults.headers.common['Authorization'] = token;
@@ -41,6 +45,44 @@ export function connect(enterpriseId = '') {
       }
     }
   );
+}
+
+export function openSocket() {
+  let socketio = io;
+  if (__DEV__ && __MOCK__) {
+    socketio = require('./mock/PlatformMock').mockSocket();
+  }
+  this.socket = socketio(config.platform.baseURL + config.platform.socketio);
+  this.socket.on('connect', () => {
+    console.log(tx('平台Socket已经连接'));
+  });
+  this.socket.on('message', (data) => {
+    this.socketHandlers.filter(it =>
+      it.type === '*' || it.type === 'message').forEach(it => {
+      try {
+        it.handler(data);
+      } catch (err) {
+        console.error(tx('消息处理失败'), err);
+      }
+    });
+  });
+  this.socket.on('disconnect', () => {
+    console.log(tx('平台Socket已经断开'));
+  });
+}
+
+// 处理平台消息
+export function onMessage(handler) {
+  const dispor = { type: 'message', handler };
+  this.socketHandlers.push(dispor);
+  return dispor;
+}
+
+// 注销消息处理器
+export function disposeMessage(dispor) {
+  if (this.socketHandlers.indexOf(dispor) > -1) {
+    this.socketHandlers.splice(this.socketHandlers.indexOf(dispor), 1);
+  }
 }
 
 export function sendLogs(data) {

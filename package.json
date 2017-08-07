@@ -70,6 +70,7 @@
     "lzwcompress": "^0.2.2",
     "mobx": "^3.0.0",
     "mobx-react": "^4.1.0",
+    "mock-socket": "^7.0.0",
     "mockjs": "^1.0.1-beta3",
     "nprogress": "^0.2.0",
     "postcss-pxtorem": "^4.0.1",

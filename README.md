@@ -385,48 +385,23 @@ addMockSocket((Server)=>{
 
 
 
-## 编译配置:
-
-### IOS
-
-
-### Android
-
-- 在android需要生成一个证书文件，并配置gradle.properties
-    // 签名
-    MYAPP_RELEASE_STORE_FILE=xxxx
-    MYAPP_RELEASE_KEY_ALIAS=xxxx
-    MYAPP_RELEASE_STORE_PASSWORD=xxxx
-    MYAPP_RELEASE_KEY_PASSWORD=xxxx
-
-    //JPush
-    JPUSH_APPKEY: xxxxxxx
-    JPUSH_APP_CHANNEL: xxxxxxx
-
-### Windows && MAC
-
-
-### Web
-
-
-
 ## Native模块
 ···
-    "@exponent/react-native-navigator": "^0.4.2",
-    "@remobile/react-native-splashscreen": "github:saas-plat/react-native-splashscreen",
-    "react-native-blur": "^2.0.0",
-    "react-native-camera": "^1.0.0-alpha1",
-    "react-native-carousel": "^0.6.1",
-    "react-native-default-preference": "github:saas-plat/react-native-default-preference",
-    "react-native-device-info": "^0.9.3",
-    "react-native-fs": "^2.1.0-rc.1",
-    "react-native-gifted-listview": "0.0.15",
-    "react-native-htmlview": "^0.4.2",
-    "react-native-image-picker": "^0.25.1",
-    "react-native-locale-detector": "^1.0.1",
-    "react-native-passcode-auth": "github:saas-plat/react-native-passcode-auth",
-    "react-native-touch-id": "^1.2.4",
-    "react-native-vector-icons": "^4.2.0",
-    "react-native-video": "^0.9.0",
-    "react-native-zip-archive": "0.0.11",
+    "@exponent/react-native-navigator": "^0.4.2",  
+    "@remobile/react-native-splashscreen": "github:saas-plat/react-native-splashscreen",  
+    "react-native-blur": "^2.0.0",  
+    "react-native-camera": "^1.0.0-alpha1",  
+    "react-native-carousel": "^0.6.1",  
+    "react-native-default-preference": "github:saas-plat/react-native-default-preference",  
+    "react-native-device-info": "^0.9.3",  
+    "react-native-fs": "^2.1.0-rc.1",  
+    "react-native-gifted-listview": "0.0.15",  
+    "react-native-htmlview": "^0.4.2",  
+    "react-native-image-picker": "^0.25.1",  
+    "react-native-locale-detector": "^1.0.1",  
+    "react-native-passcode-auth": "github:saas-plat/react-native-passcode-auth",  
+    "react-native-touch-id": "^1.2.4",  
+    "react-native-vector-icons": "^4.2.0",  
+    "react-native-video": "^0.9.0",  
+    "react-native-zip-archive": "0.0.11",  
 ···

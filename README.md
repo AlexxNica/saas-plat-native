@@ -386,6 +386,8 @@ addMockSocket((Server)=>{
 
 
 ## Native模块
+
+如下模块可以直接import使用
 ···
     "@exponent/react-native-navigator": "^0.4.2",  
     "@remobile/react-native-splashscreen": "github:saas-plat/react-native-splashscreen",  

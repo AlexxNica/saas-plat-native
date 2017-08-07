@@ -23,7 +23,7 @@ import 'saas-plat-native-portal';
 AppRegistry.registerComponent(() => App);
 ```
 
-## 平台特性和尺寸
+### 构造
 
 1. 编译五种版本到outputs文件夹
 
@@ -50,6 +50,7 @@ node node_modules/saas-plat-native/cli/index.js build index.js --output outputs 
 
 
 参见示例项目:https://github.com/saas-plat/saas-plat-native-demo
+
 
 ## 模块开发
 
@@ -188,7 +189,7 @@ this.props.history.push('/portal/saas-plat-erp-purchase-order-native/' + module.
 ```
 
 
-## Model && Store
+### Model && Store
 数据模型和控制器，基于mobx的MVC
 
 数据模型models/xxx
@@ -381,6 +382,7 @@ addMockSocket((Server)=>{
 ```
 
 参见模块代码：https://github.com/saas-plat/saas-plat-erp-native/tree/master/purchase/order-native
+
 
 
 ## 编译配置:
